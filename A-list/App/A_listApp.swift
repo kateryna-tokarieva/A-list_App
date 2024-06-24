@@ -13,7 +13,7 @@ struct A_listApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView(viewModel: HomeViewModel())
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
