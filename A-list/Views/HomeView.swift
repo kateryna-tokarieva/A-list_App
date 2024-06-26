@@ -21,18 +21,25 @@ struct HomeView: View {
             }
             
             HStack(alignment: .center, content: {
-                Picker(viewModel.category, selection: $viewModel.category, content:  {
-                    ForEach(viewModel.allCategories, id: \.self) {
-                        Text($0).tag($0)
+                Picker(viewModel.currentCategory, selection: $viewModel.currentCategory, content:  {
+                    if let user = viewModel.user {
+                        ForEach(user.categories, id: \.self) {
+                            Text($0.name).tag($0.name)
+                        }
                     }
                 })
                 .tint(.black)
                 Button {
-                    /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
+                    viewModel.fetchUser()
+                    guard let _ = viewModel.user else { return }
+                    viewModel.showingSheet.toggle()
                 } label: {
                     Image(systemName: "gearshape")
                 }
                 .tint(.red)
+                .sheet(isPresented: $viewModel.showingSheet, content: {
+                    SettingsView(viewModel: SettingsViewModel(user: viewModel.user!))
+                })
             })
             
             ZStack {
@@ -54,6 +61,7 @@ struct HomeView: View {
                     .padding()
                     Spacer()
                     Button("+") {
+                        viewModel.fetchUser()
                         showingSheet.toggle()
                         
                     }
@@ -70,10 +78,10 @@ struct HomeView: View {
                 }
                 
             }
-        })
+        })//.onAppear(perform: viewModel.fetchUser())
     }
 }
 
 #Preview {
-    HomeView(viewModel: HomeViewModel())
+    HomeView(viewModel: HomeViewModel(userId: "3YIxHKN4ekMJ5V9zdJqkDgzEenI2"))
 }

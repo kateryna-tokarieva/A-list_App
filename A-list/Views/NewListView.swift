@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewListView: View {
-    @StateObject var viewModel: NewListViewModel
+    @StateObject var viewModel = NewListViewModel()
     @State var step = NewListStep.name
     @State private var showingSheet = false
     
@@ -113,5 +113,5 @@ struct NewListView: View {
 }
 
 #Preview {
-    NewListView(viewModel: NewListViewModel())
+    NewListView()
 }

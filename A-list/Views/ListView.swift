@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ListView: View {
     @ObservedObject var viewModel: ListViewModel
-    @State private var selectedIds: [UUID] = []
+    @State private var showingSheet = false
     
     var body: some View {
         
@@ -20,19 +20,33 @@ struct ListView: View {
             VStack {
                 Text(viewModel.title)
                     .font(.largeTitle)
+                    .foregroundStyle(.black)
+                    .padding()
                 VStack {
-                    let items = viewModel.shoppingItems
-                    List(items) {
-                        Text($0.title)
-                        }
-                
+                    List {
+                        Text("")
+                    }
+                    Button("+") {
+                        showingSheet.toggle()
+                        
+                    }
+                    .sheet(isPresented: $showingSheet, content: {
+                       
+                    })
+                    .buttonStyle(.borderedProminent)
+                    .clipShape(.circle)
+                    .foregroundStyle(.white)
+                    .tint(.red)
+                    .padding()
+                    .shadow(color: .red, radius: 2, x: 2, y: 2)
+                    .controlSize(.large)
                 }
             }
         }
-        
+
     }
 }
 
 #Preview {
-    ListView(viewModel: ListViewModel(title: "АТБ", category: "Дім", shoppingItems: [ShoppingItem(title: "молоко", quantity: 3, unit: .l, done: false), ShoppingItem(title: "цукор", quantity: 1, unit: .kg, done: false)]))
+    ListView(viewModel: ListViewModel(title: "АТБ", category: "Дім"))
 }

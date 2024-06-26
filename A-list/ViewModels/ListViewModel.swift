@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 class ListViewModel: ObservableObject {
     @Published var title: String
@@ -24,18 +23,3 @@ class ListViewModel: ObservableObject {
     }
 }
 
-struct ShoppingItem: Identifiable {
-    var title: String = ""
-    var quantity: Double = 0
-    var unit: Unit = .pc
-    var done = false
-    let id = UUID()
-}
-
-enum Unit {
-    case ml
-    case l
-    case g
-    case kg
-    case pc
-}

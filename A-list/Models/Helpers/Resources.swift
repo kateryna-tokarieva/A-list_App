@@ -24,11 +24,35 @@ struct Resources {
         static var listNamePlaceholder = "Список 1"
         static var categoryNamePlaceholder = "Створи новий або обери ісснуючий"
         static var itemNamePlaceholder = "Назва продукту"
+        static var doNotHaveAccount = "Ще не маєте акканту?"
+        static var makeAnAccount = "Створити аккаунт"
+        static var email = "email"
+        static var password = "пароль"
+        static var login = "Вхід"
+        static var name = "імʼя"
+        static var registration = "Зареєструватись"
+    }
+    
+    enum Numbers {
+        static var buttonCornerRadius = 10
+        static var buttonShadowRadius = 2
     }
     
     enum Colors {
-        static var accent = Color(UIColor(red: 237, green: 96, blue: 42, alpha: 1))
-        static var background = Color(UIColor(red: 243, green: 205, blue: 222, alpha: 1))
-        static var base = Color(UIColor(red: 41, green: 91, blue: 185, alpha: 1))
+        static var accentRed = Color(UIColor(red: 252/255, green: 60/255, blue: 6/255, alpha: 1))
+        static var accentPink = Color(UIColor(red: 248/255, green: 189/255, blue: 215/255, alpha: 1))
+        static var accentBlue = Color(UIColor(red: 21/255, green: 65/255, blue: 173/255, alpha: 1))
+        static var text = Color(UIColor.black)
+        static var base = Color(UIColor.white)
+    }
+    
+    enum Views {
+        enum Colors {
+            static var borderedButtonTint = Resources.Colors.accentBlue
+            static var borderedButtonText = Resources.Colors.accentPink
+            static var borderedButtonShadow = Resources.Colors.accentPink
+            static var errorMessage = Resources.Colors.accentRed
+            static var plainButtonText = Resources.Colors.accentBlue
+        }
     }
 }
