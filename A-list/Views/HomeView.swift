@@ -8,33 +8,23 @@
 import SwiftUI
 import FirebaseFirestoreSwift
 import FirebaseAuth
+import FirebaseFirestore
 
 struct HomeView: View {
-    @ObservedObject var viewModel = HomeViewModel()
+    @StateObject private var viewModel: HomeViewModel
     @State private var showingSettingsSheet = false
-    @State private var shovingNewListSheet = false
-    @FirestoreQuery var lists: [ShoppingList]
+    @State private var showingNewListSheet = false
     private var userId = ""
     
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     init(userId: String) {
-        self.userId = userId
-        self._lists = FirestoreQuery(collectionPath: "users/\(userId)/lists")
-        print(lists)
+        _viewModel = StateObject(wrappedValue: HomeViewModel(userId: userId))
     }
     
     var body: some View {
         VStack(alignment: .center, content: {
             HStack(alignment: .center, content: {
-                //                Picker(viewModel.currentCategory, selection: $viewModel.currentCategory, content:  {
-                //                    if let user = viewModel.user {
-                //                        ForEach(user.categories, id: \.self) {
-                //                            Text($0.name).tag($0.name)
-                //                        }
-                //                    }
-                //                })
-                //                .tint(.black)
                 Button {
                     showingSettingsSheet.toggle()
                 } label: {
@@ -47,7 +37,7 @@ struct HomeView: View {
             })
             
             VStack {
-                if lists.isEmpty {
+                if viewModel.lists.isEmpty {
                     VStack {
                         Resources.Images.background
                             .resizable()
@@ -67,17 +57,17 @@ struct HomeView: View {
                     }
                 } else {
                     LazyVGrid(columns: columns) {
-                        ForEach(lists, id: \.self) { list in
+                        ForEach(viewModel.lists, id: \.self) { list in
                             ListPreviewView(viewModel: ListPreviewViewViewModel(title: list.name, items: list.items, dueDate: list.dueDate))
                         }
                     }
                 }
                 Spacer()
                 Button("+") {
-                    shovingNewListSheet.toggle()
+                    showingNewListSheet.toggle()
                     
                 }
-                .sheet(isPresented: $shovingNewListSheet, content: {
+                .sheet(isPresented: $showingNewListSheet, content: {
                     NewListView(viewModel: NewListViewModel())
                 })
                 .buttonStyle(.borderedProminent)
