@@ -12,6 +12,7 @@ struct ShoppingList: Codable, Hashable {
     var items: [ShoppingItem]?
     var dueDate: Date?
     var isDone = false
+    var id = UUID().uuidString
 }
 
 struct ShoppingItem: Identifiable, Codable, Hashable {
@@ -19,13 +20,13 @@ struct ShoppingItem: Identifiable, Codable, Hashable {
     var quantity: Double = 0
     var unit: Unit = .pc
     var done = false
-    var id = UUID()
+    var id = UUID().uuidString
 }
 
-enum Unit: Codable {
-    case ml
-    case l
-    case g
-    case kg
-    case pc
+enum Unit: String, Codable {
+    case ml = "мл."
+    case l = "л."
+    case g = "гр."
+    case kg = "кг."
+    case pc = "шт."
 }

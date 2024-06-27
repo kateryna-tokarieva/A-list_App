@@ -11,12 +11,11 @@ struct MainView: View {
     @StateObject var viewModel = MainViewModel()
     
     var body: some View {
-        //        if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
-        //            HomeView(viewModel: HomeViewModel(userId: viewModel.currentUserId))
-        //
-        //        } else {
-        LoginView()
-        //}
+        if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
+            HomeView(userId: viewModel.currentUserId)
+        } else {
+            LoginView()
+        }
     }
 }
 

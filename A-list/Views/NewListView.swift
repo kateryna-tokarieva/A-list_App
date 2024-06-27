@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewListView: View {
-    @StateObject var viewModel = NewListViewModel()
+    @ObservedObject var viewModel = NewListViewModel()
     @State var step = NewListStep.name
     @State private var showingSheet = false
     
@@ -84,6 +84,7 @@ struct NewListView: View {
                         Spacer()
                         Button {
                             guard self.step != .category else {
+                                self.viewModel.save()
                                 showingSheet.toggle()
                                 return
                             }
@@ -113,5 +114,5 @@ struct NewListView: View {
 }
 
 #Preview {
-    NewListView()
+    NewListView(viewModel: NewListViewModel())
 }

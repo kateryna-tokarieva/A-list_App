@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import FirebaseAuth
+import FirebaseFirestore
 
 class NewListViewModel: ObservableObject {
     @Published var title = "--"
@@ -49,6 +51,13 @@ class NewListViewModel: ObservableObject {
     }
     
     func save() {
-        
+        guard let usedId = Auth.auth().currentUser?.uid else { return }
+        let newList = ShoppingList(name: title, dueDate: dueDate, isDone: false)
+        let dataBase = Firestore.firestore()
+        dataBase.collection("users")
+            .document(usedId)
+            .collection("lists")
+            .document(newList.id)
+            .setData(newList.asDictionary())
     }
 }

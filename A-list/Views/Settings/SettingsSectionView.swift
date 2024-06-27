@@ -31,5 +31,5 @@ struct SettingsSectionView: View {
 }
 
 #Preview {
-    SettingsSectionView(viewModel: SettingsSectionViewModel(section: .friends, user: User(name: "Катерина", image: "person", email: "user@icloud.com", settings: Settings(modeIsDark: false, notificationsIsOn: true))))
+    SettingsSectionView(viewModel: SettingsSectionViewModel(section: .calendar))
 }

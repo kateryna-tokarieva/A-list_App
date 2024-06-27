@@ -26,7 +26,7 @@ struct A_listApp: App {
 
     var body: some Scene {
         WindowGroup {
-            LoginView()
+           MainView()
         }
     }
 }

@@ -10,11 +10,9 @@ import SwiftUI
 
 class SettingsSectionViewModel: ObservableObject {
     @Published var section: SettingsSection
-    @Published var user: User
     
     
-    init(section: SettingsSection, user: User) {
+    init(section: SettingsSection) {
         self.section = section
-        self.user = user
     }
 }

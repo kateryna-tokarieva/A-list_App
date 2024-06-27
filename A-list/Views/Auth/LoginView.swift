@@ -33,7 +33,7 @@ struct LoginView: View {
             .tint(Resources.Views.Colors.borderedButtonTint)
             .foregroundStyle(Resources.Views.Colors.borderedButtonText)
             .fullScreenCover(isPresented: $viewModel.showingHomeSheet, content: {
-                HomeView(viewModel: HomeViewModel(userId: viewModel.userId))
+                HomeView(userId: viewModel.userId)
             })
             .frame(maxWidth: .infinity)
             .buttonStyle(.borderedProminent)

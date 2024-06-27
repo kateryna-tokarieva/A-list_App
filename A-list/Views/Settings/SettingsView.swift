@@ -8,32 +8,35 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @ObservedObject var viewModel: SettingsViewModel
+    @ObservedObject var viewModel = SettingsViewModel()
     var sections: [SettingsSection] = [.friends, .categories, .calendar, .mode, .notifications, .support]
     @State var section: SettingsSection = .friends
+    private var userId: String
     
-    
+    init(userId: String) {
+        self.userId = userId
+    }
     
     var body: some View {
         VStack {
             HStack(alignment: .center) {
                 HStack {
-                    Image(systemName:viewModel.user.image)
+                    Image(systemName:viewModel.user?.image ?? "")
                         .clipShape(.circle)
                         .scaledToFill()
                         .padding()
                     
                     VStack(alignment: .leading) {
-                        Text(viewModel.user.name)
+                        Text(viewModel.user?.name ?? "")
                             .font(.title2)
-                        Text(viewModel.user.email)
+                        Text(viewModel.user?.email ?? "")
                             .font(.footnote)
                             .foregroundStyle(.gray)
                     }
                 }
                 Spacer()
                 NavigationLink {
-                    SettingsSectionView(viewModel: SettingsSectionViewModel(section: self.section, user: viewModel.user))
+                    SettingsSectionView(viewModel: SettingsSectionViewModel(section: self.section))
                 } label: {
                     Image(systemName: "pencil")
                 }
@@ -47,7 +50,7 @@ struct SettingsView: View {
                     ForEach(sections, id: \.self) {section in
                         
                         NavigationLink {
-                            SettingsSectionView(viewModel: SettingsSectionViewModel(section: self.section, user: viewModel.user)) } label: {
+                            SettingsSectionView(viewModel: SettingsSectionViewModel(section: self.section)) } label: {
                                 
                                 HStack {
                                     section.image()
@@ -61,5 +64,5 @@ struct SettingsView: View {
     }
 }
 #Preview {
-    SettingsView(viewModel: SettingsViewModel(user: User(name: "Катерина", image: "person", email: "user@icloud.com", settings: Settings(modeIsDark: false, notificationsIsOn: true))))
+    SettingsView(userId: "")
 }

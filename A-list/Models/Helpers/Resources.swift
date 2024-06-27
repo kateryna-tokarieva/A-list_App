@@ -36,6 +36,7 @@ struct Resources {
     enum Numbers {
         static var buttonCornerRadius = 10
         static var buttonShadowRadius = 2
+        static var listPreviewViewCornerRadius = 10
     }
     
     enum Colors {
