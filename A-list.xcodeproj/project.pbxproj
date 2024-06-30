@@ -19,8 +19,6 @@
 		1024D0D22C2B306700202864 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1024D0D12C2B306700202864 /* MainView.swift */; };
 		1024D0D42C2B307B00202864 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1024D0D32C2B307B00202864 /* MainViewModel.swift */; };
 		1024D0D62C2B426300202864 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1024D0D52C2B426300202864 /* GoogleService-Info.plist */; };
-		1025AFF72C2D7824004AFB73 /* ListPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1025AFF62C2D7824004AFB73 /* ListPreviewView.swift */; };
-		1025AFF92C2D7838004AFB73 /* ListPreviewViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1025AFF82C2D7838004AFB73 /* ListPreviewViewViewModel.swift */; };
 		10412AA82C2CA29800F79210 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 10412AA72C2CA29800F79210 /* FirebaseAnalytics */; };
 		10412AAA2C2CA29800F79210 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 10412AA92C2CA29800F79210 /* FirebaseAnalyticsSwift */; };
 		10412AAC2C2CA29800F79210 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 10412AAB2C2CA29800F79210 /* FirebaseAuth */; };
@@ -88,8 +86,6 @@
 		1024D0D12C2B306700202864 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		1024D0D32C2B307B00202864 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		1024D0D52C2B426300202864 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		1025AFF62C2D7824004AFB73 /* ListPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPreviewView.swift; sourceTree = "<group>"; };
-		1025AFF82C2D7838004AFB73 /* ListPreviewViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPreviewViewViewModel.swift; sourceTree = "<group>"; };
 		10439B102C28B32E005979FF /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		10439B142C28B86B005979FF /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		10439B192C297FF5005979FF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -268,7 +264,6 @@
 				1010B5062C28262C00F3114B /* HomeView.swift */,
 				10DDFD5E2C28519200F300F3 /* NewListView.swift */,
 				10439B102C28B32E005979FF /* ListView.swift */,
-				1025AFF62C2D7824004AFB73 /* ListPreviewView.swift */,
 				1025AFFC2C2D786B004AFB73 /* Settings */,
 			);
 			path = Views;
@@ -294,7 +289,6 @@
 				10439B192C297FF5005979FF /* HomeViewModel.swift */,
 				10DDFD6B2C286D9400F300F3 /* NewListViewModel.swift */,
 				10439B142C28B86B005979FF /* ListViewModel.swift */,
-				1025AFF82C2D7838004AFB73 /* ListPreviewViewViewModel.swift */,
 				1025AFFD2C2D787C004AFB73 /* Settings */,
 			);
 			path = ViewModels;
@@ -466,12 +460,10 @@
 				107AF32C2C2AED6900A2F56B /* NotificationsSettingsView.swift in Sources */,
 				10439B1A2C297FF5005979FF /* HomeViewModel.swift in Sources */,
 				1010B4D82C27238400F3114B /* A_listApp.swift in Sources */,
-				1025AFF92C2D7838004AFB73 /* ListPreviewViewViewModel.swift in Sources */,
 				1011E5442C2C5F1700A75CA6 /* RegistrationViewViewModel.swift in Sources */,
 				10DDFD6C2C286D9400F300F3 /* NewListViewModel.swift in Sources */,
 				10DDFD5D2C282EFA00F300F3 /* Resources.swift in Sources */,
 				107AF31A2C2A066D00A2F56B /* SettingsViewModel.swift in Sources */,
-				1025AFF72C2D7824004AFB73 /* ListPreviewView.swift in Sources */,
 				1024D0D42C2B307B00202864 /* MainViewModel.swift in Sources */,
 				10C1A53D2C2C0E38005C0F40 /* RegistrationView.swift in Sources */,
 				10DDFD5F2C28519200F300F3 /* NewListView.swift in Sources */,

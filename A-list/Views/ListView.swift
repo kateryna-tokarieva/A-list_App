@@ -28,10 +28,8 @@ struct ListView: View {
                     }
                     Button("+") {
                         showingSheet.toggle()
-                        
                     }
                     .sheet(isPresented: $showingSheet, content: {
-                       
                     })
                     .buttonStyle(.borderedProminent)
                     .clipShape(.circle)
@@ -43,7 +41,6 @@ struct ListView: View {
                 }
             }
         }
-
     }
 }
 
