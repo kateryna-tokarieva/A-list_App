@@ -11,6 +11,7 @@ struct ListView: View {
     @ObservedObject var viewModel: ListViewModel
     @Binding var showingNewListSheet: Bool
     @Binding var showingListSheet: Bool
+    @State private var showButton = true
     
     init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
         self.viewModel = ListViewModel(listID: listId)
@@ -79,22 +80,33 @@ struct ListView: View {
                     }
                 }
             }
-            VStack {
-                Spacer()
-                Button {
-                    viewModel.stateIsEditing.toggle()
-                    viewModel.updateForState()
-                } label: {
-                    viewModel.buttonImage
+            
+                VStack {
+                    Spacer()
+                    if showButton {
+                        Button {
+                            viewModel.stateIsEditing.toggle()
+                            viewModel.updateForState()
+                        } label: {
+                            viewModel.buttonImage
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .clipShape(.circle)
+                        .foregroundStyle(Resources.Views.Colors.borderedButtonText)
+                        .tint(Resources.Views.Colors.borderedButtonTint)
+                        .padding()
+                        .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+                        .controlSize(.large)
+                        .padding()
+                    }
                 }
-                .buttonStyle(.borderedProminent)
-                .clipShape(.circle)
-                .foregroundStyle(Resources.Views.Colors.borderedButtonText)
-                .tint(Resources.Views.Colors.borderedButtonTint)
-                .padding()
-                .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
-                .controlSize(.large)
-                .padding()
+                .onReceive(KeybordManager.shared.$keyboardFrame) { keyboardFrame in
+                    if let keyboardFrame = keyboardFrame, keyboardFrame != .zero {
+                        self.showButton = false
+                    } else {
+                        self.showButton = true
+                    }
+                
             }
         }
         .onDisappear {

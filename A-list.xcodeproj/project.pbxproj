@@ -31,6 +31,7 @@
 		10439B322C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
 		10439B332C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
 		10439B342C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
+		10657EB72C3343F900E9657F /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10657EB62C3343F900E9657F /* KeyboardManager.swift */; };
 		107AF3182C2A063E00A2F56B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3172C2A063E00A2F56B /* SettingsView.swift */; };
 		107AF31A2C2A066D00A2F56B /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3192C2A066D00A2F56B /* SettingsViewModel.swift */; };
 		107AF31C2C2ACF0800A2F56B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF31B2C2ACF0800A2F56B /* Settings.swift */; };
@@ -94,6 +95,7 @@
 		10439B192C297FF5005979FF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		10439B2D2C29C795005979FF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		10439B312C29C7AC005979FF /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		10657EB62C3343F900E9657F /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		107AF3172C2A063E00A2F56B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		107AF3192C2A066D00A2F56B /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		107AF31B2C2ACF0800A2F56B /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				107AF3332C2AFCF500A2F56B /* ShoppingList.swift */,
 				10C753F72C31F5370011742B /* ShoppingItem.swift */,
 				10C753F92C31F5B30011742B /* Unit.swift */,
+				10657EB62C3343F900E9657F /* KeyboardManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -484,6 +487,7 @@
 				10DDFD5D2C282EFA00F300F3 /* Resources.swift in Sources */,
 				107AF31A2C2A066D00A2F56B /* SettingsViewModel.swift in Sources */,
 				1024D0D42C2B307B00202864 /* MainViewModel.swift in Sources */,
+				10657EB72C3343F900E9657F /* KeyboardManager.swift in Sources */,
 				10C1A53D2C2C0E38005C0F40 /* RegistrationView.swift in Sources */,
 				10DDFD5F2C28519200F300F3 /* NewListView.swift in Sources */,
 				10439B2E2C29C796005979FF /* LoginView.swift in Sources */,
