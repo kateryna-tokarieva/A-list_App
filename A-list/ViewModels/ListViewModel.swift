@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
@@ -17,13 +18,17 @@ class ListViewModel: ObservableObject {
     @Published var newItemTitle = ""
     @Published var newItemQuantity = ""
     @Published var newItemUnit: Unit = .pc
+    @Published var itemIcons: [Image] = []
+    @Published var listId = ""
     
     init(listID: String) {
-        fetchList(listId: listID)
+        self.listId = listID
+        fetchList()
     }
     
     func addItem(_ item: ShoppingItem) {
         list?.items?.append(item)
+        itemIcons.append(Resources.Images.notDone)
         guard let userId = Auth.auth().currentUser?.uid else { return }
         guard let list else { return }
         let dataBase = Firestore.firestore()
@@ -38,6 +43,7 @@ class ListViewModel: ObservableObject {
     
     func deleteItem(withIndex index: Int) {
         let itemToDelete = list?.items?.remove(at: index)
+        itemIcons.remove(at: index)
         guard let id = itemToDelete?.id else { return }
         guard let userId = Auth.auth().currentUser?.uid else { return }
         guard let list else { return }
@@ -51,7 +57,7 @@ class ListViewModel: ObservableObject {
             .delete()
     }
     
-    func fetchList(listId: String) {
+    func fetchList() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let dataBase = Firestore.firestore()
         dataBase.collection("users").document(userId).collection("lists").document(listId).getDocument { [weak self] snapshot, error in
@@ -64,12 +70,13 @@ class ListViewModel: ObservableObject {
                                           isDone: data["isDone"] as? Bool ?? false)
                 
             }
-            dataBase.collection("users").document(userId).collection("lists").document(listId).collection("items").getDocuments { snapshot, error in
+            guard let self else { return }
+            dataBase.collection("users").document(userId).collection("lists").document(self.listId).collection("items").getDocuments { snapshot, error in
                 if let error = error {
                     print("Error fetching documents: \(error)")
                 } else {
                     guard let documents = snapshot?.documents else { return }
-                    self?.list?.items = documents.compactMap { document in
+                    self.list?.items = documents.compactMap { document in
                         do {
                             return try document.data(as: ShoppingItem.self)
                         } catch {
@@ -77,7 +84,19 @@ class ListViewModel: ObservableObject {
                             return nil
                         }
                     }
+                    self.setupIcons()
                 }
+            }
+        }
+    }
+    
+    private func setupIcons() {
+        guard let items = list?.items else { return }
+        for item in items {
+            if item.isDone {
+                itemIcons.append(Resources.Images.done)
+            } else {
+                itemIcons.append(Resources.Images.notDone)
             }
         }
     }
@@ -91,12 +110,21 @@ class ListViewModel: ObservableObject {
         }
     }
     
-    func toggleItemIsDone() {
-        if itemFulfillmentIcon == Resources.Images.notDone {
-            itemFulfillmentIcon = Resources.Images.done
+    func toggleItemIsDone(index: Int) {
+        toggleItemIsDoneInDataBase(index: index)
+        if itemIcons[index] == Resources.Images.notDone {
+            itemIcons[index] = Resources.Images.done
         } else {
-            itemFulfillmentIcon = Resources.Images.notDone
+            itemIcons[index] = Resources.Images.notDone
         }
+    }
+    
+    private func toggleItemIsDoneInDataBase(index: Int) {
+        list?.items?[index].isDone.toggle()
+        guard let item = list?.items else { return }
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let dataBase = Firestore.firestore()
+        dataBase.collection("users").document(userId).collection("lists").document(listId).collection("items").document("\(String(describing: list?.items?[index].id))").setData(item[index].asDictionary())
     }
 }
 

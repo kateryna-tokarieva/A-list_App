@@ -11,11 +11,9 @@ struct ListView: View {
     @ObservedObject var viewModel: ListViewModel
     @Binding var showingNewListSheet: Bool
     @Binding var showingListSheet: Bool
-    private var listId = ""
     
     init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
         self.viewModel = ListViewModel(listID: listId)
-        self.listId = listId
         self._showingNewListSheet = showingNewListSheet
         self._showingListSheet = showingListSheet
     }
@@ -33,10 +31,10 @@ struct ListView: View {
                         if let items = list.items {
                             ForEach(items.indices, id: \.self) { index in
                                 HStack {
-                                    viewModel.itemFulfillmentIcon
+                                    viewModel.itemIcons[index]
                                         .padding()
                                         .onTapGesture {
-                                            viewModel.toggleItemIsDone()
+                                            viewModel.toggleItemIsDone(index: index)
                                         }
                                     Text(items[index].title)
                                     Spacer()
@@ -47,7 +45,7 @@ struct ListView: View {
                                 .swipeActions {
                                     Button(role: .destructive) {
                                         viewModel.deleteItem(withIndex: index)
-                                        viewModel.fetchList(listId: listId)
+                                        viewModel.fetchList()
                                     } label: {
                                         Label("Видалити", systemImage: "trash")
                                     }

@@ -11,7 +11,7 @@ struct ShoppingItem: Identifiable, Codable, Hashable {
     var title: String = ""
     var quantity: String = ""
     var unit: Unit = .pc
-    var done = false
+    var isDone = false
     var id = UUID().uuidString
 
     enum CodingKeys: String, CodingKey {
@@ -26,7 +26,7 @@ struct ShoppingItem: Identifiable, Codable, Hashable {
         self.title = title
         self.quantity = quantity
         self.unit = unit
-        self.done = done
+        self.isDone = done
         self.id = id
     }
 
@@ -36,7 +36,7 @@ struct ShoppingItem: Identifiable, Codable, Hashable {
         title = try container.decode(String.self, forKey: .title)
         quantity = try container.decode(String.self, forKey: .quantity)
         unit = try container.decode(Unit.self, forKey: .unit)
-        done = try container.decode(Bool.self, forKey: .done)
+        isDone = try container.decode(Bool.self, forKey: .done)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -45,6 +45,6 @@ struct ShoppingItem: Identifiable, Codable, Hashable {
         try container.encode(title, forKey: .title)
         try container.encode(quantity, forKey: .quantity)
         try container.encode(unit, forKey: .unit)
-        try container.encode(done, forKey: .done)
+        try container.encode(isDone, forKey: .done)
     }
 }
