@@ -46,7 +46,7 @@ struct ListView: View {
                                 }
                                 .swipeActions {
                                     Button(role: .destructive) {
-                                        viewModel.deleteItem(withIndex: items[index].id)
+                                        viewModel.deleteItem(withIndex: index)
                                         viewModel.fetchList(listId: listId)
                                     } label: {
                                         Label("Видалити", systemImage: "trash")

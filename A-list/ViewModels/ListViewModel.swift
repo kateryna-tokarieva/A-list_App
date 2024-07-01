@@ -36,9 +36,8 @@ class ListViewModel: ObservableObject {
             .setData(item.asDictionary())
     }
     
-    func deleteItem(withIndex index: String) {
-        guard let intIndex = Int(index) else { return }
-        let itemToDelete = list?.items?.remove(at: intIndex)
+    func deleteItem(withIndex index: Int) {
+        let itemToDelete = list?.items?.remove(at: index)
         guard let id = itemToDelete?.id else { return }
         guard let userId = Auth.auth().currentUser?.uid else { return }
         guard let list else { return }
