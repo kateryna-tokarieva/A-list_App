@@ -15,16 +15,14 @@ struct HomeView: View {
     @State private var showingSettingsSheet = false
     @State private var showingNewListSheet = false
     @State private var showingListSheet = false
-    @State private var showingDeleteAlert = false
-    @State private var listToDelete: ShoppingList? = nil
-
+    
     private var userId = ""
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]
-
+    
     init(userId: String) {
         self.userId = userId
     }
-
+    
     var body: some View {
         ZStack {
             VStack(alignment: .center) {
@@ -33,20 +31,8 @@ struct HomeView: View {
             }
             footer
         }
-        .alert(isPresented: $showingDeleteAlert) {
-            Alert(
-                title: Text("Видалення списку"),
-                message: Text("Ви впевнені що хочете видалити цей список?"),
-                primaryButton: .destructive(Text("Видалити")) {
-                    if let list = listToDelete {
-                        //viewModel.deleteList(list)
-                    }
-                },
-                secondaryButton: .cancel(Text("Відмінити"))
-            )
-        }
     }
-
+    
     private var header: some View {
         HStack(alignment: .center) {
             Spacer()
@@ -69,7 +55,7 @@ struct HomeView: View {
         }
         .padding()
     }
-
+    
     private var content: some View {
         VStack {
             if viewModel.lists.isEmpty {
@@ -79,7 +65,7 @@ struct HomeView: View {
             }
         }
     }
-
+    
     private var emptyState: some View {
         VStack {
             Resources.Images.background
@@ -97,9 +83,10 @@ struct HomeView: View {
                     .multilineTextAlignment(.center)
             }
             .padding()
+            Spacer()
         }
     }
-
+    
     private var listGrid: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
@@ -110,7 +97,7 @@ struct HomeView: View {
             .padding()
         }
     }
-
+    
     private func listItem(for index: Int) -> some View {
         VStack {
             HStack {
@@ -126,10 +113,11 @@ struct HomeView: View {
             VStack {
                 ForEach(0..<4) { itemIndex in
                     HStack {
-                        Text("• " + (viewModel.lists[index].items?[itemIndex].title ?? "Item \(itemIndex + 1)"))
+                        Text("• " + (viewModel.lists[safe: index]?.items?[safe: itemIndex]?.title ?? "Item \(itemIndex + 1)"))
                             .padding(.leading)
                             .font(.caption)
                             .foregroundColor(Resources.Colors.subText)
+
                         Spacer()
                     }
                 }
@@ -150,17 +138,11 @@ struct HomeView: View {
             showingListSheet.toggle()
         }
         .sheet(isPresented: $showingListSheet, onDismiss: {
-            viewModel.fetchLists()
+            Task {
+                await viewModel.fetchLists()
+            }
         }) {
             ListView(listId: viewModel.currentListId, showingNewListSheet: $showingNewListSheet, showingListSheet: $showingListSheet)
-        }
-        .swipeActions {
-            Button(role: .destructive) {
-                listToDelete = viewModel.lists[index]
-                showingDeleteAlert = true
-            } label: {
-                Label("Видалити", systemImage: "trash")
-            }
         }
     }
     
@@ -173,7 +155,9 @@ struct HomeView: View {
                 Resources.Images.add
             }
             .sheet(isPresented: $showingNewListSheet, onDismiss: {
-                viewModel.fetchLists()
+                Task {
+                    await viewModel.fetchLists()
+                }
             }) {
                 NewListView(viewModel: NewListViewModel(), showingNewListSheet: $showingNewListSheet)
             }
