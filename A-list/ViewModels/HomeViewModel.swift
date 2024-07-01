@@ -11,12 +11,14 @@ import FirebaseAuth
 
 class HomeViewModel: ObservableObject {
     @Published var lists: [ShoppingList] = []
-    
-    init(userId: String) {
-        fetchLists(userId: userId)
+    @Published var currentListId = ""
+
+    init() {
+        fetchLists()
     }
-    
-    func fetchLists(userId: String) {
+
+    func fetchLists() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
         let dataBase = Firestore.firestore()
         dataBase.collection("users").document(userId).collection("lists").getDocuments { snapshot, error in
             if let error = error {
@@ -30,7 +32,7 @@ class HomeViewModel: ObservableObject {
                         print("Error decoding document into ShoppingList: \(error)")
                         return nil
                     }
-                }                
+                }
             }
         }
     }

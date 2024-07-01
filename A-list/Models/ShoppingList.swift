@@ -13,7 +13,7 @@ struct ShoppingList: Codable, Hashable {
     var dueDate: Date?
     var isDone = false
     var id = UUID().uuidString
-    
+
     enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -21,7 +21,7 @@ struct ShoppingList: Codable, Hashable {
         case dueDate
         case isDone
     }
-    
+
     init(id: String? = nil, name: String, items: [ShoppingItem]? = nil, dueDate: Date? = nil, isDone: Bool = false) {
         self.id = id ?? UUID().uuidString
         self.name = name
@@ -29,7 +29,7 @@ struct ShoppingList: Codable, Hashable {
         self.dueDate = dueDate
         self.isDone = isDone
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decodeIfPresent(String.self, forKey: .id) ?? UUID().uuidString
@@ -43,20 +43,15 @@ struct ShoppingList: Codable, Hashable {
             dueDate = try? container.decode(Date.self, forKey: .dueDate)
         }
     }
-}
 
-struct ShoppingItem: Identifiable, Codable, Hashable {
-    var title: String = ""
-    var quantity: Double = 0
-    var unit: Unit = .pc
-    var done = false
-    var id = UUID().uuidString
-}
-
-enum Unit: String, Codable {
-    case ml = "мл."
-    case l = "л."
-    case g = "гр."
-    case kg = "кг."
-    case pc = "шт."
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try container.encode(items, forKey: .items)
+        try container.encode(isDone, forKey: .isDone)
+        if let dueDate = dueDate {
+            try container.encode(dueDate.timeIntervalSince1970, forKey: .dueDate)
+        }
+    }
 }

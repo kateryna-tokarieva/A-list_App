@@ -34,8 +34,8 @@ struct RegistrationView: View {
             .tint(Resources.Views.Colors.borderedButtonTint)
             .foregroundStyle(Resources.Views.Colors.borderedButtonText)
             .buttonStyle(.borderedProminent)
-            .clipShape(.rect(cornerRadius: CGFloat(Resources.Numbers.buttonCornerRadius)))
-            .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: CGFloat(Resources.Numbers.buttonShadowRadius), x: CGFloat(Resources.Numbers.buttonShadowRadius), y: CGFloat(Resources.Numbers.buttonShadowRadius))
+            .clipShape(.rect(cornerRadius: CGFloat(Resources.Sizes.buttonCornerRadius)))
+            .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: CGFloat(Resources.Sizes.buttonShadowRadius), x: CGFloat(Resources.Sizes.buttonShadowRadius), y: CGFloat(Resources.Sizes.buttonShadowRadius))
             .controlSize(.large)
             .padding()
             .fullScreenCover(isPresented: $viewModel.showingLoginSheet, content: {

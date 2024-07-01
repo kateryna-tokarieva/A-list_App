@@ -16,8 +16,6 @@ struct SettingsSectionView: View {
             UserSettingsView()
         case .friends:
             FriendsSettingsView()
-        case .categories:
-            CategoriesSettingsView()
         case .calendar:
             CalendarSettingsView()
         case .mode:

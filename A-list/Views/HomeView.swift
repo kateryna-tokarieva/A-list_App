@@ -11,132 +11,180 @@ import FirebaseAuth
 import FirebaseFirestore
 
 struct HomeView: View {
-    @StateObject private var viewModel: HomeViewModel
+    @StateObject private var viewModel = HomeViewModel()
     @State private var showingSettingsSheet = false
     @State private var showingNewListSheet = false
+    @State private var showingListSheet = false
+    @State private var showingDeleteAlert = false
+    @State private var listToDelete: ShoppingList? = nil
+
     private var userId = ""
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]
-    
+
     init(userId: String) {
-        _viewModel = StateObject(wrappedValue: HomeViewModel(userId: userId))
+        self.userId = userId
+    }
+
+    var body: some View {
+        ZStack {
+            VStack(alignment: .center) {
+                header
+                content
+            }
+            footer
+        }
+        .alert(isPresented: $showingDeleteAlert) {
+            Alert(
+                title: Text("Видалення списку"),
+                message: Text("Ви впевнені що хочете видалити цей список?"),
+                primaryButton: .destructive(Text("Видалити")) {
+                    if let list = listToDelete {
+                        //viewModel.deleteList(list)
+                    }
+                },
+                secondaryButton: .cancel(Text("Відмінити"))
+            )
+        }
+    }
+
+    private var header: some View {
+        HStack(alignment: .center) {
+            Spacer()
+            Text(Resources.Strings.allLists)
+                .font(.title)
+                .underline(color: Resources.Colors.accentPink)
+                .foregroundStyle(Resources.Views.Colors.plainButtonText)
+            Spacer()
+            Button {
+                showingSettingsSheet.toggle()
+            } label: {
+                Resources.Images.settings
+            }
+            .controlSize(.large)
+            .aspectRatio(contentMode: .fill)
+            .tint(Resources.Views.Colors.plainButtonText)
+            .sheet(isPresented: $showingSettingsSheet) {
+                SettingsView(userId: userId)
+            }
+        }
+        .padding()
+    }
+
+    private var content: some View {
+        VStack {
+            if viewModel.lists.isEmpty {
+                emptyState
+            } else {
+                listGrid
+            }
+        }
+    }
+
+    private var emptyState: some View {
+        VStack {
+            Resources.Images.background
+                .resizable()
+                .scaledToFit()
+                .padding()
+            VStack {
+                Text(Resources.Strings.welcome)
+                    .padding()
+                    .font(.largeTitle)
+                Text(Resources.Strings.background)
+                    .padding()
+                    .font(.subheadline)
+                    .foregroundStyle(Resources.Colors.subText)
+                    .multilineTextAlignment(.center)
+            }
+            .padding()
+        }
+    }
+
+    private var listGrid: some View {
+        ScrollView {
+            LazyVGrid(columns: columns) {
+                ForEach(viewModel.lists.indices, id: \.self) { list in
+                    listItem(for: list)
+                }
+            }
+            .padding()
+        }
+    }
+
+    private func listItem(for index: Int) -> some View {
+        VStack {
+            HStack {
+                Text(viewModel.lists[index].name + ":")
+                    .font(.title2)
+                    .foregroundColor(Resources.Colors.accentBlue)
+                    .underline()
+                    .lineLimit(1)
+                Spacer()
+            }
+            .padding(.bottom)
+            .padding(.leading)
+            VStack {
+                ForEach(0..<4) { itemIndex in
+                    HStack {
+                        Text("• " + (viewModel.lists[index].items?[itemIndex].title ?? "Item \(itemIndex + 1)"))
+                            .padding(.leading)
+                            .font(.caption)
+                            .foregroundColor(Resources.Colors.subText)
+                        Spacer()
+                    }
+                }
+                .padding(.leading)
+            }
+        }
+        .padding()
+        .frame(width: Resources.Sizes.listPreviewFrame, height: Resources.Sizes.listPreviewFrame)
+        .background(Resources.Colors.base)
+        .cornerRadius(Resources.Sizes.listPreviewCornerRadius)
+        .shadow(color: Resources.Colors.accentPink, radius: Resources.Sizes.listPreviewShadowRadius, x: Resources.Sizes.listPreviewShadowOffset, y: Resources.Sizes.listPreviewShadowOffset)
+        .overlay(
+            RoundedRectangle(cornerRadius: Resources.Sizes.listPreviewCornerRadius)
+                .stroke(Resources.Colors.accentPink, lineWidth: 1)
+        )
+        .onTapGesture {
+            viewModel.currentListId = viewModel.lists[index].id
+            showingListSheet.toggle()
+        }
+        .sheet(isPresented: $showingListSheet, onDismiss: {
+            viewModel.fetchLists()
+        }) {
+            ListView(listId: viewModel.currentListId, showingNewListSheet: $showingNewListSheet, showingListSheet: $showingListSheet)
+        }
+        .swipeActions {
+            Button(role: .destructive) {
+                listToDelete = viewModel.lists[index]
+                showingDeleteAlert = true
+            } label: {
+                Label("Видалити", systemImage: "trash")
+            }
+        }
     }
     
-    var body: some View {
-        VStack(alignment: .center, content: {
-            HStack(alignment: .center, content: {
-                Spacer()
-                Text("Всі списки")
-                    .font(.title)
-                    .underline(color: Resources.Colors.accentPink)
-                    .foregroundStyle(Resources.Views.Colors.plainButtonText)
-                Spacer()
-                Button {
-                    showingSettingsSheet.toggle()
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .controlSize(.large)
-                .aspectRatio(contentMode: .fill)
-                .tint(Resources.Views.Colors.plainButtonText)
-                .sheet(isPresented: $showingSettingsSheet, content: {
-                    SettingsView(userId: userId)
-                })
-            })
-            .padding()
-            VStack {
-                if viewModel.lists.isEmpty {
-                    VStack {
-                        Resources.Images.background
-                            .resizable()
-                            .scaledToFit()
-                            .padding()
-                        VStack {
-                            Text(Resources.Strings.welcome)
-                                .padding()
-                                .font(.largeTitle)
-                            Text(Resources.Strings.background)
-                                .padding()
-                                .font(.subheadline)
-                                .foregroundStyle(.gray)
-                                .multilineTextAlignment(.center)
-                        }
-                        .padding()
-                    }
-                } else {
-                    LazyVGrid(columns: columns) {
-                        ForEach(viewModel.lists, id: \.self) { list in
-                            VStack {
-                                HStack {
-                                    Text(list.name + ":")
-                                        .font(.title2)
-                                        .foregroundStyle(Resources.Colors.accentBlue)
-                                        .underline()
-                                    Spacer()
-                                }
-                                .padding(.bottom)
-                                .padding(.bottom)
-                                .padding(.leading)
-                                VStack {
-                                    HStack {
-                                        Text("• " + (list.items?[0].title ?? "молоко"))
-                                            .padding(.leading)
-                                            .padding(.leading)
-                                            .font(.caption)
-                                            .foregroundStyle(.gray)
-                                        Spacer()
-                                    }
-                                    HStack {
-                                        Text("• " + (list.items?[1].title ?? "хліб"))
-                                            .padding(.leading)
-                                            .padding(.leading)
-                                            .font(.caption)
-                                            .foregroundStyle(.gray)
-                                        Spacer()
-                                    }
-                                    HStack {
-                                        Text("• " + (list.items?[2].title ?? "шоколадка"))
-                                            .padding(.leading)
-                                            .padding(.leading)
-                                            .font(.caption)
-                                            .foregroundStyle(.gray)
-                                        Spacer()
-                                    }
-                                    HStack {
-                                        Text("• " + (list.items?[3].title ?? "масло"))
-                                            .padding(.leading)
-                                            .padding(.leading)
-                                            .font(.caption)
-                                            .foregroundStyle(.gray)
-                                        Spacer()
-                                    }
-                                }
-                            }
-                        }
-                        .padding(.bottom)
-                        .frame(width: UIScreen.main.bounds.width/2 - 20, height: UIScreen.main.bounds.width/2 - 20)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Resources.Colors.accentPink, lineWidth: 1)
-                                .shadow(color: Resources.Colors.accentPink, radius: 2, x: 4, y: 4))
-                    }
-                    .padding()
-                }
-                Spacer()
-                Button("+") {
-                    showingNewListSheet.toggle()
-                }
-                .sheet(isPresented: $showingNewListSheet, content: {
-                    NewListView(viewModel: NewListViewModel())
-                })
-                .buttonStyle(.borderedProminent)
-                .clipShape(.circle)
-                .foregroundStyle(Resources.Views.Colors.borderedButtonText)
-                .tint(Resources.Views.Colors.borderedButtonTint)
-                .padding()
-                .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: 2, x: 2, y: 2)
-                .controlSize(.large)
+    private var footer: some View {
+        VStack {
+            Spacer()
+            Button {
+                showingNewListSheet.toggle()
+            } label: {
+                Resources.Images.add
             }
-        })
+            .sheet(isPresented: $showingNewListSheet, onDismiss: {
+                viewModel.fetchLists()
+            }) {
+                NewListView(viewModel: NewListViewModel(), showingNewListSheet: $showingNewListSheet)
+            }
+            .buttonStyle(.borderedProminent)
+            .clipShape(.circle)
+            .foregroundStyle(Resources.Views.Colors.borderedButtonText)
+            .tint(Resources.Views.Colors.borderedButtonTint)
+            .padding()
+            .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+            .controlSize(.large)
+        }
     }
 }
 

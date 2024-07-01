@@ -12,6 +12,14 @@ struct Resources {
     
     enum Images {
         static var background = Image("background")
+        static var settings = Image(systemName: "gearshape")
+        static var add = Image(systemName: "plus")
+        static var checkmark = Image(systemName: "checkmark")
+        static var userImagePlaceholder = Image(systemName: "person")
+        static var edit = Image(systemName: "pencil")
+        static var done = Image(systemName: "circle.fill")
+        static var notDone = Image(systemName: "circle")
+        
     }
     
     enum Strings {
@@ -31,12 +39,21 @@ struct Resources {
         static var login = "Вхід"
         static var name = "імʼя"
         static var registration = "Зареєструватись"
+        static var allLists = "Всі списки"
+        static var skip = "Пропустити"
+        static var setupNotification = "Постав нагадування"
+        static var title = "Назва"
+        static var quantity = "Кількість"
     }
     
-    enum Numbers {
-        static var buttonCornerRadius = 10
-        static var buttonShadowRadius = 2
-        static var listPreviewViewCornerRadius = 10
+    enum Sizes {
+        static var buttonCornerRadius: CGFloat = 10
+        static var buttonShadowRadius: CGFloat = 2
+        static var buttonShadowOffset: CGFloat = 2
+        static var listPreviewFrame: CGFloat = UIScreen.main.bounds.width/2 - 20
+        static var listPreviewCornerRadius: CGFloat = 10
+        static var listPreviewShadowRadius: CGFloat = 2
+        static var listPreviewShadowOffset: CGFloat = 2
     }
     
     enum Colors {
@@ -44,6 +61,7 @@ struct Resources {
         static var accentPink = Color(UIColor(red: 248/255, green: 189/255, blue: 215/255, alpha: 1))
         static var accentBlue = Color(UIColor(red: 21/255, green: 65/255, blue: 173/255, alpha: 1))
         static var text = Color(UIColor.black)
+        static var subText = Color(UIColor.gray)
         static var base = Color(UIColor.white)
     }
     

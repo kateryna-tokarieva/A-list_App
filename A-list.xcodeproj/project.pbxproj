@@ -38,7 +38,6 @@
 		107AF3202C2AD7D300A2F56B /* SettingsSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF31F2C2AD7D300A2F56B /* SettingsSectionViewModel.swift */; };
 		107AF3222C2AEC4300A2F56B /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3212C2AEC4300A2F56B /* UserSettingsView.swift */; };
 		107AF3242C2AEC7800A2F56B /* FriendsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3232C2AEC7800A2F56B /* FriendsSettingsView.swift */; };
-		107AF3262C2AECFB00A2F56B /* CategoriesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3252C2AECFB00A2F56B /* CategoriesSettingsView.swift */; };
 		107AF3282C2AED1B00A2F56B /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3272C2AED1B00A2F56B /* CalendarSettingsView.swift */; };
 		107AF32A2C2AED3F00A2F56B /* ModeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3292C2AED3F00A2F56B /* ModeSettingsView.swift */; };
 		107AF32C2C2AED6900A2F56B /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF32B2C2AED6900A2F56B /* NotificationsSettingsView.swift */; };
@@ -46,7 +45,10 @@
 		107AF3302C2AFB0600A2F56B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF32F2C2AFB0600A2F56B /* User.swift */; };
 		107AF3322C2AFCB500A2F56B /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3312C2AFCB500A2F56B /* Category.swift */; };
 		107AF3342C2AFCF500A2F56B /* ShoppingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3332C2AFCF500A2F56B /* ShoppingList.swift */; };
+		109F9D372C32CB3300709AA5 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109F9D362C32CB3300709AA5 /* Test.swift */; };
 		10C1A53D2C2C0E38005C0F40 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C1A53C2C2C0E38005C0F40 /* RegistrationView.swift */; };
+		10C753F82C31F5370011742B /* ShoppingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C753F72C31F5370011742B /* ShoppingItem.swift */; };
+		10C753FA2C31F5B30011742B /* Unit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C753F92C31F5B30011742B /* Unit.swift */; };
 		10DDFD5D2C282EFA00F300F3 /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DDFD5C2C282EFA00F300F3 /* Resources.swift */; };
 		10DDFD5F2C28519200F300F3 /* NewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DDFD5E2C28519200F300F3 /* NewListView.swift */; };
 		10DDFD6A2C286B8F00F300F3 /* NewListSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DDFD692C286B8F00F300F3 /* NewListSteps.swift */; };
@@ -98,7 +100,6 @@
 		107AF31F2C2AD7D300A2F56B /* SettingsSectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSectionViewModel.swift; sourceTree = "<group>"; };
 		107AF3212C2AEC4300A2F56B /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
 		107AF3232C2AEC7800A2F56B /* FriendsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsSettingsView.swift; sourceTree = "<group>"; };
-		107AF3252C2AECFB00A2F56B /* CategoriesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesSettingsView.swift; sourceTree = "<group>"; };
 		107AF3272C2AED1B00A2F56B /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
 		107AF3292C2AED3F00A2F56B /* ModeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSettingsView.swift; sourceTree = "<group>"; };
 		107AF32B2C2AED6900A2F56B /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
@@ -106,8 +107,11 @@
 		107AF32F2C2AFB0600A2F56B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		107AF3312C2AFCB500A2F56B /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		107AF3332C2AFCF500A2F56B /* ShoppingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingList.swift; sourceTree = "<group>"; };
+		109F9D362C32CB3300709AA5 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		10C1A53B2C2B6851005C0F40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		10C1A53C2C2C0E38005C0F40 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
+		10C753F72C31F5370011742B /* ShoppingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingItem.swift; sourceTree = "<group>"; };
+		10C753F92C31F5B30011742B /* Unit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unit.swift; sourceTree = "<group>"; };
 		10DDFD5C2C282EFA00F300F3 /* Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
 		10DDFD5E2C28519200F300F3 /* NewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewListView.swift; sourceTree = "<group>"; };
 		10DDFD692C286B8F00F300F3 /* NewListSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewListSteps.swift; sourceTree = "<group>"; };
@@ -248,7 +252,6 @@
 			children = (
 				107AF3212C2AEC4300A2F56B /* UserSettingsView.swift */,
 				107AF3232C2AEC7800A2F56B /* FriendsSettingsView.swift */,
-				107AF3252C2AECFB00A2F56B /* CategoriesSettingsView.swift */,
 				107AF3272C2AED1B00A2F56B /* CalendarSettingsView.swift */,
 				107AF3292C2AED3F00A2F56B /* ModeSettingsView.swift */,
 				107AF32B2C2AED6900A2F56B /* NotificationsSettingsView.swift */,
@@ -265,6 +268,7 @@
 				10DDFD5E2C28519200F300F3 /* NewListView.swift */,
 				10439B102C28B32E005979FF /* ListView.swift */,
 				1025AFFC2C2D786B004AFB73 /* Settings */,
+				109F9D362C32CB3300709AA5 /* Test.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -278,6 +282,8 @@
 				107AF32F2C2AFB0600A2F56B /* User.swift */,
 				107AF3312C2AFCB500A2F56B /* Category.swift */,
 				107AF3332C2AFCF500A2F56B /* ShoppingList.swift */,
+				10C753F72C31F5370011742B /* ShoppingItem.swift */,
+				10C753F92C31F5B30011742B /* Unit.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -460,6 +466,8 @@
 				107AF32C2C2AED6900A2F56B /* NotificationsSettingsView.swift in Sources */,
 				10439B1A2C297FF5005979FF /* HomeViewModel.swift in Sources */,
 				1010B4D82C27238400F3114B /* A_listApp.swift in Sources */,
+				109F9D372C32CB3300709AA5 /* Test.swift in Sources */,
+				10C753FA2C31F5B30011742B /* Unit.swift in Sources */,
 				1011E5442C2C5F1700A75CA6 /* RegistrationViewViewModel.swift in Sources */,
 				10DDFD6C2C286D9400F300F3 /* NewListViewModel.swift in Sources */,
 				10DDFD5D2C282EFA00F300F3 /* Resources.swift in Sources */,
@@ -468,6 +476,7 @@
 				10C1A53D2C2C0E38005C0F40 /* RegistrationView.swift in Sources */,
 				10DDFD5F2C28519200F300F3 /* NewListView.swift in Sources */,
 				10439B2E2C29C796005979FF /* LoginView.swift in Sources */,
+				10C753F82C31F5370011742B /* ShoppingItem.swift in Sources */,
 				107AF3182C2A063E00A2F56B /* SettingsView.swift in Sources */,
 				10DDFD6A2C286B8F00F300F3 /* NewListSteps.swift in Sources */,
 				107AF3342C2AFCF500A2F56B /* ShoppingList.swift in Sources */,
@@ -485,7 +494,6 @@
 				10439B152C28B86B005979FF /* ListViewModel.swift in Sources */,
 				107AF32E2C2AED8500A2F56B /* SupportSettingsView.swift in Sources */,
 				107AF31E2C2AD7BD00A2F56B /* SettingsSectionView.swift in Sources */,
-				107AF3262C2AECFB00A2F56B /* CategoriesSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,8 +9,9 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var viewModel = SettingsViewModel()
-    var sections: [SettingsSection] = [.friends, .categories, .calendar, .mode, .notifications, .support]
-    @State var section: SettingsSection = .friends
+    @State private var section: SettingsSection = .friends
+    @State private var showingLoginSheet = false
+    private var sections: [SettingsSection] = [.friends, .calendar, .mode, .notifications, .support]
     private var userId: String
     
     init(userId: String) {
@@ -21,7 +22,7 @@ struct SettingsView: View {
         VStack {
             HStack(alignment: .center) {
                 HStack {
-                    Image(systemName:viewModel.user?.image ?? "")
+                    Resources.Images.userImagePlaceholder
                         .clipShape(.circle)
                         .scaledToFill()
                         .padding()
@@ -38,7 +39,7 @@ struct SettingsView: View {
                 NavigationLink {
                     SettingsSectionView(viewModel: SettingsSectionViewModel(section: self.section))
                 } label: {
-                    Image(systemName: "pencil")
+                    Resources.Images.edit
                 }
                 .padding()
                 .controlSize(.large)
@@ -48,7 +49,6 @@ struct SettingsView: View {
             NavigationStack {
                 List {
                     ForEach(sections, id: \.self) {section in
-                        
                         NavigationLink {
                             SettingsSectionView(viewModel: SettingsSectionViewModel(section: self.section)) } label: {
                                 
@@ -60,9 +60,18 @@ struct SettingsView: View {
                     }
                 }
             }
+            Button {
+                viewModel.logout()
+                showingLoginSheet.toggle()
+            } label: {
+                Text("Вийти")
+            }
+            .fullScreenCover(isPresented: $showingLoginSheet, content: {
+                LoginView()
+            })
         }
     }
 }
 #Preview {
-    SettingsView(userId: "")
+    SettingsView(userId: "3YIxHKN4ekMJ5V9zdJqkDgzEenI2")
 }
