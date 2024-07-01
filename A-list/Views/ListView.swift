@@ -69,6 +69,8 @@ struct ListView: View {
                             Spacer()
                             Button {
                                 viewModel.addItem(ShoppingItem(title: viewModel.newItemTitle, quantity: viewModel.newItemQuantity, unit: viewModel.newItemUnit, done: false))
+                                viewModel.newItemTitle = ""
+                                viewModel.newItemQuantity = ""
                             } label: {
                                 Resources.Images.checkmark
                             }
