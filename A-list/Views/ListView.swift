@@ -11,9 +11,11 @@ struct ListView: View {
     @ObservedObject var viewModel: ListViewModel
     @Binding var showingNewListSheet: Bool
     @Binding var showingListSheet: Bool
+    private var listId = ""
     
     init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
         self.viewModel = ListViewModel(listID: listId)
+        self.listId = listId
         self._showingNewListSheet = showingNewListSheet
         self._showingListSheet = showingListSheet
     }
@@ -33,11 +35,22 @@ struct ListView: View {
                                 HStack {
                                     viewModel.itemFulfillmentIcon
                                         .padding()
+                                        .onTapGesture {
+                                            viewModel.toggleItemIsDone()
+                                        }
                                     Text(items[index].title)
                                     Spacer()
                                     Text(String(items[index].quantity))
                                     Text(items[index].unit.rawValue)
                                         .padding(.trailing)
+                                }
+                                .swipeActions {
+                                    Button(role: .destructive) {
+                                        viewModel.deleteItem(withIndex: items[index].id)
+                                        viewModel.fetchList(listId: listId)
+                                    } label: {
+                                        Label("Видалити", systemImage: "trash")
+                                    }
                                 }
                             }
                         }

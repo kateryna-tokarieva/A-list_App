@@ -113,7 +113,7 @@ struct HomeView: View {
             VStack {
                 ForEach(0..<4) { itemIndex in
                     HStack {
-                        Text("• " + (viewModel.lists[safe: index]?.items?[safe: itemIndex]?.title ?? "Item \(itemIndex + 1)"))
+                        Text("• " + (viewModel.lists[safe: index]?.items?[safe: itemIndex]?.title ?? ""))
                             .padding(.leading)
                             .font(.caption)
                             .foregroundColor(Resources.Colors.subText)

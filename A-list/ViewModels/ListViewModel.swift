@@ -36,6 +36,22 @@ class ListViewModel: ObservableObject {
             .setData(item.asDictionary())
     }
     
+    func deleteItem(withIndex index: String) {
+        guard let intIndex = Int(index) else { return }
+        let itemToDelete = list?.items?.remove(at: intIndex)
+        guard let id = itemToDelete?.id else { return }
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        guard let list else { return }
+        let dataBase = Firestore.firestore()
+        dataBase.collection("users")
+            .document(userId)
+            .collection("lists")
+            .document(list.id)
+            .collection("items")
+            .document(id)
+            .delete()
+    }
+    
     func fetchList(listId: String) {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let dataBase = Firestore.firestore()
