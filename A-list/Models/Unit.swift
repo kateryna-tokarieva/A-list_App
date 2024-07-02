@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Unit: String, Codable {
+enum Unit: String, Codable, CaseIterable {
     case ml = "мл."
     case l = "л."
     case g = "гр."

@@ -19,14 +19,14 @@ struct ShoppingItem: Identifiable, Codable, Hashable {
         case title
         case quantity
         case unit
-        case done
+        case isDone
     }
 
-    init(title: String, quantity: String, unit: Unit, done: Bool = false, id: String = UUID().uuidString) {
+    init(title: String, quantity: String, unit: Unit, isDone: Bool = false, id: String = UUID().uuidString) {
         self.title = title
         self.quantity = quantity
         self.unit = unit
-        self.isDone = done
+        self.isDone = isDone
         self.id = id
     }
 
@@ -36,7 +36,7 @@ struct ShoppingItem: Identifiable, Codable, Hashable {
         title = try container.decode(String.self, forKey: .title)
         quantity = try container.decode(String.self, forKey: .quantity)
         unit = try container.decode(Unit.self, forKey: .unit)
-        isDone = try container.decode(Bool.self, forKey: .done)
+        isDone = try container.decode(Bool.self, forKey: .isDone)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -45,6 +45,6 @@ struct ShoppingItem: Identifiable, Codable, Hashable {
         try container.encode(title, forKey: .title)
         try container.encode(quantity, forKey: .quantity)
         try container.encode(unit, forKey: .unit)
-        try container.encode(isDone, forKey: .done)
+        try container.encode(isDone, forKey: .isDone)
     }
 }

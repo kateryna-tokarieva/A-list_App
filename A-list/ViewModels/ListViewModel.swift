@@ -14,14 +14,13 @@ class ListViewModel: ObservableObject {
     @Published var list: ShoppingList?
     @Published var stateIsEditing = false
     @Published var buttonImage = Resources.Images.edit
-    @Published var itemFulfillmentIcon = Resources.Images.notDone
     @Published var newItemTitle = ""
     @Published var newItemQuantity = ""
     @Published var newItemUnit: Unit = .pc
     @Published var itemIcons: [Image] = []
-    @Published var listId = ""
-    private var doneItemsCount = 0
     @Published var doneItemsText = ""
+    private var doneItemsCount = 0
+    private var listId: String
     
     init(listID: String) {
         self.listId = listID
@@ -31,125 +30,106 @@ class ListViewModel: ObservableObject {
     func addItem(_ item: ShoppingItem) {
         list?.items?.append(item)
         itemIcons.append(Resources.Images.notDone)
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        guard let list else { return }
-        let dataBase = Firestore.firestore()
-        dataBase.collection("users")
-            .document(userId)
-            .collection("lists")
-            .document(list.id)
-            .collection("items")
-            .document(item.id)
-            .setData(item.asDictionary())
+        saveItemToDatabase(item)
     }
     
     func deleteItem(withIndex index: Int) {
-        let itemToDelete = list?.items?[index]
-        guard let id = itemToDelete?.id else { return }
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        guard let list else { return }
-        let dataBase = Firestore.firestore()
-        dataBase.collection("users")
-            .document(userId)
-            .collection("lists")
-            .document(list.id)
-            .collection("items")
-            .document(id)
-            .delete()
-        DispatchQueue.main.async { [weak self] in
-            self?.fetchList()
-        }
+        guard let itemToDelete = list?.items?[index] else { return }
+        deleteItemFromDatabase(itemToDelete)
+        fetchList()
     }
     
-    func fetchList() {
+    func toggleItemIsDone(index: Int) {
+        guard var item = list?.items?[index] else { return }
         guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        item.isDone.toggle()
+        
         let dataBase = Firestore.firestore()
-        dataBase.collection("users").document(userId).collection("lists").document(listId).getDocument { [weak self] snapshot, error in
-            guard let data = snapshot?.data() else { return }
-            DispatchQueue.main.async {
-                self?.list = ShoppingList(id: data["id"] as? String ?? "",
-                                          name: data["name"] as? String ?? "",
-                                          items: data["items"] as? [ShoppingItem] ?? nil,
-                                          dueDate: data["dueDate"] as? Date ?? nil,
-                                          isDone: data["isDone"] as? Bool ?? false)
-                
-            }
-            guard let self else { return }
-            dataBase.collection("users").document(userId).collection("lists").document(self.listId).collection("items").getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error fetching documents: \(error)")
-                } else {
-                    guard let documents = snapshot?.documents else { return }
-                    self.list?.items = documents.compactMap { document in
-                        do {
-                            return try document.data(as: ShoppingItem.self)
-                        } catch {
-                            print("Error decoding document into ShoppingList: \(error)")
-                            return nil
-                        }
-                    }
-                    self.setupIcons()
-                    self.makeDoneItemsText()
+        let itemDocument = dataBase.collection("users").document(userId).collection("lists").document(listId).collection("items").document(item.id)
+        itemDocument.updateData(["isDone": item.isDone]) { error in
+            if let error = error {
+                print("Error updating document: \(error)")
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.list?.items?[index].isDone = item.isDone
+                    self?.itemIcons[index] = item.isDone ? Resources.Images.done : Resources.Images.notDone
+                    self?.updateDoneItemsText()
                 }
             }
         }
     }
     
-    private func setupIcons() {
-        itemIcons = []
-        guard let items = list?.items else { return }
-        for item in items {
-            if item.isDone {
-                itemIcons.append(Resources.Images.done)
-            } else {
-                itemIcons.append(Resources.Images.notDone)
-            }
-        }
+    func deleteList() {
+        guard let list else { return }
+        deleteListFromDatabase(list)
     }
     
     func updateForState() {
-        switch stateIsEditing {
-        case true:
-            buttonImage = Resources.Images.checkmark
-        case false:
-            buttonImage = Resources.Images.edit
+        buttonImage = stateIsEditing ? Resources.Images.checkmark : Resources.Images.edit
+    }
+    
+    func fetchList() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let dataBase = Firestore.firestore()
+        
+        let listDocument = dataBase.collection("users").document(userId).collection("lists").document(listId)
+        listDocument.getDocument { [weak self] snapshot, error in
+            guard let self = self, let data = snapshot?.data() else { return }
+            self.list = ShoppingList(id: data["id"] as? String ?? "",
+                                     name: data["name"] as? String ?? "",
+                                     items: data["items"] as? [ShoppingItem] ?? nil,
+                                     dueDate: data["dueDate"] as? Date ?? nil,
+                                     isDone: data["isDone"] as? Bool ?? false)
+            self.fetchItems()
         }
     }
     
-    func toggleItemIsDone(index: Int) {
-        list?.items?[index].isDone.toggle()
-        guard let item = list?.items?[index] else { return }
+    private func fetchItems() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let dataBase = Firestore.firestore()
+        
+        let itemsCollection = dataBase.collection("users").document(userId).collection("lists").document(listId).collection("items")
+        itemsCollection.getDocuments { [weak self] snapshot, error in
+            guard let self = self, let documents = snapshot?.documents else { return }
+            self.list?.items = documents.compactMap { document in
+                try? document.data(as: ShoppingItem.self)
+            }
+            self.setupIcons()
+            self.updateDoneItemsText()
+        }
+    }
+    
+    private func setupIcons() {
+        itemIcons = list?.items?.map { $0.isDone ? Resources.Images.done : Resources.Images.notDone } ?? []
+    }
+    
+    private func updateDoneItemsText() {
+        doneItemsCount = list?.items?.filter { $0.isDone }.count ?? 0
+        doneItemsText = "\(doneItemsCount)/\(list?.items?.count ?? 0)"
+    }
+    
+    private func saveItemToDatabase(_ item: ShoppingItem) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let dataBase = Firestore.firestore()
+        
         let itemDocument = dataBase.collection("users").document(userId).collection("lists").document(listId).collection("items").document(item.id)
-        itemDocument.updateData(["done": item.isDone]) { error in
-            if let error = error {
-                print("Error updating document: \(error)")
-            }
-        }
-        fetchList()
-    }
-
-    private func makeDoneItemsText() {
-        doneItemsCount = 0
-        guard let items = list?.items else { return }
-        for item in items {
-            if item.isDone {
-                doneItemsCount += 1
-            }
-        }
-        doneItemsText = "\(doneItemsCount)/\(items.count)"
+        itemDocument.setData(item.asDictionary())
     }
     
-    func deleteList() {
+    private func deleteItemFromDatabase(_ item: ShoppingItem) {
         guard let userId = Auth.auth().currentUser?.uid else { return }
-        guard let list else { return }
         let dataBase = Firestore.firestore()
-        dataBase.collection("users")
-            .document(userId)
-            .collection("lists")
-            .document(list.id)
-            .delete()
+        
+        let itemDocument = dataBase.collection("users").document(userId).collection("lists").document(listId).collection("items").document(item.id)
+        itemDocument.delete()
+    }
+    
+    private func deleteListFromDatabase(_ list: ShoppingList) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let dataBase = Firestore.firestore()
+        
+        let listDocument = dataBase.collection("users").document(userId).collection("lists").document(list.id)
+        listDocument.delete()
     }
 }
-
