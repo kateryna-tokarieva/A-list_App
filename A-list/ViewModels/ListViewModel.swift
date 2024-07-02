@@ -20,6 +20,8 @@ class ListViewModel: ObservableObject {
     @Published var newItemUnit: Unit = .pc
     @Published var itemIcons: [Image] = []
     @Published var listId = ""
+    private var doneItemsCount = 0
+    @Published var doneItemsText = ""
     
     init(listID: String) {
         self.listId = listID
@@ -42,8 +44,7 @@ class ListViewModel: ObservableObject {
     }
     
     func deleteItem(withIndex index: Int) {
-        let itemToDelete = list?.items?.remove(at: index)
-        itemIcons.remove(at: index)
+        let itemToDelete = list?.items?[index]
         guard let id = itemToDelete?.id else { return }
         guard let userId = Auth.auth().currentUser?.uid else { return }
         guard let list else { return }
@@ -55,6 +56,9 @@ class ListViewModel: ObservableObject {
             .collection("items")
             .document(id)
             .delete()
+        DispatchQueue.main.async { [weak self] in
+            self?.fetchList()
+        }
     }
     
     func fetchList() {
@@ -85,12 +89,14 @@ class ListViewModel: ObservableObject {
                         }
                     }
                     self.setupIcons()
+                    self.makeDoneItemsText()
                 }
             }
         }
     }
     
     private func setupIcons() {
+        itemIcons = []
         guard let items = list?.items else { return }
         for item in items {
             if item.isDone {
@@ -111,20 +117,39 @@ class ListViewModel: ObservableObject {
     }
     
     func toggleItemIsDone(index: Int) {
-        toggleItemIsDoneInDataBase(index: index)
-        if itemIcons[index] == Resources.Images.notDone {
-            itemIcons[index] = Resources.Images.done
-        } else {
-            itemIcons[index] = Resources.Images.notDone
-        }
-    }
-    
-    private func toggleItemIsDoneInDataBase(index: Int) {
         list?.items?[index].isDone.toggle()
-        guard let item = list?.items else { return }
+        guard let item = list?.items?[index] else { return }
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let dataBase = Firestore.firestore()
-        dataBase.collection("users").document(userId).collection("lists").document(listId).collection("items").document("\(String(describing: list?.items?[index].id))").setData(item[index].asDictionary())
+        let itemDocument = dataBase.collection("users").document(userId).collection("lists").document(listId).collection("items").document(item.id)
+        itemDocument.updateData(["done": item.isDone]) { error in
+            if let error = error {
+                print("Error updating document: \(error)")
+            }
+        }
+        fetchList()
+    }
+
+    private func makeDoneItemsText() {
+        doneItemsCount = 0
+        guard let items = list?.items else { return }
+        for item in items {
+            if item.isDone {
+                doneItemsCount += 1
+            }
+        }
+        doneItemsText = "\(doneItemsCount)/\(items.count)"
+    }
+    
+    func deleteList() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        guard let list else { return }
+        let dataBase = Firestore.firestore()
+        dataBase.collection("users")
+            .document(userId)
+            .collection("lists")
+            .document(list.id)
+            .delete()
     }
 }
 

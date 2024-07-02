@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ListView: View {
+    @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: ListViewModel
     @Binding var showingNewListSheet: Bool
     @Binding var showingListSheet: Bool
     @State private var showButton = true
+    @State private var showAlert = false
     
     init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
         self.viewModel = ListViewModel(listID: listId)
@@ -22,11 +24,42 @@ struct ListView: View {
     var body: some View {
         ZStack {
             VStack {
-                Text(viewModel.list?.name ?? "")
-                    .font(.title)
-                    .underline(color: Resources.Colors.accentPink)
-                    .foregroundStyle(Resources.Views.Colors.plainButtonText)
+                HStack {
+                    Button(action: {
+                        viewModel.deleteList()
+                        showAlert = true
+                    }) {
+                        Image(systemName: "trash")
+                            .tint(Resources.Colors.accentRed)
+                    }
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text("Підтвердження"),
+                            message: Text("Ви впевнені, що хочете видалити цей список?"),
+                            primaryButton: .destructive(Text("Видалити")) {
+                                viewModel.deleteList()
+                                presentationMode.wrappedValue.dismiss()
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    }
                     .padding()
+                    Spacer()
+                    Text(viewModel.list?.name ?? "")
+                        .font(.title)
+                        .underline(color: Resources.Colors.accentPink)
+                        .foregroundStyle(Resources.Views.Colors.plainButtonText)
+                        .padding()
+                    Spacer()
+                    Text(viewModel.doneItemsText)
+                        .padding()
+                        .foregroundStyle(Resources.Colors.subText)
+                        .overlay(
+                            Circle()
+                                .stroke(Resources.Colors.accentPink, lineWidth: 1)
+                        )
+                        .padding()
+                }
                 List {
                     if let list = viewModel.list {
                         if let items = list.items {
@@ -81,31 +114,31 @@ struct ListView: View {
                 }
             }
             
-                VStack {
-                    Spacer()
-                    if showButton {
-                        Button {
-                            viewModel.stateIsEditing.toggle()
-                            viewModel.updateForState()
-                        } label: {
-                            viewModel.buttonImage
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .clipShape(.circle)
-                        .foregroundStyle(Resources.Views.Colors.borderedButtonText)
-                        .tint(Resources.Views.Colors.borderedButtonTint)
-                        .padding()
-                        .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
-                        .controlSize(.large)
-                        .padding()
+            VStack {
+                Spacer()
+                if showButton {
+                    Button {
+                        viewModel.stateIsEditing.toggle()
+                        viewModel.updateForState()
+                    } label: {
+                        viewModel.buttonImage
                     }
+                    .buttonStyle(.borderedProminent)
+                    .clipShape(.circle)
+                    .foregroundStyle(Resources.Views.Colors.borderedButtonText)
+                    .tint(Resources.Views.Colors.borderedButtonTint)
+                    .padding()
+                    .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+                    .controlSize(.large)
+                    .padding()
                 }
-                .onReceive(KeybordManager.shared.$keyboardFrame) { keyboardFrame in
-                    if let keyboardFrame = keyboardFrame, keyboardFrame != .zero {
-                        self.showButton = false
-                    } else {
-                        self.showButton = true
-                    }
+            }
+            .onReceive(KeybordManager.shared.$keyboardFrame) { keyboardFrame in
+                if let keyboardFrame = keyboardFrame, keyboardFrame != .zero {
+                    self.showButton = false
+                } else {
+                    self.showButton = true
+                }
                 
             }
         }
