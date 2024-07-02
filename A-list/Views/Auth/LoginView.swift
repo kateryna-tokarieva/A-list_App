@@ -30,19 +30,19 @@ struct LoginView: View {
             .frame(maxWidth: .infinity)
             .fixedSize(horizontal: true, vertical: false)
             .padding(.bottom)
-            .tint(Resources.Views.Colors.borderedButtonTint)
-            .foregroundStyle(Resources.Views.Colors.borderedButtonText)
+            .tint(Resources.ViewColors.borderedButtonTint)
+            .foregroundStyle(Resources.ViewColors.borderedButtonText)
             .fullScreenCover(isPresented: $viewModel.showingHomeSheet, content: {
                 HomeView(userId: viewModel.userId)
             })
             .frame(maxWidth: .infinity)
             .buttonStyle(.borderedProminent)
             .clipShape(.rect(cornerRadius: CGFloat(Resources.Sizes.buttonCornerRadius)))
-            .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: CGFloat(Resources.Sizes.buttonShadowRadius), x: CGFloat(Resources.Sizes.buttonShadowRadius), y: CGFloat(Resources.Sizes.buttonShadowRadius))
+            .shadow(color: Resources.ViewColors.borderedButtonShadow, radius: CGFloat(Resources.Sizes.buttonShadowRadius), x: CGFloat(Resources.Sizes.buttonShadowRadius), y: CGFloat(Resources.Sizes.buttonShadowRadius))
             .controlSize(.large)
             .padding()
             Text(viewModel.error)
-                .foregroundStyle(Resources.Views.Colors.errorMessage)
+                .foregroundStyle(Resources.ViewColors.errorMessage)
                 .padding()
             
             VStack {
@@ -53,7 +53,7 @@ struct LoginView: View {
                 } label: {
                     Text(Resources.Strings.makeAnAccount).underline()
                 }
-                .foregroundStyle(Resources.Views.Colors.plainButtonText)
+                .foregroundStyle(Resources.ViewColors.plainButtonText)
                 .sheet(isPresented: $showingRegistrationSheet, content: {
                     RegistrationView(viewModel: RegistrationViewViewModel(email: self.viewModel.email, password: self.viewModel.password))
                 })

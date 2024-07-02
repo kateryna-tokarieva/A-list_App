@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct NewListView: View {
     @ObservedObject var viewModel = NewListViewModel()
     @State var step = NewListStep.name
@@ -21,6 +19,9 @@ struct NewListView: View {
                 header
                 content
                 footer
+            }
+            .onAppear {
+                viewModel.update(step: step)
             }
         }
     }
@@ -35,9 +36,6 @@ struct NewListView: View {
                             .foregroundStyle(Resources.Colors.text)
                             .padding()
                         Spacer()
-                    }
-                    .onAppear {
-                        viewModel.update(step: step)
                     }
                 }
                 ProgressView(value: viewModel.progress)
@@ -77,7 +75,7 @@ struct NewListView: View {
         VStack {
             HStack {
                 Button {
-                    self.step = NewListStep(rawValue: step.rawValue + 1) ?? NewListStep.name
+                    self.step = .timer
                     self.viewModel.save()
                     showingSheet.toggle()
                 } label: {
@@ -89,6 +87,7 @@ struct NewListView: View {
                 }) {
                     ListView(listId: viewModel.listId, showingNewListSheet: $showingNewListSheet, showingListSheet: $showingSheet)
                 }
+                .padding()
                 .opacity(Double(viewModel.datePickerOpacity))
                 .foregroundColor(.gray)
                 Spacer()
@@ -98,17 +97,17 @@ struct NewListView: View {
                         showingSheet.toggle()
                         return
                     }
-                    self.step = NewListStep(rawValue: step.rawValue + 1) ?? NewListStep.name
+                    self.step = .timer
                     viewModel.update(step: step)
                 } label: {
                     Resources.Images.checkmark
                 }
                 .buttonStyle(.borderedProminent)
                 .clipShape(.circle)
-                .foregroundStyle(Resources.Views.Colors.borderedButtonText)
-                .tint(Resources.Views.Colors.borderedButtonTint)
+                .foregroundStyle(Resources.ViewColors.borderedButtonText)
+                .tint(Resources.ViewColors.borderedButtonTint)
                 .padding()
-                .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+                .shadow(color: Resources.ViewColors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
                 .controlSize(.large)
                 .sheet(isPresented: $showingSheet, onDismiss: {
                     showingNewListSheet = false

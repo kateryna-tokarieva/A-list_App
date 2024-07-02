@@ -10,9 +10,9 @@ import FirebaseAuth
 import FirebaseFirestore
 
 class NewListViewModel: ObservableObject {
-    @Published var listTitle = "--"
-    @Published var stepTitle = "--"
-    @Published var progress: Float = 0
+    @Published var listTitle = Resources.Strings.listNamePlaceholder
+    @Published var stepTitle = Resources.Strings.step1Title
+    @Published var progress: Float = 0.5
     @Published var textFieldOpacity = 1
     @Published var skipButtonOpacity = 0
     @Published var datePickerOpacity = 0
@@ -30,7 +30,7 @@ class NewListViewModel: ObservableObject {
             self.datePickerOpacity = 0
         case .timer:
             self.stepTitle = Resources.Strings.step2Title
-            self.progress = 0.1
+            self.progress = 1
             self.textFieldOpacity = 0
             self.skipButtonOpacity = 1
             self.datePickerOpacity = 1

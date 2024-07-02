@@ -31,18 +31,18 @@ struct RegistrationView: View {
                 guard !viewModel.userId.isEmpty else { return }
             }
             .frame(maxWidth: .infinity)
-            .tint(Resources.Views.Colors.borderedButtonTint)
-            .foregroundStyle(Resources.Views.Colors.borderedButtonText)
+            .tint(Resources.ViewColors.borderedButtonTint)
+            .foregroundStyle(Resources.ViewColors.borderedButtonText)
             .buttonStyle(.borderedProminent)
             .clipShape(.rect(cornerRadius: CGFloat(Resources.Sizes.buttonCornerRadius)))
-            .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: CGFloat(Resources.Sizes.buttonShadowRadius), x: CGFloat(Resources.Sizes.buttonShadowRadius), y: CGFloat(Resources.Sizes.buttonShadowRadius))
+            .shadow(color: Resources.ViewColors.borderedButtonShadow, radius: CGFloat(Resources.Sizes.buttonShadowRadius), x: CGFloat(Resources.Sizes.buttonShadowRadius), y: CGFloat(Resources.Sizes.buttonShadowRadius))
             .controlSize(.large)
             .padding()
             .fullScreenCover(isPresented: $viewModel.showingLoginSheet, content: {
                 LoginView(viewModel: LoginViewModel(email: self.viewModel.email, password: self.viewModel.password))
             })
             Text(viewModel.error)
-                .foregroundStyle(Resources.Views.Colors.errorMessage)
+                .foregroundStyle(Resources.ViewColors.errorMessage)
                 .padding()
         }
     }

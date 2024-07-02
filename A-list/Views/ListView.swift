@@ -29,125 +29,116 @@ struct ListView: View {
             }
             footer
         }
-        .onReceive(KeybordManager.shared.$keyboardFrame) { handleKeyboardFrameChange($0) }
-        .onDisappear { handleOnDisappear() }
-    }
-    
-    private var header: some View {
-        HStack {
-            deleteButton
-            Spacer()
-            listTitle
-            Spacer()
-            doneItemsIndicator
+        .background(Resources.Colors.base)
+        .onReceive(KeybordManager.shared.$keyboardFrame) { keyboardFrame in
+            if let keyboardFrame = keyboardFrame, keyboardFrame != .zero {
+                self.showButton = false
+            } else {
+                self.showButton = true
+            }
+        }
+        .onDisappear {
+            if !showingListSheet {
+                showingNewListSheet = false
+            }
         }
     }
     
-    private var content: some View {
+    var header: some View {
+        HStack {
+            Button(action: {
+                showAlert = true
+            }) {
+                Image(systemName: "trash")
+                    .tint(Resources.Colors.accentRed)
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text(Resources.Strings.deleteConfirmationAlertTitle),
+                    message: Text(Resources.Strings.deleteConfirmationAlertContent),
+                    primaryButton: .destructive(Text(Resources.Strings.deleteConfirmationAlertPrimaryButton)) {
+                        viewModel.deleteList()
+                        presentationMode.wrappedValue.dismiss()
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
+            .padding()
+            Spacer()
+            Text(viewModel.list?.name ?? "")
+                .font(.title)
+                .underline(color: Resources.Colors.accentPink)
+                .foregroundStyle(Resources.ViewColors.plainButtonText)
+                .padding()
+            Spacer()
+            Text(viewModel.doneItemsText)
+                .padding()
+                .foregroundStyle(Resources.Colors.subText)
+                .overlay(
+                    Circle()
+                        .stroke(Resources.Colors.accentPink, lineWidth: 1)
+                )
+                .padding()
+        }
+    }
+    
+    var content: some View {
         List {
-            if let items = viewModel.list?.items {
-                ForEach(items.indices, id: \.self) { index in
-                    itemRow(for: index)
+            if let list = viewModel.list {
+                if let items = list.items {
+                    ForEach(items.indices, id: \.self) { index in
+                        itemRow(for: index)
+                    }
                 }
             }
             if viewModel.stateIsEditing {
-                newItemInputFields
-                newItemAddButton
+                HStack {
+                    TextField(Resources.Strings.title, text: $viewModel.newItemTitle)
+                    TextField(Resources.Strings.quantity, text: $viewModel.newItemQuantity)
+                    Picker("", selection: $viewModel.newItemUnit) {
+                        ForEach(Unit.allCases, id: \.self) { unit in
+                            Text(unit.rawValue).tag(unit)
+                        }
+                    }
+                }
+                HStack {
+                    Spacer()
+                    Button {
+                        viewModel.addItem(ShoppingItem(title: viewModel.newItemTitle, quantity: viewModel.newItemQuantity, unit: viewModel.newItemUnit, isDone: false))
+                        viewModel.newItemTitle = ""
+                        viewModel.newItemQuantity = ""
+                    } label: {
+                        Resources.Images.checkmark
+                    }
+                    Spacer()
+                }
             }
         }
     }
     
-    private var footer: some View {
+    var footer: some View {
         VStack {
             Spacer()
             if showButton {
-                toggleEditButton
+                Button {
+                    viewModel.stateIsEditing.toggle()
+                    viewModel.updateForState()
+                } label: {
+                    viewModel.buttonImage
+                }
+                .buttonStyle(.borderedProminent)
+                .clipShape(.circle)
+                .foregroundStyle(Resources.ViewColors.borderedButtonText)
+                .tint(Resources.ViewColors.borderedButtonTint)
+                .padding()
+                .shadow(color: Resources.ViewColors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+                .controlSize(.large)
+                .padding()
             }
         }
     }
     
-    private var deleteButton: some View {
-        Button(action: { showAlert = true }) {
-            Image(systemName: "trash")
-                .tint(Resources.Colors.accentRed)
-        }
-        .alert(isPresented: $showAlert) {
-            deleteConfirmationAlert
-        }
-        .padding()
-    }
-    
-    private var listTitle: some View {
-        Text(viewModel.list?.name ?? "")
-            .font(.title)
-            .underline(color: Resources.Colors.accentPink)
-            .foregroundStyle(Resources.Views.Colors.plainButtonText)
-            .padding()
-    }
-    
-    private var doneItemsIndicator: some View {
-        Text(viewModel.doneItemsText)
-            .padding()
-            .foregroundStyle(Resources.Colors.subText)
-            .overlay(
-                Circle()
-                    .stroke(Resources.Colors.accentPink, lineWidth: 1)
-            )
-            .padding()
-    }
-    
-    private var newItemInputFields: some View {
-        HStack {
-            TextField(Resources.Strings.title, text: $viewModel.newItemTitle)
-            TextField(Resources.Strings.quantity, text: $viewModel.newItemQuantity)
-            unitPicker
-        }
-    }
-    
-    private var unitPicker: some View {
-        Picker("", selection: $viewModel.newItemUnit) {
-            ForEach(Unit.allCases, id: \.self) { unit in
-                Text(unit.rawValue).tag(unit)
-            }
-        }
-    }
-    
-    private var newItemAddButton: some View {
-        HStack {
-            Spacer()
-            Button(action: addItem) {
-                Resources.Images.checkmark
-            }
-            Spacer()
-        }
-    }
-    
-    private var toggleEditButton: some View {
-        Button(action: toggleEditState) {
-            viewModel.buttonImage
-        }
-        .buttonStyle(.borderedProminent)
-        .clipShape(.circle)
-        .foregroundStyle(Resources.Views.Colors.borderedButtonText)
-        .tint(Resources.Views.Colors.borderedButtonTint)
-        .padding()
-        .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
-        .controlSize(.large)
-        .padding()
-    }
-    
-    private var deleteConfirmationAlert: Alert {
-        Alert(
-            title: Text("Підтвердження"),
-            message: Text("Ви впевнені, що хочете видалити цей список?"),
-            primaryButton: .destructive(Text("Видалити")) {
-                confirmDelete()
-            },
-            secondaryButton: .cancel()
-        )
-    }
-    
-    private func itemRow(for index: Int) -> some View {
+    func itemRow(for index: Int) -> some View {
         HStack {
             viewModel.itemIcons[index]
                 .padding()
@@ -161,56 +152,16 @@ struct ListView: View {
                 .padding(.trailing)
         }
         .swipeActions {
-            deleteItemButton(index: index)
+            Button(role: .destructive) {
+                viewModel.deleteItem(withIndex: index)
+                viewModel.fetchList()
+            } label: {
+                Label("Видалити", systemImage: "trash")
+            }
         }
-    }
-    
-    private func deleteItemButton(index: Int) -> some View {
-        Button(role: .destructive) {
-            viewModel.deleteItem(withIndex: index)
-            viewModel.fetchList()
-        } label: {
-            Label("Видалити", systemImage: "trash")
-        }
-    }
-    
-    private func handleKeyboardFrameChange(_ keyboardFrame: CGRect?) {
-        self.showButton = keyboardFrame == nil || keyboardFrame == .zero
-    }
-    
-    private func handleOnDisappear() {
-        if !showingListSheet {
-            showingNewListSheet = false
-        }
-    }
-    
-    private func toggleEditState() {
-        viewModel.stateIsEditing.toggle()
-        viewModel.updateForState()
-    }
-    
-    private func addItem() {
-        let newItem = ShoppingItem(
-            title: viewModel.newItemTitle,
-            quantity: viewModel.newItemQuantity,
-            unit: viewModel.newItemUnit,
-            isDone: false
-        )
-        viewModel.addItem(newItem)
-        viewModel.newItemTitle = ""
-        viewModel.newItemQuantity = ""
-    }
-    
-    private func confirmDelete() {
-        viewModel.deleteList()
-        presentationMode.wrappedValue.dismiss()
     }
 }
 
 #Preview {
-    ListView(
-        listId: "2F0EDB58-E8D8-47E1-9F7C-BEE9945BA8DF",
-        showingNewListSheet: .constant(false),
-        showingListSheet: .constant(false)
-    )
+    ListView(listId: "2F0EDB58-E8D8-47E1-9F7C-BEE9945BA8DF", showingNewListSheet: .constant(false), showingListSheet: .constant(false))
 }

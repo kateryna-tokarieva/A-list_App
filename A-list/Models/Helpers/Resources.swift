@@ -5,7 +5,6 @@
 //  Created by Екатерина Токарева on 23.06.2024.
 //
 
-import Foundation
 import SwiftUI
 
 struct Resources {
@@ -19,7 +18,6 @@ struct Resources {
         static var edit = Image(systemName: "pencil")
         static var done = Image(systemName: "circle.fill")
         static var notDone = Image(systemName: "circle")
-        
     }
     
     enum Strings {
@@ -32,7 +30,7 @@ struct Resources {
         static var listNamePlaceholder = "Список 1"
         static var categoryNamePlaceholder = "Створи новий або обери ісснуючий"
         static var itemNamePlaceholder = "Назва продукту"
-        static var doNotHaveAccount = "Ще не маєте акканту?"
+        static var doNotHaveAccount = "Ще не маєте аккаунту?"
         static var makeAnAccount = "Створити аккаунт"
         static var email = "email"
         static var password = "пароль"
@@ -44,6 +42,9 @@ struct Resources {
         static var setupNotification = "Постав нагадування"
         static var title = "Назва"
         static var quantity = "Кількість"
+        static var deleteConfirmationAlertTitle = "Підтвердження"
+        static var deleteConfirmationAlertContent = "Ви впевнені, що хочете видалити цей список?"
+        static var deleteConfirmationAlertPrimaryButton = "Видалити"
     }
     
     enum Sizes {
@@ -56,22 +57,31 @@ struct Resources {
         static var listPreviewShadowOffset: CGFloat = 2
     }
     
-    enum Colors {
-        static var accentRed = Color(UIColor(red: 252/255, green: 60/255, blue: 6/255, alpha: 1))
-        static var accentPink = Color(UIColor(red: 248/255, green: 189/255, blue: 215/255, alpha: 1))
-        static var accentBlue = Color(UIColor(red: 21/255, green: 65/255, blue: 173/255, alpha: 1))
-        static var text = Color(UIColor.black)
-        static var subText = Color(UIColor.gray)
-        static var base = Color(UIColor.white)
+    enum ViewColors {
+        static var borderedButtonTint = Color.accentBlue
+        static var borderedButtonText = Color.accentPink
+        static var borderedButtonShadow = Color.accentPink
+        static var errorMessage = Color.accentRed
+        static var plainButtonText = Color.accentBlue
     }
     
-    enum Views {
-        enum Colors {
-            static var borderedButtonTint = Resources.Colors.accentBlue
-            static var borderedButtonText = Resources.Colors.accentPink
-            static var borderedButtonShadow = Resources.Colors.accentPink
-            static var errorMessage = Resources.Colors.accentRed
-            static var plainButtonText = Resources.Colors.accentBlue
+    enum Colors {
+        static var accentRed = Color.accentRed
+        static var accentPink = Color.accentPink
+        static var accentBlue = Color.accentBlue
+        static var text = Color.text
+        static var subText = Color.subText
+        static var base = Color.base
+    }
+    
+    static func background(forColorScheme scheme: ColorScheme) -> Image {
+        switch scheme {
+        case .light:
+            return Images.background
+        case .dark:
+            return Image("background.dark")
+        @unknown default:
+            return Images.background
         }
     }
 }

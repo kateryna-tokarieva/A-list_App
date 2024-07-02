@@ -39,7 +39,7 @@ struct HomeView: View {
             Text(Resources.Strings.allLists)
                 .font(.title)
                 .underline(color: Resources.Colors.accentPink)
-                .foregroundStyle(Resources.Views.Colors.plainButtonText)
+                .foregroundStyle(Resources.ViewColors.plainButtonText)
             Spacer()
             Button {
                 showingSettingsSheet.toggle()
@@ -48,7 +48,7 @@ struct HomeView: View {
             }
             .controlSize(.large)
             .aspectRatio(contentMode: .fill)
-            .tint(Resources.Views.Colors.plainButtonText)
+            .tint(Resources.ViewColors.plainButtonText)
             .sheet(isPresented: $showingSettingsSheet) {
                 SettingsView(userId: userId)
             }
@@ -163,10 +163,10 @@ struct HomeView: View {
             }
             .buttonStyle(.borderedProminent)
             .clipShape(.circle)
-            .foregroundStyle(Resources.Views.Colors.borderedButtonText)
-            .tint(Resources.Views.Colors.borderedButtonTint)
+            .foregroundStyle(Resources.ViewColors.borderedButtonText)
+            .tint(Resources.ViewColors.borderedButtonTint)
             .padding()
-            .shadow(color: Resources.Views.Colors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+            .shadow(color: Resources.ViewColors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
             .controlSize(.large)
         }
     }
