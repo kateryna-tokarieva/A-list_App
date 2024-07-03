@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ListView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var viewModel: ListViewModel
     @Binding var showingNewListSheet: Bool
     @Binding var showingListSheet: Bool
@@ -29,7 +30,7 @@ struct ListView: View {
             }
             footer
         }
-        .background(Resources.Colors.base)
+        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
         .onReceive(KeybordManager.shared.$keyboardFrame) { keyboardFrame in
             if let keyboardFrame = keyboardFrame, keyboardFrame != .zero {
                 self.showButton = false
@@ -45,42 +46,54 @@ struct ListView: View {
     }
     
     var header: some View {
-        HStack {
-            Button(action: {
-                showAlert = true
-            }) {
-                Image(systemName: "trash")
-                    .tint(Resources.Colors.accentRed)
+        ZStack {
+            HStack {
+                Spacer()
+                
+                Text(viewModel.list?.name ?? "")
+                    .font(.title)
+                    .underline(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme))
+                    .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .center)
+                
+                Spacer()
             }
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text(Resources.Strings.deleteConfirmationAlertTitle),
-                    message: Text(Resources.Strings.deleteConfirmationAlertContent),
-                    primaryButton: .destructive(Text(Resources.Strings.deleteConfirmationAlertPrimaryButton)) {
-                        viewModel.deleteList()
-                        presentationMode.wrappedValue.dismiss()
-                    },
-                    secondaryButton: .cancel()
-                )
+            
+            HStack {
+                Button(action: {
+                    showAlert = true
+                }) {
+                    Image(systemName: "trash")
+                        .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text(Resources.Strings.deleteConfirmationAlertTitle),
+                        message: Text(Resources.Strings.deleteConfirmationAlertContent),
+                        primaryButton: .destructive(Text(Resources.Strings.deleteConfirmationAlertPrimaryButton)) {
+                            viewModel.deleteList()
+                            presentationMode.wrappedValue.dismiss()
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
+                .padding()
+                
+                Spacer()
+                
+                Text(viewModel.doneItemsText)
+                    .padding()
+                    .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+                    .overlay(
+                        Circle()
+                            .stroke(Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), lineWidth: 1)
+                    )
+                    .padding()
             }
-            .padding()
-            Spacer()
-            Text(viewModel.list?.name ?? "")
-                .font(.title)
-                .underline(color: Resources.Colors.accentPink)
-                .foregroundStyle(Resources.ViewColors.plainButtonText)
-                .padding()
-            Spacer()
-            Text(viewModel.doneItemsText)
-                .padding()
-                .foregroundStyle(Resources.Colors.subText)
-                .overlay(
-                    Circle()
-                        .stroke(Resources.Colors.accentPink, lineWidth: 1)
-                )
-                .padding()
         }
     }
+
     
     var content: some View {
         List {
@@ -101,8 +114,10 @@ struct ListView: View {
                         }
                     }
                 }
+                
                 HStack {
                     Spacer()
+                    
                     Button {
                         viewModel.addItem(ShoppingItem(title: viewModel.newItemTitle, quantity: viewModel.newItemQuantity, unit: viewModel.newItemUnit, isDone: false))
                         viewModel.newItemTitle = ""
@@ -110,6 +125,7 @@ struct ListView: View {
                     } label: {
                         Resources.Images.checkmark
                     }
+                    
                     Spacer()
                 }
             }
@@ -119,6 +135,7 @@ struct ListView: View {
     var footer: some View {
         VStack {
             Spacer()
+            
             if showButton {
                 Button {
                     viewModel.stateIsEditing.toggle()
@@ -128,10 +145,10 @@ struct ListView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .clipShape(.circle)
-                .foregroundStyle(Resources.ViewColors.borderedButtonText)
-                .tint(Resources.ViewColors.borderedButtonTint)
+                .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+                .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                 .padding()
-                .shadow(color: Resources.ViewColors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+                .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
                 .controlSize(.large)
                 .padding()
             }
@@ -146,8 +163,11 @@ struct ListView: View {
                     viewModel.toggleItemIsDone(index: index)
                 }
             Text(viewModel.list?.items?[index].title ?? "")
+            
             Spacer()
+            
             Text(viewModel.list?.items?[index].quantity ?? "")
+            
             Text(viewModel.list?.items?[index].unit.rawValue ?? "")
                 .padding(.trailing)
         }

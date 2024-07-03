@@ -9,8 +9,28 @@ import SwiftUI
 
 struct Resources {
     
+    static var themeManager: ThemeManager?
+    
+    static var currentTheme: ColorTheme {
+        return themeManager?.currentTheme ?? .modernClean
+    }
+    
+    static var currentColorScheme: ColorScheme {
+        return themeManager?.colorScheme ?? .light
+    }
+    
     enum Images {
-        static var background = Image("background")
+        static func background(forScheme scheme: ColorScheme) -> Image {
+            switch scheme {
+            case .light:
+                return Image("background")
+            case .dark:
+                return Image("background.dark")
+            @unknown default:
+                return Image("background")
+            }
+        }
+        
         static var settings = Image(systemName: "gearshape")
         static var add = Image(systemName: "plus")
         static var checkmark = Image(systemName: "checkmark")
@@ -28,7 +48,7 @@ struct Resources {
         static var step3Title = "Вибери розділ"
         static var step4Title = "Додай необхідне"
         static var listNamePlaceholder = "Список 1"
-        static var categoryNamePlaceholder = "Створи новий або обери ісснуючий"
+        static var categoryNamePlaceholder = "Створи новий або обери існуючий"
         static var itemNamePlaceholder = "Назва продукту"
         static var doNotHaveAccount = "Ще не маєте аккаунту?"
         static var makeAnAccount = "Створити аккаунт"
@@ -50,38 +70,78 @@ struct Resources {
     enum Sizes {
         static var buttonCornerRadius: CGFloat = 10
         static var buttonShadowRadius: CGFloat = 2
-        static var buttonShadowOffset: CGFloat = 2
+        static var buttonShadowOffset: CGFloat = 4
         static var listPreviewFrame: CGFloat = UIScreen.main.bounds.width/2 - 20
         static var listPreviewCornerRadius: CGFloat = 10
-        static var listPreviewShadowRadius: CGFloat = 2
-        static var listPreviewShadowOffset: CGFloat = 2
+        static var listPreviewShadowRadius: CGFloat = 4
+        static var listPreviewShadowOffset: CGFloat = 4
     }
     
     enum ViewColors {
-        static var borderedButtonTint = Color.accentBlue
-        static var borderedButtonText = Color.accentPink
-        static var borderedButtonShadow = Color.accentPink
-        static var errorMessage = Color.accentRed
-        static var plainButtonText = Color.accentBlue
-    }
-    
-    enum Colors {
-        static var accentRed = Color.accentRed
-        static var accentPink = Color.accentPink
-        static var accentBlue = Color.accentBlue
-        static var text = Color.text
-        static var subText = Color.subText
-        static var base = Color.base
-    }
-    
-    static func background(forColorScheme scheme: ColorScheme) -> Image {
-        switch scheme {
-        case .light:
-            return Images.background
-        case .dark:
-            return Image("background.dark")
-        @unknown default:
-            return Images.background
+        static func accent(forScheme scheme: ColorScheme) -> Color {
+            switch scheme {
+            case .light:
+                return currentTheme.colors.darkerAccentColor
+            case .dark:
+                return currentTheme.darkColors.darkerAccentColor
+            @unknown default:
+                return currentTheme.colors.darkerAccentColor
+            }
+        }
+        
+        static func accentSecondary(forScheme scheme: ColorScheme) -> Color {
+            switch scheme {
+            case .light:
+                return currentTheme.colors.lighterAccentColor
+            case .dark:
+                return currentTheme.darkColors.lighterAccentColor
+            @unknown default:
+                return currentTheme.colors.lighterAccentColor
+            }
+        }
+        
+        static func error(forScheme scheme: ColorScheme) -> Color {
+            switch scheme {
+            case .light:
+                return currentTheme.colors.errorColor
+            case .dark:
+                return currentTheme.darkColors.errorColor
+            @unknown default:
+                return currentTheme.colors.errorColor
+            }
+        }
+        
+        static func text(forScheme scheme: ColorScheme) -> Color {
+            switch scheme {
+            case .light:
+                return currentTheme.colors.textColor
+            case .dark:
+                return currentTheme.darkColors.textColor
+            @unknown default:
+                return currentTheme.colors.textColor
+            }
+        }
+        
+        static func subText(forScheme scheme: ColorScheme) -> Color {
+            switch scheme {
+            case .light:
+                return currentTheme.colors.secondaryTextColor
+            case .dark:
+                return currentTheme.darkColors.secondaryTextColor
+            @unknown default:
+                return currentTheme.colors.secondaryTextColor
+            }
+        }
+        
+        static func base(forScheme scheme: ColorScheme) -> Color {
+            switch scheme {
+            case .light:
+                return currentTheme.colors.baseBackground
+            case .dark:
+                return currentTheme.darkColors.baseBackground
+            @unknown default:
+                return currentTheme.colors.baseBackground
+            }
         }
     }
 }

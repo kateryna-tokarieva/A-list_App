@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsSectionView: View {
     @ObservedObject var viewModel: SettingsSectionViewModel
+    @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
         switch viewModel.section {

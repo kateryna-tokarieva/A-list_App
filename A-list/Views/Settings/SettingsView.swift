@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var viewModel = SettingsViewModel()
-    @State private var section: SettingsSection = .friends
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var showingLoginSheet = false
     private var sections: [SettingsSection] = [.friends, .calendar, .mode, .notifications, .support]
     private var userId: String
@@ -37,7 +37,7 @@ struct SettingsView: View {
                 }
                 Spacer()
                 NavigationLink {
-                    SettingsSectionView(viewModel: SettingsSectionViewModel(section: self.section))
+                    SettingsSectionView(viewModel: SettingsSectionViewModel(section: .user))
                 } label: {
                     Resources.Images.edit
                 }
@@ -50,7 +50,7 @@ struct SettingsView: View {
                 List {
                     ForEach(sections, id: \.self) {section in
                         NavigationLink {
-                            SettingsSectionView(viewModel: SettingsSectionViewModel(section: self.section)) } label: {
+                            SettingsSectionView(viewModel: SettingsSectionViewModel(section: section)) } label: {
                                 
                                 HStack {
                                     section.image()

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NewListView: View {
     @ObservedObject var viewModel = NewListViewModel()
+    @EnvironmentObject var themeManager: ThemeManager
     @State var step = NewListStep.name
     @State private var showingSheet = false
     @Binding var showingNewListSheet: Bool
@@ -33,18 +34,18 @@ struct NewListView: View {
                     Spacer()
                     ForEach(1...2, id: \.self) {
                         Text("\($0)")
-                            .foregroundStyle(Resources.Colors.text)
+                            .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
                             .padding()
                         Spacer()
                     }
                 }
                 ProgressView(value: viewModel.progress)
-                    .tint(Resources.Colors.accentPink)
+                    .tint(Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme))
             }
             Spacer()
             Text(viewModel.stepTitle)
                 .font(.largeTitle)
-                .foregroundStyle(Resources.Colors.text)
+                .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
             Spacer()
         }
     }
@@ -58,7 +59,7 @@ struct NewListView: View {
                             TextField(viewModel.listTitle, text: $viewModel.listTitle)
                                 .padding()
                                 .opacity(Double(viewModel.textFieldOpacity))
-                                .foregroundStyle(Resources.Colors.subText)
+                                .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
                         }
                     }
                     Divider()
@@ -104,10 +105,10 @@ struct NewListView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .clipShape(.circle)
-                .foregroundStyle(Resources.ViewColors.borderedButtonText)
-                .tint(Resources.ViewColors.borderedButtonTint)
+                .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+                .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                 .padding()
-                .shadow(color: Resources.ViewColors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+                .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
                 .controlSize(.large)
                 .sheet(isPresented: $showingSheet, onDismiss: {
                     showingNewListSheet = false

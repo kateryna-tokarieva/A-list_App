@@ -8,11 +8,35 @@
 import SwiftUI
 
 struct ModeSettingsView: View {
+    @EnvironmentObject var themeManager: ThemeManager
+    @AppStorage("selectedTheme") var selectedTheme: String = ColorTheme.modernClean.rawValue
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach(ColorTheme.allCases, id: \.self) { theme in
+                HStack {
+                    Text(theme.rawValue.capitalized)
+                    Spacer()
+                    if selectedTheme == theme.rawValue {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme))
+                    }
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    selectedTheme = theme.rawValue
+                    themeManager.saveSelectedTheme(theme)
+                }
+            }
+        }
+        .navigationTitle("Select Theme")
+        .onAppear {
+            themeManager.saveSelectedTheme(ColorTheme(rawValue: selectedTheme) ?? .modernClean)
+        }
     }
 }
 
 #Preview {
     ModeSettingsView()
+        .environmentObject(ThemeManager())
 }

@@ -12,6 +12,7 @@ import FirebaseFirestore
 
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var showingSettingsSheet = false
     @State private var showingNewListSheet = false
     @State private var showingListSheet = false
@@ -38,8 +39,7 @@ struct HomeView: View {
             Spacer()
             Text(Resources.Strings.allLists)
                 .font(.title)
-                .underline(color: Resources.Colors.accentPink)
-                .foregroundStyle(Resources.ViewColors.plainButtonText)
+                .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
             Spacer()
             Button {
                 showingSettingsSheet.toggle()
@@ -48,7 +48,7 @@ struct HomeView: View {
             }
             .controlSize(.large)
             .aspectRatio(contentMode: .fill)
-            .tint(Resources.ViewColors.plainButtonText)
+            .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
             .sheet(isPresented: $showingSettingsSheet) {
                 SettingsView(userId: userId)
             }
@@ -68,7 +68,7 @@ struct HomeView: View {
     
     private var emptyState: some View {
         VStack {
-            Resources.Images.background
+            Resources.Images.background(forScheme: themeManager.colorScheme)
                 .resizable()
                 .scaledToFit()
                 .padding()
@@ -76,10 +76,11 @@ struct HomeView: View {
                 Text(Resources.Strings.welcome)
                     .padding()
                     .font(.largeTitle)
+                    .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
                 Text(Resources.Strings.background)
                     .padding()
                     .font(.subheadline)
-                    .foregroundStyle(Resources.Colors.subText)
+                    .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
                     .multilineTextAlignment(.center)
             }
             .padding()
@@ -103,8 +104,7 @@ struct HomeView: View {
             HStack {
                 Text(viewModel.lists[index].name + ":")
                     .font(.title2)
-                    .foregroundColor(Resources.Colors.accentBlue)
-                    .underline()
+                    .foregroundColor(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
                     .lineLimit(1)
                 Spacer()
             }
@@ -116,7 +116,7 @@ struct HomeView: View {
                         Text("• " + (viewModel.lists[safe: index]?.items?[safe: itemIndex]?.title ?? ""))
                             .padding(.leading)
                             .font(.caption)
-                            .foregroundColor(Resources.Colors.subText)
+                            .foregroundColor(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
 
                         Spacer()
                     }
@@ -126,12 +126,12 @@ struct HomeView: View {
         }
         .padding()
         .frame(width: Resources.Sizes.listPreviewFrame, height: Resources.Sizes.listPreviewFrame)
-        .background(Resources.Colors.base)
+        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
         .cornerRadius(Resources.Sizes.listPreviewCornerRadius)
-        .shadow(color: Resources.Colors.accentPink, radius: Resources.Sizes.listPreviewShadowRadius, x: Resources.Sizes.listPreviewShadowOffset, y: Resources.Sizes.listPreviewShadowOffset)
+        .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: Resources.Sizes.listPreviewShadowRadius, x: Resources.Sizes.listPreviewShadowOffset, y: Resources.Sizes.listPreviewShadowOffset)
         .overlay(
             RoundedRectangle(cornerRadius: Resources.Sizes.listPreviewCornerRadius)
-                .stroke(Resources.Colors.accentPink, lineWidth: 1)
+                .stroke(Resources.ViewColors.accent(forScheme: themeManager.colorScheme), lineWidth: 1)
         )
         .onTapGesture {
             viewModel.currentListId = viewModel.lists[index].id
@@ -163,10 +163,10 @@ struct HomeView: View {
             }
             .buttonStyle(.borderedProminent)
             .clipShape(.circle)
-            .foregroundStyle(Resources.ViewColors.borderedButtonText)
-            .tint(Resources.ViewColors.borderedButtonTint)
+            .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+            .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
             .padding()
-            .shadow(color: Resources.ViewColors.borderedButtonShadow, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+            .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
             .controlSize(.large)
         }
     }

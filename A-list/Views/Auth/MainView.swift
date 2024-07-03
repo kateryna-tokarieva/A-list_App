@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject var viewModel = MainViewModel()
+    @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
         if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {

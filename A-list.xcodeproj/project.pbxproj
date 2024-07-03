@@ -32,7 +32,6 @@
 		10439B332C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
 		10439B342C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
 		10657EB72C3343F900E9657F /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10657EB62C3343F900E9657F /* KeyboardManager.swift */; };
-		10657EBA2C34506900E9657F /* Color + Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10657EB92C34506900E9657F /* Color + Extention.swift */; };
 		107AF3182C2A063E00A2F56B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3172C2A063E00A2F56B /* SettingsView.swift */; };
 		107AF31A2C2A066D00A2F56B /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3192C2A066D00A2F56B /* SettingsViewModel.swift */; };
 		107AF31C2C2ACF0800A2F56B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF31B2C2ACF0800A2F56B /* Settings.swift */; };
@@ -55,6 +54,8 @@
 		10DDFD5F2C28519200F300F3 /* NewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DDFD5E2C28519200F300F3 /* NewListView.swift */; };
 		10DDFD6A2C286B8F00F300F3 /* NewListSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DDFD692C286B8F00F300F3 /* NewListSteps.swift */; };
 		10DDFD6C2C286D9400F300F3 /* NewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DDFD6B2C286D9400F300F3 /* NewListViewModel.swift */; };
+		10F0500A2C3564380017B4B9 /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F050092C3564380017B4B9 /* ColorTheme.swift */; };
+		10F0500C2C357C330017B4B9 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F0500B2C357C330017B4B9 /* ThemeManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,7 +97,6 @@
 		10439B2D2C29C795005979FF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		10439B312C29C7AC005979FF /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		10657EB62C3343F900E9657F /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
-		10657EB92C34506900E9657F /* Color + Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color + Extention.swift"; sourceTree = "<group>"; };
 		107AF3172C2A063E00A2F56B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		107AF3192C2A066D00A2F56B /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		107AF31B2C2ACF0800A2F56B /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -120,6 +120,8 @@
 		10DDFD5E2C28519200F300F3 /* NewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewListView.swift; sourceTree = "<group>"; };
 		10DDFD692C286B8F00F300F3 /* NewListSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewListSteps.swift; sourceTree = "<group>"; };
 		10DDFD6B2C286D9400F300F3 /* NewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewListViewModel.swift; sourceTree = "<group>"; };
+		10F050092C3564380017B4B9 /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
+		10F0500B2C357C330017B4B9 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,7 +278,6 @@
 			children = (
 				1024D0CF2C2B1E1000202864 /* Encodable + Extension.swift */,
 				10A6405B2C330CB3000FD228 /* Array + Extension.swift */,
-				10657EB92C34506900E9657F /* Color + Extention.swift */,
 			);
 			path = Extentions;
 			sourceTree = "<group>";
@@ -335,6 +336,8 @@
 				10657EB82C34503400E9657F /* Extentions */,
 				102944E32C32E33300900640 /* Protocols */,
 				10DDFD5C2C282EFA00F300F3 /* Resources.swift */,
+				10F050092C3564380017B4B9 /* ColorTheme.swift */,
+				10F0500B2C357C330017B4B9 /* ThemeManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -492,6 +495,7 @@
 				10C753FA2C31F5B30011742B /* Unit.swift in Sources */,
 				1011E5442C2C5F1700A75CA6 /* RegistrationViewViewModel.swift in Sources */,
 				10DDFD6C2C286D9400F300F3 /* NewListViewModel.swift in Sources */,
+				10F0500A2C3564380017B4B9 /* ColorTheme.swift in Sources */,
 				10DDFD5D2C282EFA00F300F3 /* Resources.swift in Sources */,
 				107AF31A2C2A066D00A2F56B /* SettingsViewModel.swift in Sources */,
 				1024D0D42C2B307B00202864 /* MainViewModel.swift in Sources */,
@@ -505,6 +509,7 @@
 				107AF3342C2AFCF500A2F56B /* ShoppingList.swift in Sources */,
 				10A6405C2C330CB3000FD228 /* Array + Extension.swift in Sources */,
 				10439B322C29C7AC005979FF /* LoginViewModel.swift in Sources */,
+				10F0500C2C357C330017B4B9 /* ThemeManager.swift in Sources */,
 				107AF3242C2AEC7800A2F56B /* FriendsSettingsView.swift in Sources */,
 				107AF32A2C2AED3F00A2F56B /* ModeSettingsView.swift in Sources */,
 				107AF3202C2AD7D300A2F56B /* SettingsSectionViewModel.swift in Sources */,
@@ -514,7 +519,6 @@
 				107AF3302C2AFB0600A2F56B /* User.swift in Sources */,
 				107AF3222C2AEC4300A2F56B /* UserSettingsView.swift in Sources */,
 				10439B112C28B32E005979FF /* ListView.swift in Sources */,
-				10657EBA2C34506900E9657F /* Color + Extention.swift in Sources */,
 				10439B152C28B86B005979FF /* ListViewModel.swift in Sources */,
 				107AF32E2C2AED8500A2F56B /* SupportSettingsView.swift in Sources */,
 				107AF31E2C2AD7BD00A2F56B /* SettingsSectionView.swift in Sources */,
