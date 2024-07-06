@@ -119,23 +119,24 @@ struct ListView: View {
                         }
                     }
                     .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
-                    Button {
-                        viewModel.addItem(ShoppingItem(title: viewModel.newItemTitle, quantity: viewModel.newItemQuantity, unit: viewModel.newItemUnit, isDone: false))
-                        viewModel.newItemTitle = ""
-                        viewModel.newItemQuantity = ""
-                    } label: {
-                        Resources.Images.checkmark
-                            .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
-                    }
+                    Spacer()
+                    Resources.Images.checkmark
+                        .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                        .onTapGesture {
+                            viewModel.addItem(ShoppingItem(title: viewModel.newItemTitle, quantity: viewModel.newItemQuantity, unit: viewModel.newItemUnit, isDone: false))
+                            viewModel.newItemTitle = ""
+                            viewModel.newItemQuantity = ""
+                        }
                 }
-                buttons
+                button
             }
         }
         .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
     }
     
-    var buttons: some View {
+    var button: some View {
         HStack {
+            Spacer()
             Button {
                 isShowingScanner.toggle()
             } label: {
@@ -150,6 +151,7 @@ struct ListView: View {
                 }
             }
             .padding()
+            Spacer()
         }
     }
     
