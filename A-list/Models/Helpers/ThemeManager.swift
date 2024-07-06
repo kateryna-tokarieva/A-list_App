@@ -24,7 +24,7 @@ class ThemeManager: ObservableObject {
         print(theme)
     }
     
-    func updateColorScheme(_ scheme: ColorScheme) {
-        self.colorScheme = scheme
+    func toggleTheme() {
+        self.colorScheme = (self.colorScheme == .light) ? .dark : .light
     }
 }

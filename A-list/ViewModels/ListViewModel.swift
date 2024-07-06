@@ -19,8 +19,10 @@ class ListViewModel: ObservableObject {
     @Published var newItemUnit: Unit = .pc
     @Published var itemIcons: [Image] = []
     @Published var doneItemsText = ""
+    @Published var scannedCode: String?
     private var doneItemsCount = 0
     private var listId: String
+    private var service = BarcodeDataService()
     
     init(listID: String) {
         self.listId = listID
@@ -82,6 +84,14 @@ class ListViewModel: ObservableObject {
                                      dueDate: data["dueDate"] as? Date ?? nil,
                                      isDone: data["isDone"] as? Bool ?? false)
             self.fetchItems()
+        }
+    }
+    
+    func fetchCodeData() {
+        guard let code = scannedCode, !code.isEmpty else { return }
+        service.fetchData(search: code) { [weak self] item in
+            guard let self = self else { return }
+            addItem(item.asShoppingItem()) 
         }
     }
     

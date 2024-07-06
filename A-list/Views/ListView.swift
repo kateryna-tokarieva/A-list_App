@@ -15,6 +15,7 @@ struct ListView: View {
     @Binding var showingListSheet: Bool
     @State private var showButton = true
     @State private var showAlert = false
+    @State private var isShowingScanner = false
     
     init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
         self.viewModel = ListViewModel(listID: listId)
@@ -27,8 +28,8 @@ struct ListView: View {
             VStack {
                 header
                 content
+                footer
             }
-            footer
         }
         .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
         .onReceive(KeybordManager.shared.$keyboardFrame) { keyboardFrame in
@@ -52,8 +53,7 @@ struct ListView: View {
                 
                 Text(viewModel.list?.name ?? "")
                     .font(.title)
-                    .underline(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme))
-                    .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                    .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .center)
                 
@@ -61,25 +61,27 @@ struct ListView: View {
             }
             
             HStack {
-                Button(action: {
-                    showAlert = true
-                }) {
-                    Image(systemName: "trash")
-                        .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
+                if viewModel.stateIsEditing {
+                    Button(action: {
+                        showAlert = true
+                    }) {
+                        Image(systemName: "trash")
+                            .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
+                    }
+                    
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text(Resources.Strings.deleteConfirmationAlertTitle),
+                            message: Text(Resources.Strings.deleteConfirmationAlertContent),
+                            primaryButton: .destructive(Text(Resources.Strings.deleteConfirmationAlertPrimaryButton)) {
+                                viewModel.deleteList()
+                                presentationMode.wrappedValue.dismiss()
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    }
+                    .padding()
                 }
-                .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text(Resources.Strings.deleteConfirmationAlertTitle),
-                        message: Text(Resources.Strings.deleteConfirmationAlertContent),
-                        primaryButton: .destructive(Text(Resources.Strings.deleteConfirmationAlertPrimaryButton)) {
-                            viewModel.deleteList()
-                            presentationMode.wrappedValue.dismiss()
-                        },
-                        secondaryButton: .cancel()
-                    )
-                }
-                .padding()
-                
                 Spacer()
                 
                 Text(viewModel.doneItemsText)
@@ -92,8 +94,9 @@ struct ListView: View {
                     .padding()
             }
         }
+        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
     }
-
+    
     
     var content: some View {
         List {
@@ -107,35 +110,51 @@ struct ListView: View {
             if viewModel.stateIsEditing {
                 HStack {
                     TextField(Resources.Strings.title, text: $viewModel.newItemTitle)
+                        .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
                     TextField(Resources.Strings.quantity, text: $viewModel.newItemQuantity)
+                        .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
                     Picker("", selection: $viewModel.newItemUnit) {
                         ForEach(Unit.allCases, id: \.self) { unit in
                             Text(unit.rawValue).tag(unit)
                         }
                     }
-                }
-                
-                HStack {
-                    Spacer()
-                    
+                    .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
                     Button {
                         viewModel.addItem(ShoppingItem(title: viewModel.newItemTitle, quantity: viewModel.newItemQuantity, unit: viewModel.newItemUnit, isDone: false))
                         viewModel.newItemTitle = ""
                         viewModel.newItemQuantity = ""
                     } label: {
                         Resources.Images.checkmark
+                            .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                     }
-                    
-                    Spacer()
+                }
+                buttons
+            }
+        }
+        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+    }
+    
+    var buttons: some View {
+        HStack {
+            Button {
+                isShowingScanner.toggle()
+            } label: {
+                Resources.Images.barcode
+                    .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+            }
+            .sheet(isPresented: $isShowingScanner) {
+                ScannerView { code in
+                    viewModel.scannedCode = code
+                    isShowingScanner = false
+                    viewModel.fetchCodeData()
                 }
             }
+            .padding()
         }
     }
     
     var footer: some View {
         VStack {
-            Spacer()
-            
             if showButton {
                 Button {
                     viewModel.stateIsEditing.toggle()
@@ -153,23 +172,27 @@ struct ListView: View {
                 .padding()
             }
         }
+        .background(.clear)
     }
     
     func itemRow(for index: Int) -> some View {
         HStack {
             viewModel.itemIcons[index]
+                .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                 .padding()
                 .onTapGesture {
                     viewModel.toggleItemIsDone(index: index)
                 }
             Text(viewModel.list?.items?[index].title ?? "")
-            
+                .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
             Spacer()
             
             Text(viewModel.list?.items?[index].quantity ?? "")
+                .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
             
             Text(viewModel.list?.items?[index].unit.rawValue ?? "")
                 .padding(.trailing)
+                .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
         }
         .swipeActions {
             Button(role: .destructive) {
@@ -178,6 +201,8 @@ struct ListView: View {
             } label: {
                 Label("Видалити", systemImage: "trash")
             }
+            .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
+            .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
         }
     }
 }

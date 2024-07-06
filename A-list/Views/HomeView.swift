@@ -32,6 +32,7 @@ struct HomeView: View {
             }
             footer
         }
+        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
     }
     
     private var header: some View {

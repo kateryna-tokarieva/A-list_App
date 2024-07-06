@@ -38,6 +38,7 @@ struct Resources {
         static var edit = Image(systemName: "pencil")
         static var done = Image(systemName: "circle.fill")
         static var notDone = Image(systemName: "circle")
+        static var barcode = Image(systemName: "barcode.viewfinder")
     }
     
     enum Strings {
