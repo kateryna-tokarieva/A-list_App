@@ -37,6 +37,8 @@
 		107AC09C2C39B214000FD024 /* BarcodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC09B2C39B214000FD024 /* BarcodeData.swift */; };
 		107AC09E2C39B3D8000FD024 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC09D2C39B3D8000FD024 /* API.swift */; };
 		107AC0A32C3AAD46000FD024 /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC0A22C3AAD46000FD024 /* NotificationsManager.swift */; };
+		107AC0A52C3AC2F7000FD024 /* SupportSettingsViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC0A42C3AC2F7000FD024 /* SupportSettingsViewViewModel.swift */; };
+		107AC0A92C3AC422000FD024 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC0A82C3AC422000FD024 /* MailView.swift */; };
 		107AF3182C2A063E00A2F56B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3172C2A063E00A2F56B /* SettingsView.swift */; };
 		107AF31A2C2A066D00A2F56B /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3192C2A066D00A2F56B /* SettingsViewModel.swift */; };
 		107AF31C2C2ACF0800A2F56B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF31B2C2ACF0800A2F56B /* Settings.swift */; };
@@ -106,6 +108,8 @@
 		107AC09B2C39B214000FD024 /* BarcodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeData.swift; sourceTree = "<group>"; };
 		107AC09D2C39B3D8000FD024 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		107AC0A22C3AAD46000FD024 /* NotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsManager.swift; sourceTree = "<group>"; };
+		107AC0A42C3AC2F7000FD024 /* SupportSettingsViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportSettingsViewViewModel.swift; sourceTree = "<group>"; };
+		107AC0A82C3AC422000FD024 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		107AF3172C2A063E00A2F56B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		107AF3192C2A066D00A2F56B /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		107AF31B2C2ACF0800A2F56B /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -277,7 +281,7 @@
 				107AF3272C2AED1B00A2F56B /* CalendarSettingsView.swift */,
 				107AF3292C2AED3F00A2F56B /* ModeSettingsView.swift */,
 				107AF32B2C2AED6900A2F56B /* NotificationsSettingsView.swift */,
-				107AF32D2C2AED8500A2F56B /* SupportSettingsView.swift */,
+				107AC0A72C3AC40E000FD024 /* SupportSettings */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -303,8 +307,18 @@
 		107AC09F2C3AA91F000FD024 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				107AC0A42C3AC2F7000FD024 /* SupportSettingsViewViewModel.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		107AC0A72C3AC40E000FD024 /* SupportSettings */ = {
+			isa = PBXGroup;
+			children = (
+				107AF32D2C2AED8500A2F56B /* SupportSettingsView.swift */,
+				107AC0A82C3AC422000FD024 /* MailView.swift */,
+			);
+			path = SupportSettings;
 			sourceTree = "<group>";
 		};
 		10DDFD602C286A5E00F300F3 /* Views */ = {
@@ -533,6 +547,7 @@
 				107AC09C2C39B214000FD024 /* BarcodeData.swift in Sources */,
 				10DDFD5F2C28519200F300F3 /* NewListView.swift in Sources */,
 				107AC0A32C3AAD46000FD024 /* NotificationsManager.swift in Sources */,
+				107AC0A92C3AC422000FD024 /* MailView.swift in Sources */,
 				10439B2E2C29C796005979FF /* LoginView.swift in Sources */,
 				10C753F82C31F5370011742B /* ShoppingItem.swift in Sources */,
 				107AF3182C2A063E00A2F56B /* SettingsView.swift in Sources */,
@@ -545,6 +560,7 @@
 				107AF32A2C2AED3F00A2F56B /* ModeSettingsView.swift in Sources */,
 				107AF3202C2AD7D300A2F56B /* SettingsSectionViewModel.swift in Sources */,
 				1010B5072C28262C00F3114B /* HomeView.swift in Sources */,
+				107AC0A52C3AC2F7000FD024 /* SupportSettingsViewViewModel.swift in Sources */,
 				107AF31C2C2ACF0800A2F56B /* Settings.swift in Sources */,
 				107AF3282C2AED1B00A2F56B /* CalendarSettingsView.swift in Sources */,
 				107AF3302C2AFB0600A2F56B /* User.swift in Sources */,
