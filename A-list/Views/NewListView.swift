@@ -8,110 +8,119 @@
 import SwiftUI
 
 struct NewListView: View {
-    @StateObject var viewModel = NewListViewModel()
+    @ObservedObject var viewModel = NewListViewModel()
+    @EnvironmentObject var themeManager: ThemeManager
     @State var step = NewListStep.name
     @State private var showingSheet = false
+    @Binding var showingNewListSheet: Bool
     
     var body: some View {
-        ZStack(alignment: .top, content: {
-            VStack (alignment: .center, spacing: 0.0, content: {
-                
-                VStack  (spacing: 0, content: {
-                    VStack {
-                        HStack {
-                            Spacer()
-                            ForEach(1...3, id: \.self) {
-                                Text("\($0)")
-                                    .foregroundStyle(.black)
-                                    .padding()
-                                Spacer()
-                            }
-                            .onAppear {
-                                viewModel.update(step: step)
-                            }
-                        }
-                        ProgressView(value: viewModel.progress)
-                            .tint(.red)
-                    }
+        ZStack(alignment: .top) {
+            VStack(alignment: .center, spacing: 0.0) {
+                header
+                content
+                footer
+            }
+            .onAppear {
+                viewModel.update(step: step)
+            }
+        }
+    }
+    
+    private var header: some View {
+        VStack(spacing: 0) {
+            VStack {
+                HStack {
                     Spacer()
-                    Text(viewModel.title)
-                        .font(.largeTitle)
-                        .foregroundStyle(.black)
-                    Spacer()
-                })
-                VStack(alignment: .trailing) {
-                    ZStack {
-                        VStack {
-                            HStack {
-                                ZStack {
-                                    TextField(viewModel.titleTextFieldText, text: $viewModel.titleTextFieldText)
-                                        .padding()
-                                        .opacity(Double(viewModel.titleTextFieldOpacity))
-                                        .foregroundColor(.gray)
-                                    
-                                    TextField(viewModel.categoryTextFieldText, text: $viewModel.categoryTextFieldText) {
-                                        // Додати функціонал додавання нової категорії
-                                    }
-                                    .padding()
-                                    .opacity(Double(viewModel.categoryMenuOpacity))
-                                    .foregroundColor(.gray)
-                                }
-                                Picker(viewModel.category, selection: $viewModel.category, content:  {
-                                    ForEach(viewModel.allCaterories, id: \.self) {
-                                        Text($0).tag($0)
-                                    }
-                                })
-                                .tint(.black)
-                                .opacity(Double(viewModel.categoryMenuOpacity))
-                            }
-                            Divider()
-                        }
-                        DatePicker(selection: $viewModel.dueDate, label: { Text("Постав нагадування:") })
-                            .opacity(Double(viewModel.datePickerOpacity))
-                            .foregroundColor(.gray)
-                    }
-                    HStack {
-                        Button {
-                            self.step = NewListStep(rawValue: step.rawValue + 1) ?? NewListStep.name
-                            viewModel.update(step: step)
-                            
-                        } label: {
-                            Text("Пропустити")
-                                .underline()
-                        }
-                        .opacity(Double(viewModel.datePickerOpacity))
-                        .foregroundColor(.gray)
+                    ForEach(1...2, id: \.self) {
+                        Text("\($0)")
+                            .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
+                            .padding()
                         Spacer()
-                        Button {
-                            guard self.step != .category else {
-                                showingSheet.toggle()
-                                return
-                            }
-                            self.step = NewListStep(rawValue: step.rawValue + 1) ?? NewListStep.name
-                            viewModel.update(step: step)
-                            
-                            
-                        } label: {
-                            Image(systemName: "checkmark")
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .clipShape(.circle)
-                        .foregroundStyle(.white)
-                        .tint(.red)
-                        .controlSize(.large)
-                        .shadow(color: .red, radius: 2, x: 2, y: 2)
-                        .sheet(isPresented: $showingSheet, content: {
-                            ListView(viewModel: ListViewModel(title: self.viewModel.titleTextFieldText, category: self.viewModel.category))
-                        })
                     }
                 }
+                ProgressView(value: viewModel.progress)
+                    .tint(Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme))
+            }
+            Spacer()
+            Text(viewModel.stepTitle)
+                .font(.largeTitle)
+                .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
+            Spacer()
+        }
+    }
+    
+    private var content: some View {
+        VStack(alignment: .trailing) {
+            ZStack {
+                VStack {
+                    HStack {
+                        ZStack {
+                            TextField(viewModel.listTitle, text: $viewModel.listTitle)
+                                .padding()
+                                .opacity(Double(viewModel.textFieldOpacity))
+                                .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+                        }
+                    }
+                    Divider()
+                }
+                DatePicker(selection: $viewModel.dueDate, label: { Text(Resources.Strings.setupNotification) })
+                    .opacity(Double(viewModel.datePickerOpacity))
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding()
+    }
+    
+    private var footer: some View {
+        VStack {
+            HStack {
+                Button {
+                    self.step = .timer
+                    self.viewModel.save()
+                    showingSheet.toggle()
+                } label: {
+                    Text(Resources.Strings.skip)
+                        .underline()
+                }
+                .sheet(isPresented: $showingSheet, onDismiss: {
+                    showingNewListSheet = false
+                }) {
+                    ListView(listId: viewModel.listId, showingNewListSheet: $showingNewListSheet, showingListSheet: $showingSheet)
+                }
                 .padding()
-                Spacer(minLength: 300)
-            })
-        })
+                .opacity(Double(viewModel.datePickerOpacity))
+                .foregroundColor(.gray)
+                Spacer()
+                Button {
+                    guard self.step != .timer else {
+                        self.viewModel.save()
+                        showingSheet.toggle()
+                        return
+                    }
+                    self.step = .timer
+                    viewModel.update(step: step)
+                } label: {
+                    Resources.Images.checkmark
+                }
+                .buttonStyle(.borderedProminent)
+                .clipShape(.circle)
+                .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+                .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                .padding()
+                .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+                .controlSize(.large)
+                .sheet(isPresented: $showingSheet, onDismiss: {
+                    showingNewListSheet = false
+                }) {
+                    ListView(listId: viewModel.listId, showingNewListSheet: $showingNewListSheet, showingListSheet: $showingSheet)
+                }
+            }
+            Spacer(minLength: 300)
+        }
     }
 }
 
 #Preview {
-    NewListView()
+    NewListView(showingNewListSheet: .constant(true))
 }

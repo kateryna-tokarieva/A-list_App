@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsSectionView: View {
     @ObservedObject var viewModel: SettingsSectionViewModel
+    @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
         switch viewModel.section {
@@ -16,8 +17,6 @@ struct SettingsSectionView: View {
             UserSettingsView()
         case .friends:
             FriendsSettingsView()
-        case .categories:
-            CategoriesSettingsView()
         case .calendar:
             CalendarSettingsView()
         case .mode:
@@ -31,5 +30,5 @@ struct SettingsSectionView: View {
 }
 
 #Preview {
-    SettingsSectionView(viewModel: SettingsSectionViewModel(section: .friends, user: User(name: "Катерина", image: "person", email: "user@icloud.com", settings: Settings(modeIsDark: false, notificationsIsOn: true))))
+    SettingsSectionView(viewModel: SettingsSectionViewModel(section: .calendar))
 }

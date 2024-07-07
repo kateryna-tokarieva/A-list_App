@@ -6,82 +6,173 @@
 //
 
 import SwiftUI
+import FirebaseFirestoreSwift
+import FirebaseAuth
+import FirebaseFirestore
 
 struct HomeView: View {
-    @StateObject var viewModel: HomeViewModel
-    @State private var showingSheet = false
-    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    @StateObject private var viewModel = HomeViewModel()
+    @EnvironmentObject var themeManager: ThemeManager
+    @State private var showingSettingsSheet = false
+    @State private var showingNewListSheet = false
+    @State private var showingListSheet = false
+    
+    private var userId = ""
+    private let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    
+    init(userId: String) {
+        self.userId = userId
+    }
     
     var body: some View {
-        ZStack(alignment: .top, content: {
-            ScrollView {
-                LazyVGrid(columns: columns) {
-                    //Lists
+        ZStack {
+            VStack(alignment: .center) {
+                header
+                content
+            }
+            footer
+        }
+        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+    }
+    
+    private var header: some View {
+        HStack(alignment: .center) {
+            Spacer()
+            Text(Resources.Strings.allLists)
+                .font(.title)
+                .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
+            Spacer()
+            Button {
+                showingSettingsSheet.toggle()
+            } label: {
+                Resources.Images.settings
+            }
+            .controlSize(.large)
+            .aspectRatio(contentMode: .fill)
+            .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+            .sheet(isPresented: $showingSettingsSheet) {
+                SettingsView(userId: userId)
+            }
+        }
+        .padding()
+    }
+    
+    private var content: some View {
+        VStack {
+            if viewModel.lists.isEmpty {
+                emptyState
+            } else {
+                listGrid
+            }
+        }
+    }
+    
+    private var emptyState: some View {
+        VStack {
+            Resources.Images.background(forScheme: themeManager.colorScheme)
+                .resizable()
+                .scaledToFit()
+                .padding()
+            VStack {
+                Text(Resources.Strings.welcome)
+                    .padding()
+                    .font(.largeTitle)
+                    .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
+                Text(Resources.Strings.background)
+                    .padding()
+                    .font(.subheadline)
+                    .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+                    .multilineTextAlignment(.center)
+            }
+            .padding()
+            Spacer()
+        }
+    }
+    
+    private var listGrid: some View {
+        ScrollView {
+            LazyVGrid(columns: columns) {
+                ForEach(viewModel.lists.indices, id: \.self) { list in
+                    listItem(for: list)
                 }
             }
-            
-            HStack(alignment: .center, content: {
-                Picker(viewModel.currentCategory, selection: $viewModel.currentCategory, content:  {
-                    if let user = viewModel.user {
-                        ForEach(user.categories, id: \.self) {
-                            Text($0.name).tag($0.name)
-                        }
-                    }
-                })
-                .tint(.black)
-                Button {
-                    viewModel.fetchUser()
-                    guard let _ = viewModel.user else { return }
-                    viewModel.showingSheet.toggle()
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .tint(.red)
-                .sheet(isPresented: $viewModel.showingSheet, content: {
-                    SettingsView(viewModel: SettingsViewModel(user: viewModel.user!))
-                })
-            })
-            
-            ZStack {
-                VStack {
-                    Resources.Images.background
-                        .resizable()
-                        .scaledToFit()
-                        .padding()
-                    VStack {
-                        Text(Resources.Strings.welcome)
-                            .padding()
-                            .font(.largeTitle)
-                        Text(Resources.Strings.background)
-                            .padding()
-                            .font(.subheadline)
-                            .foregroundStyle(.gray)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding()
-                    Spacer()
-                    Button("+") {
-                        viewModel.fetchUser()
-                        showingSheet.toggle()
-                        
-                    }
-                    .sheet(isPresented: $showingSheet, content: {
-                        NewListView(viewModel: NewListViewModel())
-                    })
-                    .buttonStyle(.borderedProminent)
-                    .clipShape(.circle)
-                    .foregroundStyle(.white)
-                    .tint(.red)
-                    .padding()
-                    .shadow(color: .red, radius: 2, x: 2, y: 2)
-                    .controlSize(.large)
-                }
-                
+            .padding()
+        }
+    }
+    
+    private func listItem(for index: Int) -> some View {
+        VStack {
+            HStack {
+                Text(viewModel.lists[index].name + ":")
+                    .font(.title2)
+                    .foregroundColor(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
+                    .lineLimit(1)
+                Spacer()
             }
-        })//.onAppear(perform: viewModel.fetchUser())
+            .padding(.bottom)
+            .padding(.leading)
+            VStack {
+                ForEach(0..<4) { itemIndex in
+                    HStack {
+                        Text("• " + (viewModel.lists[safe: index]?.items?[safe: itemIndex]?.title ?? ""))
+                            .padding(.leading)
+                            .font(.caption)
+                            .foregroundColor(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+
+                        Spacer()
+                    }
+                }
+                .padding(.leading)
+            }
+        }
+        .padding()
+        .frame(width: Resources.Sizes.listPreviewFrame, height: Resources.Sizes.listPreviewFrame)
+        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+        .cornerRadius(Resources.Sizes.listPreviewCornerRadius)
+        .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: Resources.Sizes.listPreviewShadowRadius, x: Resources.Sizes.listPreviewShadowOffset, y: Resources.Sizes.listPreviewShadowOffset)
+        .overlay(
+            RoundedRectangle(cornerRadius: Resources.Sizes.listPreviewCornerRadius)
+                .stroke(Resources.ViewColors.accent(forScheme: themeManager.colorScheme), lineWidth: 1)
+        )
+        .onTapGesture {
+            viewModel.currentListId = viewModel.lists[index].id
+            showingListSheet.toggle()
+        }
+        .sheet(isPresented: $showingListSheet, onDismiss: {
+            Task {
+                await viewModel.fetchLists()
+            }
+        }) {
+            ListView(listId: viewModel.currentListId, showingNewListSheet: $showingNewListSheet, showingListSheet: $showingListSheet)
+        }
+    }
+    
+    private var footer: some View {
+        VStack {
+            Spacer()
+            Button {
+                showingNewListSheet.toggle()
+            } label: {
+                Resources.Images.add
+            }
+            .sheet(isPresented: $showingNewListSheet, onDismiss: {
+                Task {
+                    await viewModel.fetchLists()
+                }
+            }) {
+                NewListView(viewModel: NewListViewModel(), showingNewListSheet: $showingNewListSheet)
+            }
+            .buttonStyle(.borderedProminent)
+            .clipShape(.circle)
+            .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+            .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+            .padding()
+            .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+            .controlSize(.large)
+        }
     }
 }
 
 #Preview {
-    HomeView(viewModel: HomeViewModel(userId: "3YIxHKN4ekMJ5V9zdJqkDgzEenI2"))
+    HomeView(userId: "3YIxHKN4ekMJ5V9zdJqkDgzEenI2")
 }

@@ -8,10 +8,9 @@
 import Foundation
 import SwiftUI
 
-enum SettingsSection: String {
-    case user = "Юзер"
+enum SettingsSection: String, CaseIterable {
+    case user = "Мій профіль"
     case friends = "Друзі"
-    case categories = "Категоріі"
     case calendar = "Календар"
     case mode = "Тема"
     case notifications = "Сповіщення"
@@ -23,8 +22,6 @@ enum SettingsSection: String {
             Image(systemName: "person.circle")
         case .friends:
             Image(systemName: "person.3")
-        case .categories:
-            Image(systemName: "folder")
         case .calendar:
             Image(systemName: "calendar")
         case .mode:
@@ -38,6 +35,5 @@ enum SettingsSection: String {
 }
 
 struct Settings: Codable {
-    var modeIsDark: Bool = false
     var notificationsIsOn: Bool = true
 }

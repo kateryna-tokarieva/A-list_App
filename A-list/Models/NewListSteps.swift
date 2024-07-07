@@ -10,5 +10,5 @@ import Foundation
 enum NewListStep: Int {
     case name
     case timer
-    case category
+    //case category
 }

@@ -14,7 +14,7 @@ struct User: Codable {
     var image: String = "person"
     var email: String = ""
     var friends: [String]?
-    var categories: [Category] = [Category(name: "Всі списки")]
+    var lists: [ShoppingList]?
     var events: [Date]?
     var settings: Settings
 }
