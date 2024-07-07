@@ -70,6 +70,7 @@ struct SettingsView: View {
         } label: {
             Text("Вийти")
         }
+        .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
         .fullScreenCover(isPresented: $showingLoginSheet, content: {
             LoginView()
         })

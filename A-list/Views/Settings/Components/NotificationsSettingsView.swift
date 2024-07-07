@@ -9,16 +9,18 @@ import SwiftUI
 
 struct NotificationsSettingsView: View {
     @EnvironmentObject var notificationsManager: NotificationsManager
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         List {
-            HStack {
+            HStack(alignment: .center) {
                 Toggle(
                     isOn: $notificationsManager.notificationsIsOn
                 ) {
                     Label("Отримувати сповіщення", systemImage: "bell")
                 }
-                .padding()
+                .lineLimit(1)
+                .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
             }
         }
     }
