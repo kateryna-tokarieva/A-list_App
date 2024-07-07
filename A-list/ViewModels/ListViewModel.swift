@@ -33,12 +33,23 @@ class ListViewModel: ObservableObject {
         list?.items?.append(item)
         itemIcons.append(Resources.Images.notDone)
         saveItemToDatabase(item)
+        setupIcons()
+        updateDoneItemsText()
     }
     
     func deleteItem(withIndex index: Int) {
         guard let itemToDelete = list?.items?[index] else { return }
         deleteItemFromDatabase(itemToDelete)
         fetchList()
+    }
+    
+    func editItem(withIndex index: Int) {
+        stateIsEditing = true
+        guard let itemToEdit = list?.items?[index] else { return }
+        newItemTitle = itemToEdit.title
+        newItemQuantity = itemToEdit.quantity
+        newItemUnit = itemToEdit.unit
+        deleteItem(withIndex: index)
     }
     
     func toggleItemIsDone(index: Int) {

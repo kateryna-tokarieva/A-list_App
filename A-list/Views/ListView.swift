@@ -205,6 +205,13 @@ struct ListView: View {
             }
             .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
             .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+            Button {
+                viewModel.editItem(withIndex: index)
+            } label: {
+                Label("Редагувати", systemImage: "pencil")
+            }
+            .tint(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+            .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
         }
     }
 }
