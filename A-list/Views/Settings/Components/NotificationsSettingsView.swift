@@ -8,11 +8,24 @@
 import SwiftUI
 
 struct NotificationsSettingsView: View {
+    @EnvironmentObject var notificationsManager: NotificationsManager
+
     var body: some View {
-        Text("Notifications")
+        List {
+            HStack {
+                Toggle(
+                    isOn: $notificationsManager.notificationsIsOn
+                ) {
+                    Label("Отримувати сповіщення", systemImage: "bell")
+                }
+                .padding()
+            }
+        }
     }
 }
 
 #Preview {
     NotificationsSettingsView()
+        .environmentObject(NotificationsManager())
 }
+

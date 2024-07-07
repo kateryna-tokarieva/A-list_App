@@ -29,7 +29,6 @@ struct ModeSettingsView: View {
                 }
             }
         }
-        .navigationTitle("Select Theme")
         .onAppear {
             themeManager.saveSelectedTheme(ColorTheme(rawValue: selectedTheme) ?? .modernClean)
         }

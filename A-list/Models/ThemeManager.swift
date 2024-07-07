@@ -21,7 +21,6 @@ class ThemeManager: ObservableObject {
     func saveSelectedTheme(_ theme: ColorTheme) {
         UserDefaults.standard.set(theme.rawValue, forKey: "selectedTheme")
         self.currentTheme = theme
-        print(theme)
     }
     
     func toggleTheme() {

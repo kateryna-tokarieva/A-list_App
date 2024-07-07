@@ -11,7 +11,6 @@ import SwiftUI
 class SettingsSectionViewModel: ObservableObject {
     @Published var section: SettingsSection
     
-    
     init(section: SettingsSection) {
         self.section = section
     }

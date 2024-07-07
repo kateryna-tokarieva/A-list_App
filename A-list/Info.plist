@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocalNotificationUsageDescription</key>
+	<string>Дозвольте додатку надсилати нагадування</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Дозвольте доступ до камери щоб відсканувати код</string>
 	<key>FirebaseAutomaticScreenReportingEnabled</key>

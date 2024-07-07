@@ -24,11 +24,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct A_listApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var themeManager = ThemeManager()
+    @StateObject private var notificationsManager = NotificationsManager()
     
     var body: some Scene {
         WindowGroup {
             MainView()
                 .environmentObject(themeManager)
+                .environmentObject(notificationsManager)
                 .onAppear {
                     Resources.themeManager = themeManager
                 }

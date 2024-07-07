@@ -11,7 +11,6 @@ struct SettingsView: View {
     @ObservedObject var viewModel = SettingsViewModel()
     @EnvironmentObject var themeManager: ThemeManager
     @State private var showingLoginSheet = false
-    private var sections: [SettingsSection] = [.friends, .calendar, .mode, .notifications, .support]
     private var userId: String
     
     init(userId: String) {
@@ -20,56 +19,60 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
-            HStack(alignment: .center) {
-                HStack {
-                    Resources.Images.userImagePlaceholder
-                        .clipShape(.circle)
-                        .scaledToFill()
-                        .padding()
-                    
-                    VStack(alignment: .leading) {
-                        Text(viewModel.user?.name ?? "")
-                            .font(.title2)
-                        Text(viewModel.user?.email ?? "")
-                            .font(.footnote)
-                            .foregroundStyle(.gray)
-                    }
-                }
-                Spacer()
-                NavigationLink {
-                    SettingsSectionView(viewModel: SettingsSectionViewModel(section: .user))
-                } label: {
-                    Resources.Images.edit
-                }
-                .padding()
-                .controlSize(.large)
-                .tint(.red)
-            }
-            .padding()
-            NavigationStack {
-                List {
-                    ForEach(sections, id: \.self) {section in
-                        NavigationLink {
-                            SettingsSectionView(viewModel: SettingsSectionViewModel(section: section)) } label: {
-                                
-                                HStack {
-                                    section.image()
-                                    Text(section.rawValue)
-                                }
-                            }
-                    }
-                }
-            }
-            Button {
-                viewModel.logout()
-                showingLoginSheet.toggle()
-            } label: {
-                Text("Вийти")
-            }
-            .fullScreenCover(isPresented: $showingLoginSheet, content: {
-                LoginView()
-            })
+           header
+           content
+           footer
         }
+    }
+    
+    var header: some View {
+        HStack(alignment: .center) {
+            HStack {
+                Resources.Images.userImagePlaceholder
+                    .clipShape(.circle)
+                    .scaledToFill()
+                    .padding()
+                
+                VStack(alignment: .leading) {
+                    Text(viewModel.user?.name ?? "")
+                        .font(.title2)
+                    Text(viewModel.user?.email ?? "")
+                        .font(.footnote)
+                        .foregroundStyle(.gray)
+                }
+            }
+            Spacer()
+        }
+        .padding()
+    }
+    
+    var content: some View {
+        NavigationStack {
+            List {
+                ForEach(SettingsSection.allCases, id: \.self) {section in
+                    NavigationLink {
+                        SettingsSectionView(viewModel: SettingsSectionViewModel(section: section)) } label: {
+                            
+                            HStack {
+                                section.image()
+                                Text(section.rawValue)
+                            }
+                        }
+                }
+            }
+        }
+    }
+    
+    var footer: some View {
+        Button {
+            viewModel.logout()
+            showingLoginSheet.toggle()
+        } label: {
+            Text("Вийти")
+        }
+        .fullScreenCover(isPresented: $showingLoginSheet, content: {
+            LoginView()
+        })
     }
 }
 #Preview {

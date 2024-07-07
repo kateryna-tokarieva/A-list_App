@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-enum SettingsSection: String {
-    case user = "Юзер"
+enum SettingsSection: String, CaseIterable {
+    case user = "Мій профіль"
     case friends = "Друзі"
     case calendar = "Календар"
     case mode = "Тема"
@@ -35,6 +35,5 @@ enum SettingsSection: String {
 }
 
 struct Settings: Codable {
-    var modeIsDark: Bool = false
     var notificationsIsOn: Bool = true
 }

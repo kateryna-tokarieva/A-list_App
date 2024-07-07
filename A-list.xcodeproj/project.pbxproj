@@ -36,6 +36,7 @@
 		107AC0992C39B14F000FD024 /* BarcodeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC0982C39B14F000FD024 /* BarcodeDataService.swift */; };
 		107AC09C2C39B214000FD024 /* BarcodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC09B2C39B214000FD024 /* BarcodeData.swift */; };
 		107AC09E2C39B3D8000FD024 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC09D2C39B3D8000FD024 /* API.swift */; };
+		107AC0A32C3AAD46000FD024 /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC0A22C3AAD46000FD024 /* NotificationsManager.swift */; };
 		107AF3182C2A063E00A2F56B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3172C2A063E00A2F56B /* SettingsView.swift */; };
 		107AF31A2C2A066D00A2F56B /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3192C2A066D00A2F56B /* SettingsViewModel.swift */; };
 		107AF31C2C2ACF0800A2F56B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF31B2C2ACF0800A2F56B /* Settings.swift */; };
@@ -104,6 +105,7 @@
 		107AC0982C39B14F000FD024 /* BarcodeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeDataService.swift; sourceTree = "<group>"; };
 		107AC09B2C39B214000FD024 /* BarcodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeData.swift; sourceTree = "<group>"; };
 		107AC09D2C39B3D8000FD024 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		107AC0A22C3AAD46000FD024 /* NotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsManager.swift; sourceTree = "<group>"; };
 		107AF3172C2A063E00A2F56B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		107AF3192C2A066D00A2F56B /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		107AF31B2C2ACF0800A2F56B /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		1025AFFD2C2D787C004AFB73 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				107AC09F2C3AA91F000FD024 /* Components */,
 				107AF3192C2A066D00A2F56B /* SettingsViewModel.swift */,
 				107AF31F2C2AD7D300A2F56B /* SettingsSectionViewModel.swift */,
 			);
@@ -297,6 +300,13 @@
 			path = BarcodeScanning;
 			sourceTree = "<group>";
 		};
+		107AC09F2C3AA91F000FD024 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		10DDFD602C286A5E00F300F3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -321,6 +331,8 @@
 				10C753F72C31F5370011742B /* ShoppingItem.swift */,
 				10C753F92C31F5B30011742B /* Unit.swift */,
 				10657EB62C3343F900E9657F /* KeyboardManager.swift */,
+				10F0500B2C357C330017B4B9 /* ThemeManager.swift */,
+				107AC0A22C3AAD46000FD024 /* NotificationsManager.swift */,
 				107AC09A2C39B16A000FD024 /* BarcodeScanning */,
 			);
 			path = Models;
@@ -353,7 +365,6 @@
 				102944E32C32E33300900640 /* Protocols */,
 				10DDFD5C2C282EFA00F300F3 /* Resources.swift */,
 				10F050092C3564380017B4B9 /* ColorTheme.swift */,
-				10F0500B2C357C330017B4B9 /* ThemeManager.swift */,
 				107AC09D2C39B3D8000FD024 /* API.swift */,
 			);
 			path = Helpers;
@@ -521,6 +532,7 @@
 				10C1A53D2C2C0E38005C0F40 /* RegistrationView.swift in Sources */,
 				107AC09C2C39B214000FD024 /* BarcodeData.swift in Sources */,
 				10DDFD5F2C28519200F300F3 /* NewListView.swift in Sources */,
+				107AC0A32C3AAD46000FD024 /* NotificationsManager.swift in Sources */,
 				10439B2E2C29C796005979FF /* LoginView.swift in Sources */,
 				10C753F82C31F5370011742B /* ShoppingItem.swift in Sources */,
 				107AF3182C2A063E00A2F56B /* SettingsView.swift in Sources */,
