@@ -16,6 +16,7 @@ struct ListView: View {
     @State private var showButton = true
     @State private var showAlert = false
     @State private var isShowingScanner = false
+    @State private var showingFriendsList = false
     
     init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
         self.viewModel = ListViewModel(listID: listId)
@@ -81,6 +82,45 @@ struct ListView: View {
                         )
                     }
                     .padding()
+                    Menu {
+                        ForEach(viewModel.friends, id: \.self) { friend in
+                            Button {
+                                viewModel.shareWithFriend(withName: friend.name)
+                            } label: {
+                                Text(friend.name)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                                                   .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                    }
+                    .menuStyle(BorderlessButtonMenuStyle())
+                    .padding()
+                    if let sharedWithFriends = viewModel.list?.sharedWithFriends {
+                        Menu {
+                            ForEach(viewModel.sharedFriends, id: \.self) { friend in
+                                Button {
+                                    viewModel.shareWithFriend(withName: friend.name)
+                                } label: {
+                                    Text(friend.name)
+                                        .swipeActions {
+                                            Button(role: .destructive) {
+                                                viewModel.deleteFriendFromShared(withName: friend.name)
+                                            } label: {
+                                                Label("Видалити", systemImage: "trash")
+                                            }
+                                            .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
+                                            .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+                                        }
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "person.crop.circle.badge.checkmark")
+                                .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                        }
+                        .menuStyle(BorderlessButtonMenuStyle())
+                    }
+                    
                 }
                 Spacer()
                 
@@ -111,8 +151,10 @@ struct ListView: View {
                 HStack {
                     TextField(Resources.Strings.title, text: $viewModel.newItemTitle)
                         .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+                        .padding()
                     TextField(Resources.Strings.quantity, text: $viewModel.newItemQuantity)
                         .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+                        .padding(.trailing)
                     Picker("", selection: $viewModel.newItemUnit) {
                         ForEach(Unit.allCases, id: \.self) { unit in
                             Text(unit.rawValue).tag(unit)
@@ -127,6 +169,7 @@ struct ListView: View {
                             viewModel.newItemTitle = ""
                             viewModel.newItemQuantity = ""
                         }
+                        .padding()
                 }
                 button
             }
@@ -142,7 +185,7 @@ struct ListView: View {
                 isShowingScanner.toggle()
             } label: {
                 Resources.Images.barcode
-                    .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                    .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
             }
             .sheet(isPresented: $isShowingScanner) {
                 ScannerView { code in
@@ -200,7 +243,8 @@ struct ListView: View {
         .swipeActions {
             Button(role: .destructive) {
                 viewModel.deleteItem(withIndex: index)
-                viewModel.fetchList()
+                    viewModel.fetchList()
+                
             } label: {
                 Label("Видалити", systemImage: "trash")
             }
