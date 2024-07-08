@@ -36,6 +36,8 @@
 		107674EE2C3ACEE800BAE0E0 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107674ED2C3ACEE800BAE0E0 /* Event.swift */; };
 		107674F82C3AE31A00BAE0E0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 107674F72C3AE31A00BAE0E0 /* Alamofire */; };
 		107674FC2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107674FB2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift */; };
+		107675002C3C5B7D00BAE0E0 /* SharedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107674FF2C3C5B7C00BAE0E0 /* SharedList.swift */; };
+		107675022C3C5F2200BAE0E0 /* SharedListViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107675012C3C5F2200BAE0E0 /* SharedListViewViewModel.swift */; };
 		107AC0992C39B14F000FD024 /* BarcodeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC0982C39B14F000FD024 /* BarcodeDataService.swift */; };
 		107AC09C2C39B214000FD024 /* BarcodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC09B2C39B214000FD024 /* BarcodeData.swift */; };
 		107AC09E2C39B3D8000FD024 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC09D2C39B3D8000FD024 /* API.swift */; };
@@ -109,6 +111,8 @@
 		10657EB62C3343F900E9657F /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		107674ED2C3ACEE800BAE0E0 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		107674FB2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsSettingsViewViewModel.swift; sourceTree = "<group>"; };
+		107674FF2C3C5B7C00BAE0E0 /* SharedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedList.swift; sourceTree = "<group>"; };
+		107675012C3C5F2200BAE0E0 /* SharedListViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedListViewViewModel.swift; sourceTree = "<group>"; };
 		107AC0982C39B14F000FD024 /* BarcodeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeDataService.swift; sourceTree = "<group>"; };
 		107AC09B2C39B214000FD024 /* BarcodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeData.swift; sourceTree = "<group>"; };
 		107AC09D2C39B3D8000FD024 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
@@ -348,6 +352,7 @@
 				10DDFD692C286B8F00F300F3 /* NewListSteps.swift */,
 				107AF31B2C2ACF0800A2F56B /* Settings.swift */,
 				107AF32F2C2AFB0600A2F56B /* User.swift */,
+				107674FF2C3C5B7C00BAE0E0 /* SharedList.swift */,
 				107AF3332C2AFCF500A2F56B /* ShoppingList.swift */,
 				10C753F72C31F5370011742B /* ShoppingItem.swift */,
 				10C753F92C31F5B30011742B /* Unit.swift */,
@@ -367,6 +372,7 @@
 				10439B192C297FF5005979FF /* HomeViewModel.swift */,
 				10DDFD6B2C286D9400F300F3 /* NewListViewModel.swift */,
 				10439B142C28B86B005979FF /* ListViewModel.swift */,
+				107675012C3C5F2200BAE0E0 /* SharedListViewViewModel.swift */,
 				1025AFFD2C2D787C004AFB73 /* Settings */,
 			);
 			path = ViewModels;
@@ -552,6 +558,7 @@
 				10F0500A2C3564380017B4B9 /* ColorTheme.swift in Sources */,
 				10297F442C397E5B00A41891 /* ScannerView.swift in Sources */,
 				10DDFD5D2C282EFA00F300F3 /* Resources.swift in Sources */,
+				107675002C3C5B7D00BAE0E0 /* SharedList.swift in Sources */,
 				107AF31A2C2A066D00A2F56B /* SettingsViewModel.swift in Sources */,
 				1024D0D42C2B307B00202864 /* MainViewModel.swift in Sources */,
 				10657EB72C3343F900E9657F /* KeyboardManager.swift in Sources */,
@@ -564,6 +571,7 @@
 				10439B2E2C29C796005979FF /* LoginView.swift in Sources */,
 				10C753F82C31F5370011742B /* ShoppingItem.swift in Sources */,
 				107AF3182C2A063E00A2F56B /* SettingsView.swift in Sources */,
+				107675022C3C5F2200BAE0E0 /* SharedListViewViewModel.swift in Sources */,
 				10DDFD6A2C286B8F00F300F3 /* NewListSteps.swift in Sources */,
 				107AF3342C2AFCF500A2F56B /* ShoppingList.swift in Sources */,
 				10A6405C2C330CB3000FD228 /* Array + Extension.swift in Sources */,

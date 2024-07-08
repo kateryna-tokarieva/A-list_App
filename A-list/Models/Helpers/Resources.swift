@@ -66,6 +66,7 @@ struct Resources {
         static var deleteConfirmationAlertTitle = "Підтвердження"
         static var deleteConfirmationAlertContent = "Ви впевнені, що хочете видалити цей список?"
         static var deleteConfirmationAlertPrimaryButton = "Видалити"
+        static var deleteSharedFriendAlertContent = "Ви впевнені, що хочете видалити друга зі списку?"
     }
     
     enum Sizes {

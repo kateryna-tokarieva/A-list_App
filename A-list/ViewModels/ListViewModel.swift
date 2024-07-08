@@ -31,9 +31,9 @@ class ListViewModel: ObservableObject {
     init(listID: String) {
         self.listId = listID
         
-    
-            fetchList()
-            
+        
+        fetchList()
+        
         
     }
     
@@ -79,9 +79,7 @@ class ListViewModel: ObservableObject {
     func deleteItem(withIndex index: Int) {
         guard let itemToDelete = list?.items?[index] else { return }
         deleteItemFromDatabase(itemToDelete)
-        
-           fetchList()
-       
+        fetchList()
     }
     
     private func saveItemToDatabase(_ item: ShoppingItem) {
@@ -240,7 +238,7 @@ class ListViewModel: ObservableObject {
             print("No friends to fetch or sharedWithFriends is empty")
             return
         }
-
+        
         var users: [User] = []
         
         for id in list.sharedWithFriends {
@@ -259,9 +257,9 @@ class ListViewModel: ObservableObject {
         
         self.sharedFriends = users
     }
-
-
-
+    
+    
+    
     
     func shareWithFriend(withName name: String) {
         var friendId = ""
@@ -286,12 +284,11 @@ class ListViewModel: ObservableObject {
     private func addListToFriend(withId id: String) {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         guard let list else { return }
-        var newList = list
-        newList.owner = userId
+        var sharedList = SharedList(id: list.id, ownerId: userId)
         dataBase.collection("users")
             .document(id)
-            .collection("lists")
-            .document(newList.id).setData(newList.asDictionary())
+            .collection("sharedLists")
+            .document(sharedList.id).setData(sharedList.asDictionary())
     }
     
     func deleteFriendFromShared(withName name: String) {
@@ -315,14 +312,13 @@ class ListViewModel: ObservableObject {
                 return
             }
         }
-        
         guard let list else { return }
         fetchList()
         deleteListFromFriend(withId: id, listId: list.id)
     }
     
     private func deleteListFromFriend(withId id: String, listId: String)  {
-        let friendsList = dataBase.collection("users").document(id).collection("lists").document(listId)
+        let friendsList = dataBase.collection("users").document(id).collection("sharedLists").document(listId)
         friendsList.delete { error in
             if let error = error {
                 print("Error deleting friend: \(error)")

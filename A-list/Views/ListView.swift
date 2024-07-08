@@ -14,9 +14,11 @@ struct ListView: View {
     @Binding var showingNewListSheet: Bool
     @Binding var showingListSheet: Bool
     @State private var showButton = true
-    @State private var showAlert = false
+    @State private var showDeletingListAlert = false
     @State private var isShowingScanner = false
     @State private var showingFriendsList = false
+    @State private var showDeletingFriendAlert = false
+    @State private var selectedFriend: User?
     
     init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
         self.viewModel = ListViewModel(listID: listId)
@@ -64,13 +66,12 @@ struct ListView: View {
             HStack {
                 if viewModel.stateIsEditing {
                     Button(action: {
-                        showAlert = true
+                        showDeletingListAlert = true
                     }) {
                         Image(systemName: "trash")
                             .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
                     }
-                    
-                    .alert(isPresented: $showAlert) {
+                    .alert(isPresented: $showDeletingListAlert) {
                         Alert(
                             title: Text(Resources.Strings.deleteConfirmationAlertTitle),
                             message: Text(Resources.Strings.deleteConfirmationAlertContent),
@@ -82,6 +83,7 @@ struct ListView: View {
                         )
                     }
                     .padding()
+                    
                     Menu {
                         ForEach(viewModel.friends, id: \.self) { friend in
                             Button {
@@ -92,26 +94,22 @@ struct ListView: View {
                         }
                     } label: {
                         Image(systemName: "square.and.arrow.up")
-                                                   .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                            .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                     }
                     .menuStyle(BorderlessButtonMenuStyle())
                     .padding()
-                    if let sharedWithFriends = viewModel.list?.sharedWithFriends {
+                    
+                    if !viewModel.sharedFriends.isEmpty {
                         Menu {
                             ForEach(viewModel.sharedFriends, id: \.self) { friend in
-                                Button {
-                                    viewModel.shareWithFriend(withName: friend.name)
-                                } label: {
-                                    Text(friend.name)
-                                        .swipeActions {
-                                            Button(role: .destructive) {
-                                                viewModel.deleteFriendFromShared(withName: friend.name)
-                                            } label: {
-                                                Label("Видалити", systemImage: "trash")
-                                            }
-                                            .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
-                                            .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
-                                        }
+                                Button(action: {
+                                    selectedFriend = friend
+                                    showDeletingFriendAlert = true
+                                }) {
+                                    HStack {
+                                        Text(friend.name)
+                                        Image(systemName: "trash")
+                                    }
                                 }
                             }
                         } label: {
@@ -119,9 +117,21 @@ struct ListView: View {
                                 .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                         }
                         .menuStyle(BorderlessButtonMenuStyle())
+                        .alert(isPresented: $showDeletingFriendAlert) {
+                            Alert(
+                                title: Text(Resources.Strings.deleteConfirmationAlertTitle),
+                                message: Text(Resources.Strings.deleteSharedFriendAlertContent),
+                                primaryButton: .destructive(Text(Resources.Strings.deleteConfirmationAlertPrimaryButton)) {
+                                    if let friend = selectedFriend {
+                                        viewModel.deleteFriendFromShared(withName: friend.name)
+                                    }
+                                },
+                                secondaryButton: .cancel()
+                            )
+                        }
                     }
-                    
                 }
+                
                 Spacer()
                 
                 Text(viewModel.doneItemsText)
@@ -136,7 +146,6 @@ struct ListView: View {
         }
         .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
     }
-    
     
     var content: some View {
         List {
@@ -243,7 +252,7 @@ struct ListView: View {
         .swipeActions {
             Button(role: .destructive) {
                 viewModel.deleteItem(withIndex: index)
-                    viewModel.fetchList()
+                viewModel.fetchList()
                 
             } label: {
                 Label("Видалити", systemImage: "trash")
