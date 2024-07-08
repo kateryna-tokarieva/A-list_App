@@ -30,11 +30,7 @@ class ListViewModel: ObservableObject {
     
     init(listID: String) {
         self.listId = listID
-        
-        
         fetchList()
-        
-        
     }
     
     //MARK: Updating UI
@@ -258,9 +254,6 @@ class ListViewModel: ObservableObject {
         self.sharedFriends = users
     }
     
-    
-    
-    
     func shareWithFriend(withName name: String) {
         var friendId = ""
         for friend in friends {
@@ -284,7 +277,7 @@ class ListViewModel: ObservableObject {
     private func addListToFriend(withId id: String) {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         guard let list else { return }
-        var sharedList = SharedList(id: list.id, ownerId: userId)
+        let sharedList = SharedList(id: list.id, ownerId: userId)
         dataBase.collection("users")
             .document(id)
             .collection("sharedLists")
