@@ -32,7 +32,7 @@ struct LoginView: View {
             .fixedSize(horizontal: true, vertical: false)
             .padding(.bottom)
             .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
-            .foregroundStyle(Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme))
+            .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
             .fullScreenCover(isPresented: $viewModel.showingHomeSheet, content: {
                 HomeView(userId: viewModel.userId)
             })

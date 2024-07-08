@@ -58,7 +58,7 @@ struct Resources {
         static var login = "Вхід"
         static var name = "імʼя"
         static var registration = "Зареєструватись"
-        static var allLists = "Всі списки"
+        static var allLists = "Списки"
         static var skip = "Пропустити"
         static var setupNotification = "Постав нагадування"
         static var title = "Назва"

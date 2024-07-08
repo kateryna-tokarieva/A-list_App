@@ -33,6 +33,9 @@
 		10439B332C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
 		10439B342C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
 		10657EB72C3343F900E9657F /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10657EB62C3343F900E9657F /* KeyboardManager.swift */; };
+		107674EE2C3ACEE800BAE0E0 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107674ED2C3ACEE800BAE0E0 /* Event.swift */; };
+		107674F82C3AE31A00BAE0E0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 107674F72C3AE31A00BAE0E0 /* Alamofire */; };
+		107674FC2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107674FB2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift */; };
 		107AC0992C39B14F000FD024 /* BarcodeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC0982C39B14F000FD024 /* BarcodeDataService.swift */; };
 		107AC09C2C39B214000FD024 /* BarcodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC09B2C39B214000FD024 /* BarcodeData.swift */; };
 		107AC09E2C39B3D8000FD024 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AC09D2C39B3D8000FD024 /* API.swift */; };
@@ -104,6 +107,8 @@
 		10439B2D2C29C795005979FF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		10439B312C29C7AC005979FF /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		10657EB62C3343F900E9657F /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
+		107674ED2C3ACEE800BAE0E0 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		107674FB2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsSettingsViewViewModel.swift; sourceTree = "<group>"; };
 		107AC0982C39B14F000FD024 /* BarcodeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeDataService.swift; sourceTree = "<group>"; };
 		107AC09B2C39B214000FD024 /* BarcodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeData.swift; sourceTree = "<group>"; };
 		107AC09D2C39B3D8000FD024 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
@@ -144,6 +149,7 @@
 				10412AB02C2CA29800F79210 /* FirebaseFirestoreSwift in Frameworks */,
 				10412AAA2C2CA29800F79210 /* FirebaseAnalyticsSwift in Frameworks */,
 				10412AAE2C2CA29800F79210 /* FirebaseFirestore in Frameworks */,
+				107674F82C3AE31A00BAE0E0 /* Alamofire in Frameworks */,
 				10412AAC2C2CA29800F79210 /* FirebaseAuth in Frameworks */,
 				10412AA82C2CA29800F79210 /* FirebaseAnalytics in Frameworks */,
 			);
@@ -308,6 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				107AC0A42C3AC2F7000FD024 /* SupportSettingsViewViewModel.swift */,
+				107674FB2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -344,6 +351,7 @@
 				107AF3332C2AFCF500A2F56B /* ShoppingList.swift */,
 				10C753F72C31F5370011742B /* ShoppingItem.swift */,
 				10C753F92C31F5B30011742B /* Unit.swift */,
+				107674ED2C3ACEE800BAE0E0 /* Event.swift */,
 				10657EB62C3343F900E9657F /* KeyboardManager.swift */,
 				10F0500B2C357C330017B4B9 /* ThemeManager.swift */,
 				107AC0A22C3AAD46000FD024 /* NotificationsManager.swift */,
@@ -406,6 +414,7 @@
 				10412AAB2C2CA29800F79210 /* FirebaseAuth */,
 				10412AAD2C2CA29800F79210 /* FirebaseFirestore */,
 				10412AAF2C2CA29800F79210 /* FirebaseFirestoreSwift */,
+				107674F72C3AE31A00BAE0E0 /* Alamofire */,
 			);
 			productName = "A-list";
 			productReference = 1010B4D42C27238400F3114B /* A-list.app */;
@@ -484,6 +493,8 @@
 			mainGroup = 1010B4CB2C27238400F3114B;
 			packageReferences = (
 				10439B222C29C060005979FF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				107674EA2C3ACED200BAE0E0 /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
+				107674F62C3AE31A00BAE0E0 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 1010B4D52C27238400F3114B /* Products */;
 			projectDirPath = "";
@@ -529,6 +540,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				107AC0992C39B14F000FD024 /* BarcodeDataService.swift in Sources */,
+				107674EE2C3ACEE800BAE0E0 /* Event.swift in Sources */,
 				1024D0D02C2B1E1000202864 /* Encodable + Extension.swift in Sources */,
 				1024D0D22C2B306700202864 /* MainView.swift in Sources */,
 				107AF32C2C2AED6900A2F56B /* NotificationsSettingsView.swift in Sources */,
@@ -543,6 +555,7 @@
 				107AF31A2C2A066D00A2F56B /* SettingsViewModel.swift in Sources */,
 				1024D0D42C2B307B00202864 /* MainViewModel.swift in Sources */,
 				10657EB72C3343F900E9657F /* KeyboardManager.swift in Sources */,
+				107674FC2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift in Sources */,
 				10C1A53D2C2C0E38005C0F40 /* RegistrationView.swift in Sources */,
 				107AC09C2C39B214000FD024 /* BarcodeData.swift in Sources */,
 				10DDFD5F2C28519200F300F3 /* NewListView.swift in Sources */,
@@ -913,6 +926,22 @@
 				minimumVersion = 10.28.0;
 			};
 		};
+		107674EA2C3ACED200BAE0E0 /* XCRemoteSwiftPackageReference "HorizonCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/HorizonCalendar";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		107674F62C3AE31A00BAE0E0 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -940,6 +969,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 10439B222C29C060005979FF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		107674F72C3AE31A00BAE0E0 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 107674F62C3AE31A00BAE0E0 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

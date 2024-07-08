@@ -132,6 +132,7 @@ struct ListView: View {
             }
         }
         .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+        .listStyle(.plain)
     }
     
     var button: some View {

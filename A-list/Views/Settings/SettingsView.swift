@@ -60,6 +60,7 @@ struct SettingsView: View {
                         }
                 }
             }
+            .listStyle(.plain)
         }
     }
     

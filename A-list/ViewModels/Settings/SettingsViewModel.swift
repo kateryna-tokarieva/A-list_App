@@ -32,8 +32,9 @@ class SettingsViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self?.user = User(
                     id: data["id"] as? String ?? "",
-                    name: data["name"] as? String ?? "",
+                    name: data["name"] as? String ?? "", image: "",
                     email: data["email"] as? String ?? "",
+                    friends: data["friends"] as? [String] ?? [],
                     settings: data["settings"] as? Settings ?? Settings())
             }
         }

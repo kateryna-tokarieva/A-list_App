@@ -23,6 +23,7 @@ struct NotificationsSettingsView: View {
                 .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
             }
         }
+        .listStyle(.plain)
     }
 }
 

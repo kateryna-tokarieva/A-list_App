@@ -34,6 +34,14 @@ enum SettingsSection: String, CaseIterable {
     }
 }
 
-struct Settings: Codable {
+struct Settings: Codable, Hashable {
     var notificationsIsOn: Bool = true
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(notificationsIsOn)
+    }
+    
+    static func == (lhs: Settings, rhs: Settings) -> Bool {
+        return lhs.notificationsIsOn == rhs.notificationsIsOn
+    }
 }
