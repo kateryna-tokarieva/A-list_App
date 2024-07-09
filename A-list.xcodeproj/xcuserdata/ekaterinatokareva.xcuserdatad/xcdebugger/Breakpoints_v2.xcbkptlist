@@ -3,4 +3,54 @@
    uuid = "EACC90AE-ACD5-4E57-A471-A4631098DB7D"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A4B5B023-1B35-4048-80D1-B18BEDD59CDF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "A-list/ViewModels/List/SharedListViewViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "init(listId:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A4B5B023-1B35-4048-80D1-B18BEDD59CDF - 9445ed94933aae7d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "A_list.SharedListViewViewModel.__allocating_init(listId: Swift.String) -&gt; A_list.SharedListViewViewModel"
+                  moduleName = "A-list"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ekaterinatokareva/Documents/A-list_App/A-list/ViewModels/List/SharedListViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  uuid = "A4B5B023-1B35-4048-80D1-B18BEDD59CDF - 3b8d052b4ff4e094"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "A_list.SharedListViewViewModel.init(listId: Swift.String) -&gt; A_list.SharedListViewViewModel"
+                  moduleName = "A-list"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ekaterinatokareva/Documents/A-list_App/A-list/ViewModels/List/SharedListViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "72">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

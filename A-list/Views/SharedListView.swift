@@ -16,7 +16,7 @@ struct SharedListView: View {
     @State private var isShowingScanner = false
     
     init(listId: String) {
-        self.viewModel = SharedListViewViewModel(listID: listId)
+        self.viewModel = SharedListViewViewModel(listId: listId)
     }
     
     var body: some View {

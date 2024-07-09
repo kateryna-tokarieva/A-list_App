@@ -21,7 +21,7 @@ struct ListView: View {
     @State private var selectedFriend: User?
     
     init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
-        self.viewModel = ListViewModel(listID: listId)
+        self.viewModel = ListViewModel(listId: listId)
         self._showingNewListSheet = showingNewListSheet
         self._showingListSheet = showingListSheet
     }

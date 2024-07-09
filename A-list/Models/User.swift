@@ -13,7 +13,7 @@ struct User: Codable, Hashable {
     var name: String
     var image: String
     var email: String
-    var friends: [String]
+    var friends: [String]?
     var lists: [ShoppingList]?
     var sharedLists: [SharedList]?
     var events: [Date]?

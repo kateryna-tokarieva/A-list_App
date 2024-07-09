@@ -16,6 +16,7 @@ struct HomeView: View {
     @State private var showingSettingsSheet = false
     @State private var showingNewListSheet = false
     @State private var showingListSheet = false
+    @State private var showingSharedListSheet = false
     
     private var userId = ""
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]
@@ -35,7 +36,6 @@ struct HomeView: View {
         .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
         .onAppear {
             Task {
-                print("Fetching lists and shared lists onAppear")
                 await viewModel.fetchLists()
                 await viewModel.fetchSharedLists()
             }
@@ -101,18 +101,23 @@ struct HomeView: View {
             LazyVGrid(columns: columns) {
                 ForEach(viewModel.lists.indices, id: \.self) { index in
                     listItem(for: index)
+                        .id("listItem_\(index)")
                 }
                 ForEach(viewModel.sharedLists.indices, id: \.self) { index in
                     sharedListItem(for: index)
+                        .id("sharedListItem_\(index)")
                 }
             }
             .padding()
         }
     }
+
     
     private func sharedListItem(for index: Int) -> some View {
         VStack {
             HStack {
+                Image(systemName: "person.crop.circle.badge.checkmark")
+                    .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                 Text(viewModel.sharedLists[index].name + ":")
                     .font(.title2)
                     .foregroundColor(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
@@ -126,6 +131,7 @@ struct HomeView: View {
                     HStack {
                         Text("• " + (viewModel.sharedLists[safe: index]?.items?[safe: itemIndex]?.title ?? ""))
                             .padding(.leading)
+                            .lineLimit(1)
                             .font(.caption)
                             .foregroundColor(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
 
@@ -146,9 +152,9 @@ struct HomeView: View {
         )
         .onTapGesture {
             viewModel.currentListId = viewModel.sharedLists[index].id
-            showingListSheet.toggle()
+            showingSharedListSheet.toggle()
         }
-        .sheet(isPresented: $showingListSheet, onDismiss: {
+        .sheet(isPresented: $showingSharedListSheet, onDismiss: {
             Task {
                 await viewModel.fetchLists()
                 await viewModel.fetchSharedLists()
@@ -174,6 +180,7 @@ struct HomeView: View {
                     HStack {
                         Text("• " + (viewModel.lists[safe: index]?.items?[safe: itemIndex]?.title ?? ""))
                             .padding(.leading)
+                            .lineLimit(1)
                             .font(.caption)
                             .foregroundColor(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
 

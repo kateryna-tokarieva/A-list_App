@@ -132,7 +132,6 @@ class HomeViewModel: ObservableObject {
             }
             
             self.sharedLists = lists
-            print("Successfully fetched shared lists: \(self.sharedLists)")
         } catch {
             print("Error fetching documents: \(error)")
         }

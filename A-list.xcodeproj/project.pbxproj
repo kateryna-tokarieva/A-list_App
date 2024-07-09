@@ -22,6 +22,7 @@
 		10297F442C397E5B00A41891 /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10297F432C397E5B00A41891 /* ScannerView.swift */; };
 		10387BE12C3C6025002C5CC7 /* SharedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10387BE02C3C6025002C5CC7 /* SharedListView.swift */; };
 		10387BE32C3C67DC002C5CC7 /* ListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10387BE22C3C67DC002C5CC7 /* ListManager.swift */; };
+		10387BE62C3D7381002C5CC7 /* BaseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10387BE52C3D7381002C5CC7 /* BaseListViewModel.swift */; };
 		10412AA82C2CA29800F79210 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 10412AA72C2CA29800F79210 /* FirebaseAnalytics */; };
 		10412AAA2C2CA29800F79210 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 10412AA92C2CA29800F79210 /* FirebaseAnalyticsSwift */; };
 		10412AAC2C2CA29800F79210 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 10412AAB2C2CA29800F79210 /* FirebaseAuth */; };
@@ -107,6 +108,7 @@
 		10297F432C397E5B00A41891 /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
 		10387BE02C3C6025002C5CC7 /* SharedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedListView.swift; sourceTree = "<group>"; };
 		10387BE22C3C67DC002C5CC7 /* ListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListManager.swift; sourceTree = "<group>"; };
+		10387BE52C3D7381002C5CC7 /* BaseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseListViewModel.swift; sourceTree = "<group>"; };
 		10439B102C28B32E005979FF /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		10439B142C28B86B005979FF /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		10439B192C297FF5005979FF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -287,6 +289,16 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		10387BE42C3D7361002C5CC7 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				10387BE52C3D7381002C5CC7 /* BaseListViewModel.swift */,
+				10439B142C28B86B005979FF /* ListViewModel.swift */,
+				107675012C3C5F2200BAE0E0 /* SharedListViewViewModel.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
 		10439B1B2C29B7F1005979FF /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,8 +389,7 @@
 				1025AFFB2C2D785A004AFB73 /* Auth */,
 				10439B192C297FF5005979FF /* HomeViewModel.swift */,
 				10DDFD6B2C286D9400F300F3 /* NewListViewModel.swift */,
-				10439B142C28B86B005979FF /* ListViewModel.swift */,
-				107675012C3C5F2200BAE0E0 /* SharedListViewViewModel.swift */,
+				10387BE42C3D7361002C5CC7 /* List */,
 				1025AFFD2C2D787C004AFB73 /* Settings */,
 			);
 			path = ViewModels;
@@ -576,6 +587,7 @@
 				107AC0A32C3AAD46000FD024 /* NotificationsManager.swift in Sources */,
 				107AC0A92C3AC422000FD024 /* MailView.swift in Sources */,
 				10439B2E2C29C796005979FF /* LoginView.swift in Sources */,
+				10387BE62C3D7381002C5CC7 /* BaseListViewModel.swift in Sources */,
 				10C753F82C31F5370011742B /* ShoppingItem.swift in Sources */,
 				107AF3182C2A063E00A2F56B /* SettingsView.swift in Sources */,
 				107675022C3C5F2200BAE0E0 /* SharedListViewViewModel.swift in Sources */,

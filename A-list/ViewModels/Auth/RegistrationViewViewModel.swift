@@ -38,7 +38,7 @@ class RegistrationViewViewModel: ObservableObject {
     }
     
     func insertUserRecord(id: String) {
-        let newUser = User(id: id, name: name, image: "", email: email, friends: [], settings: Settings())
+        let newUser = User(id: id, name: name, image: "", email: email, settings: Settings())
         let dataBase = Firestore.firestore()
         dataBase.collection("users")
             .document(id)
