@@ -20,6 +20,7 @@ class SharedListViewViewModel: ObservableObject {
     @Published var newItemQuantity = ""
     @Published var newItemUnit: Unit = .pc
     @Published var doneItemsText = ""
+    
     private let dataBase = Firestore.firestore()
     private var doneItemsCount = 0
     private var sharedList: SharedList?
@@ -28,7 +29,8 @@ class SharedListViewViewModel: ObservableObject {
     
     init(listID: String) {
         self.listId = listID
-        fetchList()
+        print("Initializing SharedListViewViewModel with list ID: \(listID)")
+        fetchSharedList()
     }
     
     //MARK: Updating UI
@@ -47,10 +49,22 @@ class SharedListViewViewModel: ObservableObject {
     }
     
     func fetchSharedList() {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        let sharedListDocument = dataBase.collection("sharedLists").document(listId)
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("No user ID found in fetchList")
+            return
+        }
+        print("Fetching shared list with ID: \(listId)")
+        let sharedListDocument = dataBase.collection("users").document(userId).collection("sharedLists").document(listId)
         sharedListDocument.getDocument { [weak self] snapshot, error in
-            guard let self = self, let data = snapshot?.data() else { return }
+            if let error = error {
+                print("Error fetching shared list: \(error)")
+                return
+            }
+            guard let self = self, let data = snapshot?.data() else {
+                print("Shared list not found")
+                return
+            }
+            print("Shared list data: \(data)")
             self.sharedList = SharedList(id: data["id"] as? String ?? "",
                                          ownerId: data["ownerId"] as? String ?? "")
             
@@ -59,14 +73,26 @@ class SharedListViewViewModel: ObservableObject {
     }
     
     func fetchList() {
-        guard let sharedList else { return }
+        
+        guard let sharedList else {
+            print("Shared list is nil")
+            return
+        }
         let listDocument = dataBase.collection("users").document(sharedList.ownerId).collection("lists").document(sharedList.id)
         listDocument.getDocument { [weak self] snapshot, error in
-            guard let self = self, let data = snapshot?.data() else { return }
+            if let error = error {
+                print("Error fetching list: \(error)")
+                return
+            }
+            guard let self = self, let data = snapshot?.data() else {
+                print("List not found for ID: \(self?.listId)")
+                return
+            }
+            print("List data: \(data)")
             self.list = ShoppingList(id: data["id"] as? String ?? "",
                                      name: data["name"] as? String ?? "",
                                      items: data["items"] as? [ShoppingItem] ?? nil,
-                                     dueDate: data["dueDate"] as? Date ?? nil,
+                                     dueDate: (data["dueDate"] as? Timestamp)?.dateValue(),
                                      isDone: data["isDone"] as? Bool ?? false,
                                      sharedWithFriends: data["friends"] as? [String] ?? [],
                                      owner: data["owner"] as? String ?? nil)
@@ -76,19 +102,36 @@ class SharedListViewViewModel: ObservableObject {
     }
     
     func deleteList() {
-        guard let sharedList else { return }
+        guard let sharedList else {
+            print("Shared list is nil")
+            return
+        }
         let sharedListDocument = dataBase.collection("users").document(sharedList.ownerId).collection("lists").document(sharedList.id)
         sharedListDocument.delete()
     }
     
     func fetchItems() {
-        guard let sharedList else { return }
-        guard let list else { return }
+        guard let sharedList else {
+            print("Shared list is nil")
+            return
+        }
         let itemsCollection = dataBase.collection("users").document(sharedList.ownerId).collection("lists").document(sharedList.id).collection("items")
         itemsCollection.getDocuments { [weak self] snapshot, error in
-            guard let self = self, let documents = snapshot?.documents else { return }
+            if let error = error {
+                print("Error fetching items: \(error)")
+                return
+            }
+            guard let self = self, let documents = snapshot?.documents else {
+                print("No items found for list ID: \(self?.listId)")
+                return
+            }
             self.list?.items = documents.compactMap { document in
-                try? document.data(as: ShoppingItem.self)
+                do {
+                    return try document.data(as: ShoppingItem.self)
+                } catch {
+                    print("Error decoding document into ShoppingItem: \(error)")
+                    return nil
+                }
             }
             self.setupIcons()
             self.updateDoneItemsText()
@@ -104,7 +147,10 @@ class SharedListViewViewModel: ObservableObject {
     }
     
     private func saveItemToDatabase(_ item: ShoppingItem) {
-        guard let sharedList else { return }
+        guard let sharedList else {
+            print("Shared list is nil")
+            return
+        }
         let itemDocument = dataBase.collection("users").document(sharedList.ownerId).collection("lists").document(sharedList.id).collection("items").document(item.id)
         itemDocument.setData(item.asDictionary())
     }

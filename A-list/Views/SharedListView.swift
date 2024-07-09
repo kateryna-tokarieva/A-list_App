@@ -17,7 +17,6 @@ struct SharedListView: View {
     
     init(listId: String) {
         self.viewModel = SharedListViewViewModel(listID: listId)
-        
     }
     
     var body: some View {
@@ -31,7 +30,7 @@ struct SharedListView: View {
             HStack {
                 Spacer()
                 
-                Text("")
+                Text(viewModel.list?.name ?? "")
                     .font(.title)
                     .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
                     .padding()
@@ -59,6 +58,7 @@ struct SharedListView: View {
                         )
                     }
                     .padding()
+                    Spacer()
                 }
             }
         }
