@@ -36,6 +36,7 @@ struct SupportSettingsView: View {
         .sheet(isPresented: $viewModel.showingMailView) {
             MailView(result: self.$viewModel.result, recipients: ["kate.tokareva@icloud.com"], subject: "Підтримка", messageBody: viewModel.message)
         }
+        Spacer()
     }
 }
 

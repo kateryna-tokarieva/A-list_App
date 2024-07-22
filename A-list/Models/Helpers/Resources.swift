@@ -62,7 +62,7 @@ struct Resources {
         static var friendsLists = "Списки друзів"
         static var skip = "Пропустити"
         static var setupNotification = "Постав нагадування"
-        static var title = "Назва"
+        static var title = "Назва *"
         static var quantity = "Кількість"
         static var deleteConfirmationAlertTitle = "Підтвердження"
         static var deleteConfirmationAlertContent = "Ви впевнені, що хочете видалити цей список?"

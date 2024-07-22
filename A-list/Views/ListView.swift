@@ -50,19 +50,7 @@ struct ListView: View {
     }
     
     var header: some View {
-        ZStack {
-            HStack {
-                Spacer()
-                
-                Text(viewModel.list?.name ?? "")
-                    .font(.title)
-                    .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                
-                Spacer()
-            }
-            
+        HStack {
             HStack {
                 if viewModel.stateIsEditing {
                     Button(action: {
@@ -71,6 +59,7 @@ struct ListView: View {
                         Image(systemName: "trash")
                             .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
                     }
+                    .padding(.leading)
                     .alert(isPresented: $showDeletingListAlert) {
                         Alert(
                             title: Text(Resources.Strings.deleteConfirmationAlertTitle),
@@ -82,8 +71,6 @@ struct ListView: View {
                             secondaryButton: .cancel()
                         )
                     }
-                    .padding()
-                    
                     Menu {
                         ForEach(viewModel.friends, id: \.self) { friend in
                             Button {
@@ -131,9 +118,16 @@ struct ListView: View {
                         }
                     }
                 }
-                
+            }
+            .frame(width: 100)
+            Text(viewModel.list?.name ?? "")
+                .font(.title)
+                .lineLimit(2)
+                .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
+            HStack {
                 Spacer()
-                
                 Text(viewModel.doneItemsText)
                     .padding()
                     .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
@@ -143,8 +137,8 @@ struct ListView: View {
                     )
                     .padding()
             }
+            .frame(width: 100)
         }
-        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
     }
     
     var content: some View {
@@ -153,23 +147,26 @@ struct ListView: View {
                 if let items = list.items {
                     ForEach(items.indices, id: \.self) { index in
                         itemRow(for: index)
+                            .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
                     }
                 }
             }
             if viewModel.stateIsEditing {
+                TextField(Resources.Strings.title, text: $viewModel.newItemTitle)
+                    .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+                    .padding()
+                    .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
                 HStack {
-                    TextField(Resources.Strings.title, text: $viewModel.newItemTitle)
-                        .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
-                        .padding()
                     TextField(Resources.Strings.quantity, text: $viewModel.newItemQuantity)
                         .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
-                        .padding(.trailing)
+                        .padding()
                     Picker("", selection: $viewModel.newItemUnit) {
                         ForEach(Unit.allCases, id: \.self) { unit in
                             Text(unit.rawValue).tag(unit)
                         }
                     }
                     .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+                    .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
                     Spacer()
                     Resources.Images.checkmark
                         .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
@@ -180,10 +177,11 @@ struct ListView: View {
                         }
                         .padding()
                 }
+                .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
                 button
+                    .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
             }
         }
-        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
         .listStyle(.plain)
     }
     

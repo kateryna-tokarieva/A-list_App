@@ -117,7 +117,7 @@ struct HomeView: View {
         VStack {
             HStack {
                 Image(systemName: "person.crop.circle.badge.checkmark")
-                    .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                    .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                 Text(viewModel.sharedLists[index].name + ":")
                     .font(.title2)
                     .foregroundColor(Resources.ViewColors.text(forScheme: themeManager.colorScheme))

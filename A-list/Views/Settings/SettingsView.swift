@@ -10,7 +10,6 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject var viewModel = SettingsViewModel()
     @EnvironmentObject var themeManager: ThemeManager
-    @State private var showingLoginSheet = false
     private var userId: String
     
     init(userId: String) {
@@ -19,9 +18,9 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
-           header
-           content
-           footer
+            header
+            content
+            Spacer()
         }
     }
     
@@ -62,19 +61,6 @@ struct SettingsView: View {
             }
             .listStyle(.plain)
         }
-    }
-    
-    var footer: some View {
-        Button {
-            viewModel.logout()
-            showingLoginSheet.toggle()
-        } label: {
-            Text("Вийти")
-        }
-        .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
-        .fullScreenCover(isPresented: $showingLoginSheet, content: {
-            LoginView()
-        })
     }
 }
 #Preview {

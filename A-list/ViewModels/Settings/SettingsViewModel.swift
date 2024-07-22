@@ -16,14 +16,6 @@ class SettingsViewModel: ObservableObject {
         fetchUser()
     }
     
-    func logout() {
-        do {
-            try Auth.auth().signOut()
-        } catch {
-            
-        }
-    }
-    
     func fetchUser() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let dataBase = Firestore.firestore()

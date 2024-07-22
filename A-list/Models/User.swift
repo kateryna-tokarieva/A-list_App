@@ -14,6 +14,8 @@ struct User: Codable, Hashable {
     var image: String
     var email: String
     var friends: [String]?
+    var receivedFriendRequests: [String]?
+    var sentFriendRequests: [String]?
     var lists: [ShoppingList]?
     var sharedLists: [SharedList]?
     var events: [Date]?

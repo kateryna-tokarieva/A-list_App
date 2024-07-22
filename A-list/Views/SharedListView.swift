@@ -20,24 +20,16 @@ struct SharedListView: View {
     }
     
     var body: some View {
-        header
-        content
-        footer
+        VStack {
+            header
+            content
+            footer
+        }
+        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
     }
     
     private var header: some View {
-        ZStack {
-            HStack {
-                Spacer()
-                
-                Text(viewModel.list?.name ?? "")
-                    .font(.title)
-                    .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                
-                Spacer()
-            }
+        HStack {
             HStack {
                 if viewModel.stateIsEditing {
                     Button(action: {
@@ -58,9 +50,17 @@ struct SharedListView: View {
                         )
                     }
                     .padding()
-                    Spacer()
                 }
+                Spacer()
             }
+            .frame(width: 50)
+            Text(viewModel.list?.name ?? "")
+                .font(.title)
+                .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
+            Spacer()
+                .frame(width: 50)
         }
     }
     
@@ -70,17 +70,19 @@ struct SharedListView: View {
                 if let items = list.items {
                     ForEach(items.indices, id: \.self) { index in
                         itemRow(for: index)
+                            .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
                     }
                 }
             }
             if viewModel.stateIsEditing {
+                TextField(Resources.Strings.title, text: $viewModel.newItemTitle)
+                    .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+                    .padding()
+                    .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
                 HStack {
-                    TextField(Resources.Strings.title, text: $viewModel.newItemTitle)
-                        .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
-                        .padding()
                     TextField(Resources.Strings.quantity, text: $viewModel.newItemQuantity)
                         .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
-                        .padding(.trailing)
+                        .padding()
                     Picker("", selection: $viewModel.newItemUnit) {
                         ForEach(Unit.allCases, id: \.self) { unit in
                             Text(unit.rawValue).tag(unit)
@@ -97,10 +99,11 @@ struct SharedListView: View {
                         }
                         .padding()
                 }
+                .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
                 button
+                    .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
             }
         }
-        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
         .listStyle(.plain)
     }
     
