@@ -15,10 +15,13 @@ struct UserSettingsView: View {
     @State private var selectedImage: UIImage?
     @State private var isEditing = false
     @State var name = ""
+    @State private var showProfileImage = true
     
     var body: some View {
         VStack {
-            profileImage
+            if showProfileImage {
+                profileImage
+            }
             VStack (alignment: .leading) {
                 userName
                 userEmail
@@ -34,6 +37,13 @@ struct UserSettingsView: View {
                 }
             })
         })
+        .onReceive(KeybordManager.shared.$keyboardFrame) { keyboardFrame in
+            if let keyboardFrame = keyboardFrame, keyboardFrame != .zero {
+                self.showProfileImage = false
+            } else {
+                self.showProfileImage = true
+            }
+        }
     }
     
     var profileImage: some View {
