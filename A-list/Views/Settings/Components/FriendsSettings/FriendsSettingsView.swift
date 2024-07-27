@@ -11,33 +11,36 @@ struct FriendsSettingsView: View {
     @ObservedObject var viewModel = FriendsSettingsViewViewModel()
     @EnvironmentObject var themeManager: ThemeManager
     @State private var email: String = ""
+    @State private var showingFriendSearch = false
     
     var body: some View {
         VStack {
-            VStack {
-                TextField("Введіть email друга", text: $email)
-                    .padding()
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Button("Відправити запит") {
-                    viewModel.sendFriendRequest(withEmail: email) { success in
-                        if success {
-                            email = ""
-                        } else {
-                            // handle error case
+            if showingFriendSearch {
+                VStack {
+                    TextField("Введіть email друга", text: $email)
+                        .padding()
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Button("Відправити запит") {
+                        viewModel.sendFriendRequest(withEmail: email) { success in
+                            if success {
+                                email = ""
+                            } else {
+                                // handle error case
+                            }
                         }
                     }
-                }
-                .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
-                .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
-                .buttonStyle(.borderedProminent)
-                .clipShape(.rect(cornerRadius: CGFloat(Resources.Sizes.buttonCornerRadius)))
-                .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: CGFloat(Resources.Sizes.buttonShadowRadius), x: CGFloat(Resources.Sizes.buttonShadowRadius), y: CGFloat(Resources.Sizes.buttonShadowRadius))
-                .controlSize(.large)
-                .padding()
-                
-                if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
+                    .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                    .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+                    .buttonStyle(.borderedProminent)
+                    .clipShape(.rect(cornerRadius: CGFloat(Resources.Sizes.buttonCornerRadius)))
+                    .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: CGFloat(Resources.Sizes.buttonShadowRadius), x: CGFloat(Resources.Sizes.buttonShadowRadius), y: CGFloat(Resources.Sizes.buttonShadowRadius))
+                    .controlSize(.large)
+                    .padding()
+                    
+                    if let errorMessage = viewModel.errorMessage {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                    }
                 }
             }
             HStack {
@@ -81,7 +84,20 @@ struct FriendsSettingsView: View {
             Spacer()
         }
         .padding()
+        .toolbar(content: {
+            HStack {
+                Spacer()
+                Button(action: {
+                    showingFriendSearch.toggle()
+                }, label: {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme))
+                })
+                .padding()
+            }
+        })
     }
+    
 }
 
 #Preview {
