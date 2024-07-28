@@ -12,23 +12,23 @@ struct ModeSettingsView: View {
     @AppStorage("selectedTheme") var selectedTheme: String = ColorTheme.modernClean.rawValue
 
     var body: some View {
-        List {
-            ForEach(ColorTheme.allCases, id: \.self) { theme in
-                HStack {
-                    Text(theme.rawValue.capitalized)
-                    Spacer()
-                    if selectedTheme == theme.rawValue {
-                        Image(systemName: "checkmark")
-                            .foregroundColor(Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme))
-                    }
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    selectedTheme = theme.rawValue
-                    themeManager.saveSelectedTheme(theme)
+        VStack {
+            HStack {
+                ForEach(ColorTheme.allCases, id: \.self) { theme in
+                    Button(action: {
+                        selectedTheme = theme.rawValue
+                        themeManager.saveSelectedTheme(theme)
+                    }, label: {
+                        Circle()
+                            .foregroundStyle(theme.colors.lighterAccentColor)
+                            .shadow(color: theme.colors.darkerAccentColor, radius: Resources.Sizes.buttonCornerRadius, x: Resources.Sizes.buttonShadowOffset, y: Resources.Sizes.buttonShadowOffset)
+                    })
+                    .padding()
                 }
             }
+            Spacer()
         }
+        .padding()
         .onAppear {
             themeManager.saveSelectedTheme(ColorTheme(rawValue: selectedTheme) ?? .modernClean)
         }

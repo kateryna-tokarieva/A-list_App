@@ -10,6 +10,7 @@ import SegmentedPicker
 
 struct FriendsRequestsView: View {
     @EnvironmentObject var themeManager: ThemeManager
+    @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel = FriendRequestViewViewModel()
     @State private var selectedRequests = 0
     
@@ -66,6 +67,20 @@ struct FriendsRequestsView: View {
                             .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
                         Spacer()
                     }
+                }
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                        Text("Назад")
+                    }
+                    .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                 }
             }
         }
