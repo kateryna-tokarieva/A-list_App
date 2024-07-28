@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct NotificationsSettingsView: View {
     @EnvironmentObject var notificationsManager: NotificationsManager
@@ -15,7 +16,18 @@ struct NotificationsSettingsView: View {
         List {
             HStack(alignment: .center) {
                 Toggle(
-                    isOn: $notificationsManager.notificationsIsOn
+                    isOn: Binding(
+                        get: { notificationsManager.notificationsIsOn },
+                        set: { newValue in
+                            print("Toggle value changed to: \(newValue)")
+                            notificationsManager.notificationsIsOn = newValue
+                            if newValue {
+                                notificationsManager.enableNotifications()
+                            } else {
+                                notificationsManager.disableNotifications()
+                            }
+                        }
+                    )
                 ) {
                     Label("Отримувати сповіщення", systemImage: "bell")
                 }
@@ -24,6 +36,10 @@ struct NotificationsSettingsView: View {
             }
         }
         .listStyle(.plain)
+        .onAppear {
+            notificationsManager.loadInitialState()
+            print("Initial state loaded: \(notificationsManager.notificationsIsOn)")
+        }
     }
 }
 
