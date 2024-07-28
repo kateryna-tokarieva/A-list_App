@@ -14,6 +14,7 @@ class ListViewModel: BaseListViewModel {
     @Published var sharedFriends: [User] = []
     private var friendsIds: [String] = []
     var friends: [User] = []
+    @Published var editedName: String = ""
     
     override init(listId: String) {
         super.init(listId: listId)
@@ -29,6 +30,21 @@ class ListViewModel: BaseListViewModel {
         Task {
             await fetchFriends()
             await fetchSharedFriends()
+        }
+    }
+    
+    func updateListName() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        guard let listId = list?.id else { return }
+        
+        let listDocument = dataBase.collection("users").document(userId).collection("lists").document(listId)
+        
+        listDocument.updateData(["name": editedName]) { error in
+            if let error = error {
+                print("Error updating list name: \(error.localizedDescription)")
+            } else {
+                self.fetchList() // Refresh the list to reflect the new name
+            }
         }
     }
     
@@ -151,21 +167,15 @@ class ListViewModel: BaseListViewModel {
     }
     
     func shareWithFriend(withName name: String) {
-        var friendId = ""
-        for friend in friends {
-            if friend.name == name {
-                friendId = friend.id
-            }
-        }
-        if !friendId.isEmpty {
-            shareWithFriend(withId: friendId)
+        if let friend = friends.first(where: { $0.name == name }) {
+            shareWithFriend(withId: friend.id)
         }
     }
     
     private func shareWithFriend(withId id: String) {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        dataBase.collection("users").document(userId).collection("lists").document(listId).collection("friends").document(id).setData(["id":id])
+        dataBase.collection("users").document(userId).collection("lists").document(listId).collection("friends").document(id).setData(["id": id])
         fetchList()
         addListToFriend(withId: id)
     }
@@ -181,21 +191,15 @@ class ListViewModel: BaseListViewModel {
     }
     
     func deleteFriendFromShared(withName name: String) {
-        var friendId = ""
-        for friend in friends {
-            if friend.name == name {
-                friendId = friend.id
-            }
-        }
-        if !friendId.isEmpty {
-            deleteFriendFromShared(withId: friendId)
+        if let friend = friends.first(where: { $0.name == name }) {
+            deleteFriendFromShared(withId: friend.id)
         }
     }
     
     private func deleteFriendFromShared(withId id: String) {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        dataBase.collection("users").document(userId).collection("lists").document(listId).collection("friends").document(id).delete {error in
+        dataBase.collection("users").document(userId).collection("lists").document(listId).collection("friends").document(id).delete { error in
             if let error = error {
                 print("Error deleting friend: \(error)")
                 return
@@ -206,13 +210,34 @@ class ListViewModel: BaseListViewModel {
         deleteListFromFriend(withId: id, listId: list.id)
     }
     
-    private func deleteListFromFriend(withId id: String, listId: String)  {
+    private func deleteListFromFriend(withId id: String, listId: String) {
         let friendsList = dataBase.collection("users").document(id).collection("sharedLists").document(listId)
         friendsList.delete { error in
             if let error = error {
                 print("Error deleting friend: \(error)")
                 return
             }
+        }
+    }
+    
+    func deleteAllFriends() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        guard let listId = list?.id else { return }
+        
+        let friendsCollection = dataBase.collection("users").document(userId).collection("lists").document(listId).collection("friends")
+        
+        friendsCollection.getDocuments { snapshot, error in
+            guard let documents = snapshot?.documents else {
+                print("Error fetching friends for deletion: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            for document in documents {
+                let friendId = document.documentID
+                friendsCollection.document(friendId).delete()
+                self.deleteListFromFriend(withId: friendId, listId: listId)
+            }
+            self.fetchList()
         }
     }
 }

@@ -19,6 +19,7 @@ struct ListView: View {
     @State private var showingFriendsList = false
     @State private var showDeletingFriendAlert = false
     @State private var selectedFriend: User?
+    @State private var isEditingName = false
     
     init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
         self.viewModel = ListViewModel(listId: listId)
@@ -120,12 +121,34 @@ struct ListView: View {
                 }
             }
             .frame(width: 100)
-            Text(viewModel.list?.name ?? "")
+            if isEditingName {
+                TextField("Enter new name", text: $viewModel.editedName, onCommit: {
+                    viewModel.list?.name = viewModel.editedName
+                    isEditingName = false
+                    viewModel.updateListName()
+                })
                 .font(.title)
                 .lineLimit(2)
                 .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
+            } else {
+                Text(viewModel.list?.name ?? "")
+                    .font(.title)
+                    .lineLimit(2)
+                    .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .onTapGesture(count: 2) {
+                        isEditingName = true
+                        viewModel.editedName = viewModel.list?.name ?? ""
+                    }
+                    .onLongPressGesture {
+                        isEditingName = true
+                        viewModel.editedName = viewModel.list?.name ?? ""
+                    }
+            }
+            
             HStack {
                 Spacer()
                 Text(viewModel.doneItemsText)
