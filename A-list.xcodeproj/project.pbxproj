@@ -64,6 +64,7 @@
 		107AF3342C2AFCF500A2F56B /* ShoppingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AF3332C2AFCF500A2F56B /* ShoppingList.swift */; };
 		10A6405C2C330CB3000FD228 /* Array + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10A6405B2C330CB3000FD228 /* Array + Extension.swift */; };
 		10C1A53D2C2C0E38005C0F40 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C1A53C2C2C0E38005C0F40 /* RegistrationView.swift */; };
+		10C229792C56532800E98B92 /* SegmentedPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 10C229782C56532800E98B92 /* SegmentedPicker */; };
 		10C37B612C4D62B9008928B9 /* PasswordResetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C37B602C4D62B9008928B9 /* PasswordResetViewModel.swift */; };
 		10C37B632C4D62DA008928B9 /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C37B622C4D62DA008928B9 /* PasswordResetView.swift */; };
 		10C37B652C4D668C008928B9 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 10C37B642C4D668C008928B9 /* FirebaseDynamicLinks */; };
@@ -172,6 +173,7 @@
 			files = (
 				10412AB02C2CA29800F79210 /* FirebaseFirestoreSwift in Frameworks */,
 				10412AAA2C2CA29800F79210 /* FirebaseAnalyticsSwift in Frameworks */,
+				10C229792C56532800E98B92 /* SegmentedPicker in Frameworks */,
 				10412AAE2C2CA29800F79210 /* FirebaseFirestore in Frameworks */,
 				107674F82C3AE31A00BAE0E0 /* Alamofire in Frameworks */,
 				10412AAC2C2CA29800F79210 /* FirebaseAuth in Frameworks */,
@@ -470,6 +472,7 @@
 				107674F72C3AE31A00BAE0E0 /* Alamofire */,
 				10C37B642C4D668C008928B9 /* FirebaseDynamicLinks */,
 				10C8F30F2C5139D5001D7689 /* FirebaseStorage */,
+				10C229782C56532800E98B92 /* SegmentedPicker */,
 			);
 			productName = "A-list";
 			productReference = 1010B4D42C27238400F3114B /* A-list.app */;
@@ -550,6 +553,7 @@
 				10439B222C29C060005979FF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				107674EA2C3ACED200BAE0E0 /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 				107674F62C3AE31A00BAE0E0 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				10C229772C56532800E98B92 /* XCRemoteSwiftPackageReference "SwiftySegmentedPicker" */,
 			);
 			productRefGroup = 1010B4D52C27238400F3114B /* Products */;
 			projectDirPath = "";
@@ -1008,6 +1012,14 @@
 				minimumVersion = 5.9.1;
 			};
 		};
+		10C229772C56532800E98B92 /* XCRemoteSwiftPackageReference "SwiftySegmentedPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/KazaiMazai/SwiftySegmentedPicker.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1040,6 +1052,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 107674F62C3AE31A00BAE0E0 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		10C229782C56532800E98B92 /* SegmentedPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 10C229772C56532800E98B92 /* XCRemoteSwiftPackageReference "SwiftySegmentedPicker" */;
+			productName = SegmentedPicker;
 		};
 		10C37B642C4D668C008928B9 /* FirebaseDynamicLinks */ = {
 			isa = XCSwiftPackageProductDependency;

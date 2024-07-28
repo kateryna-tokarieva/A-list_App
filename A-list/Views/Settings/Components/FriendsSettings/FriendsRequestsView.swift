@@ -6,28 +6,45 @@
 //
 
 import SwiftUI
+import SegmentedPicker
 
 struct FriendsRequestsView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var viewModel = FriendRequestViewViewModel()
-    @State private var selectedRequests: RequestType = .recieved
+    @State private var selectedRequests = 0
     
     private enum RequestType: String, CaseIterable, Identifiable {
-        case sent, recieved
+        case sent = "Відправлені"
+        case recieved = "Отримані"
         var id: Self { self }
     }
     
     var body: some View {
         VStack {
-            Picker("", selection: $selectedRequests) {
-                Text("Отримані").tag(RequestType.recieved)
-                Text("Відправлені").tag(RequestType.sent)
+            SegmentedPicker(
+                RequestType.allCases,
+                selectedIndex: Binding(
+                    get: { selectedRequests },
+                    set: { selectedRequests = $0 ?? 0 }),
+                selectionAlignment: .bottom,
+                content: { item, isSelected in
+                    Text(item.rawValue)
+                        .foregroundColor(isSelected ? Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme) : Resources.ViewColors.subText(forScheme: themeManager.colorScheme ))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                },
+                selection: {
+                    VStack(spacing: 0) {
+                        Spacer()
+                        Resources.ViewColors.accent(forScheme: themeManager.colorScheme).frame(height: 1)
+                    }
+                })
+            .onAppear {
+                selectedRequests = 0
             }
-            .padding()
-            .pickerStyle(.segmented)
-            .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+            .animation(.easeInOut, value: 0.3)
             List {
-                if selectedRequests == .recieved, let receivedRequestsUsers = viewModel.receivedRequestsUsers {
+                if selectedRequests == 0, let receivedRequestsUsers = viewModel.receivedRequestsUsers {
                     ForEach(receivedRequestsUsers, id: \.id) { friend in
                         HStack {
                             Text(friend.name)
@@ -42,7 +59,7 @@ struct FriendsRequestsView: View {
                             })
                         }
                     }
-                } else if selectedRequests == .sent, let sentRequestsUsers = viewModel.sentRequestsUsers {
+                } else if selectedRequests == 1, let sentRequestsUsers = viewModel.sentRequestsUsers {
                     ForEach(sentRequestsUsers, id: \.id) { friend in
                         Text(friend.name)
                             .padding()
