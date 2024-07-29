@@ -58,14 +58,16 @@ struct Resources {
         static var login = "Вхід"
         static var name = "імʼя"
         static var registration = "Зареєструватись"
-        static var allLists = "Всі списки"
+        static var allLists = "Мої списки"
+        static var friendsLists = "Списки друзів"
         static var skip = "Пропустити"
         static var setupNotification = "Постав нагадування"
-        static var title = "Назва"
+        static var title = "Назва *"
         static var quantity = "Кількість"
         static var deleteConfirmationAlertTitle = "Підтвердження"
         static var deleteConfirmationAlertContent = "Ви впевнені, що хочете видалити цей список?"
         static var deleteConfirmationAlertPrimaryButton = "Видалити"
+        static var deleteSharedFriendAlertContent = "Ви впевнені, що хочете видалити друга зі списку?"
     }
     
     enum Sizes {

@@ -1,56 +1,34 @@
 //
-//  ListView.swift
+//  SharedListView.swift
 //  A-list
 //
-//  Created by Екатерина Токарева on 23.06.2024.
+//  Created by Екатерина Токарева on 08.07.2024.
 //
 
 import SwiftUI
 
-struct ListView: View {
+struct SharedListView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var themeManager: ThemeManager
-    @ObservedObject var viewModel: ListViewModel
-    @Binding var showingNewListSheet: Bool
-    @Binding var showingListSheet: Bool
+    @ObservedObject var viewModel: SharedListViewViewModel
     @State private var showButton = true
     @State private var showDeletingListAlert = false
     @State private var isShowingScanner = false
-    @State private var showingFriendsList = false
-    @State private var showDeletingFriendAlert = false
-    @State private var selectedFriend: User?
-    @State private var isEditingName = false
     
-    init(listId: String, showingNewListSheet: Binding<Bool>, showingListSheet: Binding<Bool>) {
-        self.viewModel = ListViewModel(listId: listId)
-        self._showingNewListSheet = showingNewListSheet
-        self._showingListSheet = showingListSheet
+    init(listId: String) {
+        self.viewModel = SharedListViewViewModel(listId: listId)
     }
     
     var body: some View {
-        ZStack {
-            VStack {
-                header
-                content
-                footer
-            }
+        VStack {
+            header
+            content
+            footer
         }
         .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
-        .onReceive(KeybordManager.shared.$keyboardFrame) { keyboardFrame in
-            if let keyboardFrame = keyboardFrame, keyboardFrame != .zero {
-                self.showButton = false
-            } else {
-                self.showButton = true
-            }
-        }
-        .onDisappear {
-            if !showingListSheet {
-                showingNewListSheet = false
-            }
-        }
     }
     
-    var header: some View {
+    private var header: some View {
         HStack {
             HStack {
                 if viewModel.stateIsEditing {
@@ -60,7 +38,6 @@ struct ListView: View {
                         Image(systemName: "trash")
                             .tint(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
                     }
-                    .padding(.leading)
                     .alert(isPresented: $showDeletingListAlert) {
                         Alert(
                             title: Text(Resources.Strings.deleteConfirmationAlertTitle),
@@ -72,99 +49,22 @@ struct ListView: View {
                             secondaryButton: .cancel()
                         )
                     }
-                    Menu {
-                        ForEach(viewModel.friends, id: \.self) { friend in
-                            Button {
-                                viewModel.shareWithFriend(withName: friend.name)
-                            } label: {
-                                Text(friend.name)
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "square.and.arrow.up")
-                            .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
-                    }
-                    .menuStyle(BorderlessButtonMenuStyle())
                     .padding()
-                    
-                    if !viewModel.sharedFriends.isEmpty {
-                        Menu {
-                            ForEach(viewModel.sharedFriends, id: \.self) { friend in
-                                Button(action: {
-                                    selectedFriend = friend
-                                    showDeletingFriendAlert = true
-                                }) {
-                                    HStack {
-                                        Text(friend.name)
-                                        Image(systemName: "trash")
-                                    }
-                                }
-                            }
-                        } label: {
-                            Image(systemName: "person.crop.circle.badge.checkmark")
-                                .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
-                        }
-                        .menuStyle(BorderlessButtonMenuStyle())
-                        .alert(isPresented: $showDeletingFriendAlert) {
-                            Alert(
-                                title: Text(Resources.Strings.deleteConfirmationAlertTitle),
-                                message: Text(Resources.Strings.deleteSharedFriendAlertContent),
-                                primaryButton: .destructive(Text(Resources.Strings.deleteConfirmationAlertPrimaryButton)) {
-                                    if let friend = selectedFriend {
-                                        viewModel.deleteFriendFromShared(withName: friend.name)
-                                    }
-                                },
-                                secondaryButton: .cancel()
-                            )
-                        }
-                    }
                 }
+                Spacer()
             }
-            .frame(width: 100)
-            if isEditingName {
-                TextField("Enter new name", text: $viewModel.editedName, onCommit: {
-                    viewModel.list?.name = viewModel.editedName
-                    isEditingName = false
-                    viewModel.updateListName()
-                })
+            .frame(width: 50)
+            Text(viewModel.list?.name ?? "")
                 .font(.title)
-                .lineLimit(2)
                 .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
-            } else {
-                Text(viewModel.list?.name ?? "")
-                    .font(.title)
-                    .lineLimit(2)
-                    .foregroundStyle(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .onTapGesture(count: 2) {
-                        isEditingName = true
-                        viewModel.editedName = viewModel.list?.name ?? ""
-                    }
-                    .onLongPressGesture {
-                        isEditingName = true
-                        viewModel.editedName = viewModel.list?.name ?? ""
-                    }
-            }
-            
-            HStack {
-                Spacer()
-                Text(viewModel.doneItemsText)
-                    .padding()
-                    .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
-                    .overlay(
-                        Circle()
-                            .stroke(Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), lineWidth: 1)
-                    )
-                    .padding()
-            }
-            .frame(width: 100)
+            Spacer()
+                .frame(width: 50)
         }
     }
     
-    var content: some View {
+    private var content: some View {
         List {
             if let list = viewModel.list {
                 if let items = list.items {
@@ -189,7 +89,6 @@ struct ListView: View {
                         }
                     }
                     .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
-                    .listRowBackground(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
                     Spacer()
                     Resources.Images.checkmark
                         .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
@@ -208,28 +107,7 @@ struct ListView: View {
         .listStyle(.plain)
     }
     
-    var button: some View {
-        HStack {
-            Spacer()
-            Button {
-                isShowingScanner.toggle()
-            } label: {
-                Resources.Images.barcode
-                    .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
-            }
-            .sheet(isPresented: $isShowingScanner) {
-                ScannerView { code in
-                    viewModel.scannedCode = code
-                    isShowingScanner = false
-                    viewModel.fetchCodeData()
-                }
-            }
-            .padding()
-            Spacer()
-        }
-    }
-    
-    var footer: some View {
+    private var footer: some View {
         VStack {
             if showButton {
                 Button {
@@ -249,6 +127,27 @@ struct ListView: View {
             }
         }
         .background(.clear)
+    }
+    
+    private var button: some View {
+        HStack {
+            Spacer()
+            Button {
+                isShowingScanner.toggle()
+            } label: {
+                Resources.Images.barcode
+                    .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+            }
+            .sheet(isPresented: $isShowingScanner) {
+                ScannerView { code in
+                    viewModel.scannedCode = code
+                    isShowingScanner = false
+                    viewModel.fetchCodeData()
+                }
+            }
+            .padding()
+            Spacer()
+        }
     }
     
     func itemRow(for index: Int) -> some View {
@@ -292,5 +191,5 @@ struct ListView: View {
 }
 
 #Preview {
-    ListView(listId: "2F0EDB58-E8D8-47E1-9F7C-BEE9945BA8DF", showingNewListSheet: .constant(false), showingListSheet: .constant(false))
+    SharedListView(listId: "2F0EDB58-E8D8-47E1-9F7C-BEE9945BA8DF")
 }

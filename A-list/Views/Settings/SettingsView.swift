@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject var viewModel = SettingsViewModel()
     @EnvironmentObject var themeManager: ThemeManager
-    @State private var showingLoginSheet = false
+    @EnvironmentObject var userSettingsViewModel: UserSettingsViewViewModel
     private var userId: String
     
     init(userId: String) {
@@ -19,20 +19,39 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
-           header
-           content
-           footer
+            header
+            content
+            Spacer()
+                .onAppear {
+                    viewModel.user = userSettingsViewModel.user
+                    viewModel.profileImage = userSettingsViewModel.profileImage
+                }
+                .onChange(of: userSettingsViewModel.user?.name) {
+                    viewModel.fetchUser()
+                }
+                .onChange(of: userSettingsViewModel.profileImage) {
+                    viewModel.profileImage = userSettingsViewModel.profileImage
+                }
         }
     }
     
     var header: some View {
         HStack(alignment: .center) {
             HStack {
-                Resources.Images.userImagePlaceholder
-                    .clipShape(.circle)
-                    .scaledToFill()
-                    .padding()
-                
+                if let image = viewModel.profileImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 30, height: 30)
+                        .clipShape(Circle())
+                        .clipped()
+                        .padding()
+                } else {
+                    Resources.Images.userImagePlaceholder
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                        .padding()
+                }
                 VStack(alignment: .leading) {
                     Text(viewModel.user?.name ?? "")
                         .font(.title2)
@@ -60,19 +79,8 @@ struct SettingsView: View {
                         }
                 }
             }
+            .listStyle(.plain)
         }
-    }
-    
-    var footer: some View {
-        Button {
-            viewModel.logout()
-            showingLoginSheet.toggle()
-        } label: {
-            Text("Вийти")
-        }
-        .fullScreenCover(isPresented: $showingLoginSheet, content: {
-            LoginView()
-        })
     }
 }
 #Preview {

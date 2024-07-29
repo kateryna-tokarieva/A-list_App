@@ -16,6 +16,7 @@ struct HomeView: View {
     @State private var showingSettingsSheet = false
     @State private var showingNewListSheet = false
     @State private var showingListSheet = false
+    @State private var showingSharedListSheet = false
     
     private var userId = ""
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]
@@ -33,6 +34,12 @@ struct HomeView: View {
             footer
         }
         .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+        .onAppear {
+            Task {
+                await viewModel.fetchLists()
+                await viewModel.fetchSharedLists()
+            }
+        }
     }
     
     private var header: some View {
@@ -59,7 +66,7 @@ struct HomeView: View {
     
     private var content: some View {
         VStack {
-            if viewModel.lists.isEmpty {
+            if viewModel.lists.isEmpty && viewModel.sharedLists.isEmpty {
                 emptyState
             } else {
                 listGrid
@@ -92,11 +99,68 @@ struct HomeView: View {
     private var listGrid: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
-                ForEach(viewModel.lists.indices, id: \.self) { list in
-                    listItem(for: list)
+                ForEach(viewModel.lists.indices, id: \.self) { index in
+                    listItem(for: index)
+                        .id("listItem_\(index)")
+                }
+                ForEach(viewModel.sharedLists.indices, id: \.self) { index in
+                    sharedListItem(for: index)
+                        .id("sharedListItem_\(index)")
                 }
             }
             .padding()
+        }
+    }
+
+    
+    private func sharedListItem(for index: Int) -> some View {
+        VStack {
+            HStack {
+                Image(systemName: "person.crop.circle.badge.checkmark")
+                    .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
+                Text(viewModel.sharedLists[index].name + ":")
+                    .font(.title2)
+                    .foregroundColor(Resources.ViewColors.text(forScheme: themeManager.colorScheme))
+                    .lineLimit(1)
+                Spacer()
+            }
+            .padding(.bottom)
+            .padding(.leading)
+            VStack {
+                ForEach(0..<4) { itemIndex in
+                    HStack {
+                        Text("• " + (viewModel.sharedLists[safe: index]?.items?[safe: itemIndex]?.title ?? ""))
+                            .padding(.leading)
+                            .lineLimit(1)
+                            .font(.caption)
+                            .foregroundColor(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+
+                        Spacer()
+                    }
+                }
+                .padding(.leading)
+            }
+        }
+        .padding()
+        .frame(width: Resources.Sizes.listPreviewFrame, height: Resources.Sizes.listPreviewFrame)
+        .background(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
+        .cornerRadius(Resources.Sizes.listPreviewCornerRadius)
+        .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: Resources.Sizes.listPreviewShadowRadius, x: Resources.Sizes.listPreviewShadowOffset, y: Resources.Sizes.listPreviewShadowOffset)
+        .overlay(
+            RoundedRectangle(cornerRadius: Resources.Sizes.listPreviewCornerRadius)
+                .stroke(Resources.ViewColors.accent(forScheme: themeManager.colorScheme), lineWidth: 1)
+        )
+        .onTapGesture {
+            viewModel.currentListId = viewModel.sharedLists[index].id
+            showingSharedListSheet.toggle()
+        }
+        .sheet(isPresented: $showingSharedListSheet, onDismiss: {
+            Task {
+                await viewModel.fetchLists()
+                await viewModel.fetchSharedLists()
+            }
+        }) {
+            SharedListView(listId: viewModel.currentListId)
         }
     }
     
@@ -116,6 +180,7 @@ struct HomeView: View {
                     HStack {
                         Text("• " + (viewModel.lists[safe: index]?.items?[safe: itemIndex]?.title ?? ""))
                             .padding(.leading)
+                            .lineLimit(1)
                             .font(.caption)
                             .foregroundColor(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
 
@@ -141,6 +206,7 @@ struct HomeView: View {
         .sheet(isPresented: $showingListSheet, onDismiss: {
             Task {
                 await viewModel.fetchLists()
+                await viewModel.fetchSharedLists()
             }
         }) {
             ListView(listId: viewModel.currentListId, showingNewListSheet: $showingNewListSheet, showingListSheet: $showingListSheet)
@@ -158,6 +224,7 @@ struct HomeView: View {
             .sheet(isPresented: $showingNewListSheet, onDismiss: {
                 Task {
                     await viewModel.fetchLists()
+                    await viewModel.fetchSharedLists()
                 }
             }) {
                 NewListView(viewModel: NewListViewModel(), showingNewListSheet: $showingNewListSheet)

@@ -15,7 +15,7 @@ struct RegistrationView: View {
         VStack {
             VStack {
                 TextField(Resources.Strings.name, text: $viewModel.name)
-                    .keyboardType(.emailAddress)
+                    .keyboardType(.namePhonePad)
                     .textFieldStyle(.roundedBorder)
                     .padding(.bottom)
                 TextField(Resources.Strings.email, text: $viewModel.email)

@@ -11,6 +11,7 @@ struct LoginView: View {
     @ObservedObject var viewModel = LoginViewModel(email: "", password: "")
     @EnvironmentObject var themeManager: ThemeManager
     @State private var showingRegistrationSheet = false
+    @State private var showingPasswordResetSheet = false
     
     var body: some View {
         VStack {
@@ -21,6 +22,20 @@ struct LoginView: View {
                     .padding(.bottom)
                 SecureField(Resources.Strings.password, text: $viewModel.password)
                     .textFieldStyle(.roundedBorder)
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        showingPasswordResetSheet.toggle()
+                    }, label: {
+                        Text("Забули пароль?")
+                            .underline()
+                            .foregroundStyle(Resources.ViewColors.subText(forScheme: themeManager.colorScheme))
+                            .padding()
+                    })
+                    .sheet(isPresented: $showingPasswordResetSheet, content: {
+                        PasswordResetView()
+                    })
+                }
             }
             .padding()
             
@@ -32,7 +47,7 @@ struct LoginView: View {
             .fixedSize(horizontal: true, vertical: false)
             .padding(.bottom)
             .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
-            .foregroundStyle(Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme))
+            .foregroundStyle(Resources.ViewColors.base(forScheme: themeManager.colorScheme))
             .fullScreenCover(isPresented: $viewModel.showingHomeSheet, content: {
                 HomeView(userId: viewModel.userId)
             })
