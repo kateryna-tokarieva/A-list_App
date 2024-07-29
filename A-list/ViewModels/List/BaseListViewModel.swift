@@ -151,13 +151,24 @@ class BaseListViewModel: ObservableObject {
                                      dueDate: (data["dueDate"] as? Timestamp)?.dateValue(),
                                      isDone: data["isDone"] as? Bool ?? false,
                                      sharedWithFriends: data["friends"] as? [String] ?? [],
-                                     owner: data["owner"] as? String ?? nil)
+                                     owner: data["owner"] as? String ?? nil,
+                                     notificationId: data["notificationId"] as? String ?? nil)
         }
     }
     
     func deleteList() {
         guard let list, let userId else { return }
+        deleteEventIfPresent(id: list.id)
         let listDocument = dataBase.collection("users").document(userId).collection("lists").document(list.id)
         listDocument.delete()
+    }
+    
+    private func deleteEventIfPresent(id: String) {
+        guard let userId else { return }
+        let eventDocument = dataBase.collection("users").document(userId).collection("events").document(id)
+        eventDocument.delete()
+        if let notificationId = list?.notificationId {
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notificationId])
+        }
     }
 }

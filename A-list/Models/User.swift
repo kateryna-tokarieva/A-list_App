@@ -18,7 +18,7 @@ struct User: Codable, Hashable {
     var sentFriendRequests: [String]?
     var lists: [ShoppingList]?
     var sharedLists: [SharedList]?
-    var events: [Date]?
+    var events: [Event]?
     var settings: Settings
     
     func hash(into hasher: inout Hasher) {

@@ -37,7 +37,6 @@ class NotificationsManager: ObservableObject {
                     print("Authorization granted: \(granted)")
                     self.setNotificationsIsOn(granted)
                     if granted {
-//                        print("Scheduling test notification")
 //                        self.scheduleTestNotification()
                     }
                 }
