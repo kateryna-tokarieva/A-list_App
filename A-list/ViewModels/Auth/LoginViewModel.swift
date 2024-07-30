@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseAuth
+import Combine
 
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
@@ -15,9 +16,13 @@ class LoginViewModel: ObservableObject {
     @Published var userId: String = ""
     @Published var showingHomeSheet = false
     
-    init(email: String = "", password: String = "") {
+    private let authService: AuthService
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(email: String = "", password: String = "", authService: AuthService = FirebaseAuthService()) {
         self.email = email
         self.password = password
+        self.authService = authService
     }
     
     func login() {
@@ -25,15 +30,18 @@ class LoginViewModel: ObservableObject {
         password = password.trimmingCharacters(in: .whitespaces)
         
         guard validate() else { return }
-        Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
-            if let userId = result?.user.uid {
-                self?.userId = userId
-                self?.showingHomeSheet.toggle()
-            }
-            if let error {
-                self?.error = self?.translateError(error) ?? "Невідома помилка"
-            }
-        }
+        
+        authService.signIn(withEmail: email, password: password)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.error = self?.translateError(error) ?? "Невідома помилка"
+                }
+            }, receiveValue: { [weak self] result in
+                self?.userId = result.user.uid
+                self?.showingHomeSheet = true
+            })
+            .store(in: &cancellables)
     }
     
     private func validate() -> Bool {
@@ -75,5 +83,4 @@ class LoginViewModel: ObservableObject {
             return "Невідома помилка: \(nsError.localizedDescription)"
         }
     }
-
 }

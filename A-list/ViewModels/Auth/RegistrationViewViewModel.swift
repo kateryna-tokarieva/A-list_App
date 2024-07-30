@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
+import Combine
 
 class RegistrationViewViewModel: ObservableObject {
     @Published var email = ""
@@ -15,7 +16,7 @@ class RegistrationViewViewModel: ObservableObject {
     @Published var name = ""
     @Published var error: String = ""
     @Published var userId: String = ""
-    @Published var showingLoginSheet = false
+    var registrationSuccessPublisher = PassthroughSubject<Void, Never>()
     
     init(email: String = "", password: String = "", name: String = "") {
         self.email = email
@@ -33,7 +34,7 @@ class RegistrationViewViewModel: ObservableObject {
             if let userId = result?.user.uid {
                 self?.userId = userId
                 self?.insertUserRecord(id: userId)
-                self?.showingLoginSheet.toggle()
+                self?.registrationSuccessPublisher.send(())
             }
             if let error {
                 self?.error = self?.translateError(error) ?? "Невідома помилка"
@@ -41,7 +42,7 @@ class RegistrationViewViewModel: ObservableObject {
         }
     }
     
-    func insertUserRecord(id: String) {
+    private func insertUserRecord(id: String) {
         let newUser = User(id: id, name: name, image: "", email: email, settings: Settings())
         let dataBase = Firestore.firestore()
         dataBase.collection("users")
@@ -101,5 +102,4 @@ class RegistrationViewViewModel: ObservableObject {
             return "Невідома помилка: \(nsError.localizedDescription)"
         }
     }
-
 }

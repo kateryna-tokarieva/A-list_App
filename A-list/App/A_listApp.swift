@@ -39,10 +39,11 @@ struct A_listApp: App {
     @StateObject private var themeManager = ThemeManager()
     @StateObject private var notificationsManager = NotificationsManager()
     @StateObject private var userSettingsViewModel = UserSettingsViewViewModel()
+    @StateObject private var mainViewModel = MainViewModel()
     
     var body: some Scene {
         WindowGroup {
-            MainView()
+            MainView(viewModel: mainViewModel)
                 .environmentObject(themeManager)
                 .environmentObject(notificationsManager)
                 .environmentObject(userSettingsViewModel)

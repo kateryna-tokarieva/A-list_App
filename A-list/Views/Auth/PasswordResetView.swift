@@ -6,16 +6,17 @@
 //
 
 import SwiftUI
+import Combine
 
 struct PasswordResetView: View {
-    @StateObject private var viewModel = PasswordResetViewModel()
+    @StateObject var viewModel: PasswordResetViewModel
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack {
             Spacer()
-            TextField("Електронна пошта", text: $viewModel.email)
+            TextField(Resources.Strings.email, text: $viewModel.email)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
                 .autocapitalization(.none)
@@ -24,7 +25,7 @@ struct PasswordResetView: View {
             Button(action: {
                 viewModel.sendPasswordReset(email: viewModel.email)
             }) {
-                Text("Відновити пароль")
+                Text(Resources.Strings.resetPassword)
             }
             .frame(maxWidth: .infinity)
             .fixedSize(horizontal: true, vertical: false)
@@ -47,15 +48,8 @@ struct PasswordResetView: View {
             Spacer()
         }
         .padding()
-        .onChange(of: viewModel.successMessage) {
-            if !viewModel.successMessage.isEmpty {
-                presentationMode.wrappedValue.dismiss()
-            }
-            
+        .onReceive(viewModel.successPublisher) { _ in
+            presentationMode.wrappedValue.dismiss()
         }
     }
-}
-
-#Preview {
-    PasswordResetView()
 }

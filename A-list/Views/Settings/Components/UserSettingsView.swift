@@ -113,7 +113,7 @@ struct UserSettingsView: View {
         }
         .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
         .fullScreenCover(isPresented: $showingLoginSheet, content: {
-            LoginView()
+            LoginView(viewModel: LoginViewModel())
         })
     }
 }

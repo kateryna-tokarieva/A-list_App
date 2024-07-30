@@ -116,7 +116,7 @@ struct HomeView: View {
     private func sharedListItem(for index: Int) -> some View {
         VStack {
             HStack {
-                Image(systemName: "person.crop.circle.badge.checkmark")
+                Resources.Images.sharedList
                     .foregroundStyle(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
                 Text(viewModel.sharedLists[index].name + ":")
                     .font(.title2)

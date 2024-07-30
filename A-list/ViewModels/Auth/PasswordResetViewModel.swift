@@ -7,21 +7,27 @@
 
 import Foundation
 import FirebaseAuth
+import Combine
 
 class PasswordResetViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var errorMessage: String = ""
-    @Published var successMessage: String = ""
+    var successPublisher = PassthroughSubject<Void, Never>()
     
     func sendPasswordReset(email: String) {
         self.email = email.trimmingCharacters(in: .whitespaces)
 
-        Auth.auth().sendPasswordReset(withEmail: self.email) { error in
-            if let error {
-                self.errorMessage = self.translateError(error)
+        guard isValidEmail(self.email) else {
+            self.errorMessage = "Некоректний формат електронної пошти."
+            return
+        }
+
+        Auth.auth().sendPasswordReset(withEmail: self.email) { [weak self] error in
+            if let error = error {
+                self?.errorMessage = self?.translateError(error) ?? "Невідома помилка"
             } else {
-                self.successMessage = "Лист для відновлення паролю успішно відправлено."
-                self.errorMessage = ""
+                self?.errorMessage = ""
+                self?.successPublisher.send(())
             }
         }
     }
@@ -46,4 +52,3 @@ class PasswordResetViewModel: ObservableObject {
         }
     }
 }
-

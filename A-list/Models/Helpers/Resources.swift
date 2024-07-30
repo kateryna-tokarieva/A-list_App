@@ -39,6 +39,7 @@ struct Resources {
         static var done = Image(systemName: "circle.fill")
         static var notDone = Image(systemName: "circle")
         static var barcode = Image(systemName: "barcode.viewfinder")
+        static var sharedList = Image(systemName: "person.3.sequence")
     }
     
     enum Strings {
@@ -68,6 +69,8 @@ struct Resources {
         static var deleteConfirmationAlertContent = "Ви впевнені, що хочете видалити цей список?"
         static var deleteConfirmationAlertPrimaryButton = "Видалити"
         static var deleteSharedFriendAlertContent = "Ви впевнені, що хочете видалити друга зі списку?"
+        static var forgotPassword = "Забули пароль?"
+        static var resetPassword = "Відновити пароль"
     }
     
     enum Sizes {

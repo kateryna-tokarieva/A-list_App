@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Combine
 
 struct RegistrationView: View {
-    @ObservedObject var viewModel = RegistrationViewViewModel()
+    @ObservedObject var viewModel: RegistrationViewViewModel
     @EnvironmentObject var themeManager: ThemeManager
+    @State private var showingLoginSheet = false
     
     var body: some View {
         VStack {
@@ -29,7 +31,6 @@ struct RegistrationView: View {
             
             Button(Resources.Strings.registration) {
                 viewModel.register()
-                guard !viewModel.userId.isEmpty else { return }
             }
             .frame(maxWidth: .infinity)
             .tint(Resources.ViewColors.accent(forScheme: themeManager.colorScheme))
@@ -39,16 +40,15 @@ struct RegistrationView: View {
             .shadow(color: Resources.ViewColors.accentSecondary(forScheme: themeManager.colorScheme), radius: CGFloat(Resources.Sizes.buttonShadowRadius), x: CGFloat(Resources.Sizes.buttonShadowRadius), y: CGFloat(Resources.Sizes.buttonShadowRadius))
             .controlSize(.large)
             .padding()
-            .fullScreenCover(isPresented: $viewModel.showingLoginSheet, content: {
+            .fullScreenCover(isPresented: $showingLoginSheet, content: {
                 LoginView(viewModel: LoginViewModel(email: self.viewModel.email, password: self.viewModel.password))
             })
             Text(viewModel.error)
                 .foregroundStyle(Resources.ViewColors.error(forScheme: themeManager.colorScheme))
                 .padding()
         }
+        .onReceive(viewModel.registrationSuccessPublisher) { _ in
+            showingLoginSheet = true
+        }
     }
-}
-
-#Preview {
-    RegistrationView()
 }

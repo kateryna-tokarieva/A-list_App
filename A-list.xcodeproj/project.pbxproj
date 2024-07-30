@@ -37,6 +37,8 @@
 		10439B322C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
 		10439B332C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
 		10439B342C29C7AC005979FF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10439B312C29C7AC005979FF /* LoginViewModel.swift */; };
+		1056B2C32C5916BB002E2A0D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1056B2C22C5916BB002E2A0D /* AuthService.swift */; };
+		1056B2C72C5917CE002E2A0D /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1056B2C62C5917CE002E2A0D /* FirebaseAuthService.swift */; };
 		10657EB72C3343F900E9657F /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10657EB62C3343F900E9657F /* KeyboardManager.swift */; };
 		107674EE2C3ACEE800BAE0E0 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107674ED2C3ACEE800BAE0E0 /* Event.swift */; };
 		107674F82C3AE31A00BAE0E0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 107674F72C3AE31A00BAE0E0 /* Alamofire */; };
@@ -126,6 +128,8 @@
 		10439B192C297FF5005979FF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		10439B2D2C29C795005979FF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		10439B312C29C7AC005979FF /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		1056B2C22C5916BB002E2A0D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		1056B2C62C5917CE002E2A0D /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
 		10657EB62C3343F900E9657F /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		107674ED2C3ACEE800BAE0E0 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		107674FB2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsSettingsViewViewModel.swift; sourceTree = "<group>"; };
@@ -307,6 +311,7 @@
 		102944E32C32E33300900640 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				1056B2C22C5916BB002E2A0D /* AuthService.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -342,6 +347,34 @@
 				107AC0A72C3AC40E000FD024 /* SupportSettings */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		1056B2C42C591723002E2A0D /* DataModels */ = {
+			isa = PBXGroup;
+			children = (
+				10DDFD692C286B8F00F300F3 /* NewListSteps.swift */,
+				107AF31B2C2ACF0800A2F56B /* Settings.swift */,
+				107AF32F2C2AFB0600A2F56B /* User.swift */,
+				107674FF2C3C5B7C00BAE0E0 /* SharedList.swift */,
+				107AF3332C2AFCF500A2F56B /* ShoppingList.swift */,
+				10C753F72C31F5370011742B /* ShoppingItem.swift */,
+				10C753F92C31F5B30011742B /* Unit.swift */,
+				107674ED2C3ACEE800BAE0E0 /* Event.swift */,
+			);
+			path = DataModels;
+			sourceTree = "<group>";
+		};
+		1056B2C52C591741002E2A0D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				10657EB62C3343F900E9657F /* KeyboardManager.swift */,
+				10F0500B2C357C330017B4B9 /* ThemeManager.swift */,
+				107AC0A22C3AAD46000FD024 /* NotificationsManager.swift */,
+				107AC09A2C39B16A000FD024 /* BarcodeScanning */,
+				10387BE22C3C67DC002C5CC7 /* ListManager.swift */,
+				1056B2C62C5917CE002E2A0D /* FirebaseAuthService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		10657EB82C34503400E9657F /* Extentions */ = {
@@ -401,19 +434,8 @@
 			isa = PBXGroup;
 			children = (
 				10DDFD672C286B4900F300F3 /* Helpers */,
-				10DDFD692C286B8F00F300F3 /* NewListSteps.swift */,
-				107AF31B2C2ACF0800A2F56B /* Settings.swift */,
-				107AF32F2C2AFB0600A2F56B /* User.swift */,
-				107674FF2C3C5B7C00BAE0E0 /* SharedList.swift */,
-				107AF3332C2AFCF500A2F56B /* ShoppingList.swift */,
-				10C753F72C31F5370011742B /* ShoppingItem.swift */,
-				10C753F92C31F5B30011742B /* Unit.swift */,
-				107674ED2C3ACEE800BAE0E0 /* Event.swift */,
-				10657EB62C3343F900E9657F /* KeyboardManager.swift */,
-				10F0500B2C357C330017B4B9 /* ThemeManager.swift */,
-				107AC0A22C3AAD46000FD024 /* NotificationsManager.swift */,
-				107AC09A2C39B16A000FD024 /* BarcodeScanning */,
-				10387BE22C3C67DC002C5CC7 /* ListManager.swift */,
+				1056B2C42C591723002E2A0D /* DataModels */,
+				1056B2C52C591741002E2A0D /* Services */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -607,6 +629,7 @@
 				1024D0D22C2B306700202864 /* MainView.swift in Sources */,
 				107AF32C2C2AED6900A2F56B /* NotificationsSettingsView.swift in Sources */,
 				10439B1A2C297FF5005979FF /* HomeViewModel.swift in Sources */,
+				1056B2C32C5916BB002E2A0D /* AuthService.swift in Sources */,
 				1010B4D82C27238400F3114B /* A_listApp.swift in Sources */,
 				10C8F3122C513C0D001D7689 /* ImagePicker.swift in Sources */,
 				10C753FA2C31F5B30011742B /* Unit.swift in Sources */,
@@ -624,6 +647,7 @@
 				107674FC2C3AE4D200BAE0E0 /* FriendsSettingsViewViewModel.swift in Sources */,
 				10C1A53D2C2C0E38005C0F40 /* RegistrationView.swift in Sources */,
 				10387BE32C3C67DC002C5CC7 /* ListManager.swift in Sources */,
+				1056B2C72C5917CE002E2A0D /* FirebaseAuthService.swift in Sources */,
 				107AC09C2C39B214000FD024 /* BarcodeData.swift in Sources */,
 				10DDFD5F2C28519200F300F3 /* NewListView.swift in Sources */,
 				10C2297B2C566E2000E98B92 /* CalendarSettingsViewModel.swift in Sources */,
