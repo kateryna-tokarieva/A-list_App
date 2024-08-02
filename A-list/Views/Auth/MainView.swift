@@ -13,14 +13,13 @@ struct MainView: View {
     
     var body: some View {
         Group {
-            if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
+            if viewModel.showingHomeSheet, !viewModel.currentUserId.isEmpty {
                 HomeView(userId: viewModel.currentUserId)
             } else {
                 LoginView(viewModel: LoginViewModel())
             }
         }
         .onAppear {
-            // Trigger any initial setup if needed
         }
     }
 }

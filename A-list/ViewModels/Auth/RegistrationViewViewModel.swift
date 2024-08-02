@@ -18,28 +18,38 @@ class RegistrationViewViewModel: ObservableObject {
     @Published var userId: String = ""
     var registrationSuccessPublisher = PassthroughSubject<Void, Never>()
     
-    init(email: String = "", password: String = "", name: String = "") {
+    private let authService: AuthService
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(email: String = "", password: String = "", name: String = "", authService: AuthService = FirebaseAuthService.shared) {
         self.email = email
         self.password = password
         self.name = name
+        self.authService = authService
     }
     
     func register() {
-        email = email.trimmingCharacters(in: .whitespaces)
-        password = password.trimmingCharacters(in: .whitespaces)
-        name = name.trimmingCharacters(in: .whitespaces)
+        email = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        password = password.trimmingCharacters(in: .whitespacesAndNewlines)
+        name = name.trimmingCharacters(in: .whitespacesAndNewlines)
         
         guard validate() else { return }
-        Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
-            if let userId = result?.user.uid {
-                self?.userId = userId
-                self?.insertUserRecord(id: userId)
+        
+        authService.signUp(email: email, password: password, name: name)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.error = self?.authService.translateError(error) ?? "Unknown error"
+                case .finished:
+                    break
+                }
+            }, receiveValue: { [weak self] result in
+                self?.userId = result.user.uid
+                self?.insertUserRecord(id: result.user.uid)
                 self?.registrationSuccessPublisher.send(())
-            }
-            if let error {
-                self?.error = self?.translateError(error) ?? "Невідома помилка"
-            }
-        }
+            })
+            .store(in: &cancellables)
     }
     
     private func insertUserRecord(id: String) {
@@ -47,22 +57,26 @@ class RegistrationViewViewModel: ObservableObject {
         let dataBase = Firestore.firestore()
         dataBase.collection("users")
             .document(id)
-            .setData(newUser.asDictionary())
+            .setData(newUser.asDictionary()) { [weak self] error in
+                if let error = error {
+                    self?.error = "Failed to save user data: \(error.localizedDescription)"
+                }
+            }
     }
     
     private func validate() -> Bool {
         guard isValidEmail(email) else {
-            error = "Некоректний формат електронної пошти."
+            error = "Invalid email format."
             return false
         }
         
         guard isValidPassword(password) else {
-            error = "Пароль повинен містити щонайменше 8 символів, включаючи одну велику літеру, одну малу літеру та одну цифру."
+            error = "Password must be at least 8 characters long, with one uppercase letter, one lowercase letter, and one number."
             return false
         }
         
         guard isValidName(name) else {
-            error = "Ім'я повинно містити щонайменше 3 символи."
+            error = "Name must be at least 3 characters long."
             return false
         }
         
@@ -71,7 +85,7 @@ class RegistrationViewViewModel: ObservableObject {
     
     private func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
     
@@ -83,23 +97,5 @@ class RegistrationViewViewModel: ObservableObject {
     
     private func isValidName(_ name: String) -> Bool {
         return name.count >= 3
-    }
-    
-    private func translateError(_ error: Error) -> String {
-        let nsError = error as NSError
-        switch nsError.code {
-        case AuthErrorCode.networkError.rawValue:
-            return "Проблеми з підключенням до мережі. Спробуйте ще раз."
-        case AuthErrorCode.userNotFound.rawValue:
-            return "Користувача не знайдено. Перевірте введені дані."
-        case AuthErrorCode.invalidEmail.rawValue:
-            return "Неправильний формат електронної пошти."
-        case AuthErrorCode.emailAlreadyInUse.rawValue:
-            return "Ця електронна пошта вже використовується."
-        case AuthErrorCode.weakPassword.rawValue:
-            return "Пароль занадто слабкий. Використовуйте щонайменше 8 символів, включаючи одну велику літеру, одну малу літеру та одну цифру."
-        default:
-            return "Невідома помилка: \(nsError.localizedDescription)"
-        }
     }
 }

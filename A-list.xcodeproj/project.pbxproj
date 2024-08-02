@@ -328,6 +328,7 @@
 		10387BE42C3D7361002C5CC7 /* List */ = {
 			isa = PBXGroup;
 			children = (
+				10DDFD6B2C286D9400F300F3 /* NewListViewModel.swift */,
 				10387BE52C3D7381002C5CC7 /* BaseListViewModel.swift */,
 				10439B142C28B86B005979FF /* ListViewModel.swift */,
 				107675012C3C5F2200BAE0E0 /* SharedListViewViewModel.swift */,
@@ -370,11 +371,22 @@
 				10657EB62C3343F900E9657F /* KeyboardManager.swift */,
 				10F0500B2C357C330017B4B9 /* ThemeManager.swift */,
 				107AC0A22C3AAD46000FD024 /* NotificationsManager.swift */,
-				107AC09A2C39B16A000FD024 /* BarcodeScanning */,
 				10387BE22C3C67DC002C5CC7 /* ListManager.swift */,
 				1056B2C62C5917CE002E2A0D /* FirebaseAuthService.swift */,
+				107AC09A2C39B16A000FD024 /* BarcodeScanning */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		1056B2C82C591BE8002E2A0D /* List */ = {
+			isa = PBXGroup;
+			children = (
+				10DDFD5E2C28519200F300F3 /* NewListView.swift */,
+				10439B102C28B32E005979FF /* ListView.swift */,
+				10387BE02C3C6025002C5CC7 /* SharedListView.swift */,
+				10297F432C397E5B00A41891 /* ScannerView.swift */,
+			);
+			path = List;
 			sourceTree = "<group>";
 		};
 		10657EB82C34503400E9657F /* Extentions */ = {
@@ -421,10 +433,7 @@
 			children = (
 				1025AFFA2C2D7850004AFB73 /* Auth */,
 				1010B5062C28262C00F3114B /* HomeView.swift */,
-				10DDFD5E2C28519200F300F3 /* NewListView.swift */,
-				10439B102C28B32E005979FF /* ListView.swift */,
-				10387BE02C3C6025002C5CC7 /* SharedListView.swift */,
-				10297F432C397E5B00A41891 /* ScannerView.swift */,
+				1056B2C82C591BE8002E2A0D /* List */,
 				1025AFFC2C2D786B004AFB73 /* Settings */,
 			);
 			path = Views;
@@ -445,7 +454,6 @@
 			children = (
 				1025AFFB2C2D785A004AFB73 /* Auth */,
 				10439B192C297FF5005979FF /* HomeViewModel.swift */,
-				10DDFD6B2C286D9400F300F3 /* NewListViewModel.swift */,
 				10387BE42C3D7361002C5CC7 /* List */,
 				1025AFFD2C2D787C004AFB73 /* Settings */,
 			);

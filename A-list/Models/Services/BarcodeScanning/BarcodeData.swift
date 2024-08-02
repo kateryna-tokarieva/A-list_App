@@ -8,14 +8,14 @@
 import Foundation
 
 struct BarcodeData: Codable {
-    let product: Product
+    let product: ProductItem
     
     func asShoppingItem() -> ShoppingItem {
         ShoppingItem(title: "\(product.productName) (\(product.brands))", quantity: "1", unit: .pc)
     }
 }
 
-struct Product: Codable {
+struct ProductItem: Codable {
     let productName: String
     let brands: String
     

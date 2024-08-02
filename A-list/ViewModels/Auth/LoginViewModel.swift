@@ -19,23 +19,26 @@ class LoginViewModel: ObservableObject {
     private let authService: AuthService
     private var cancellables = Set<AnyCancellable>()
     
-    init(email: String = "", password: String = "", authService: AuthService = FirebaseAuthService()) {
+    init(email: String = "", password: String = "", authService: AuthService = FirebaseAuthService.shared) {
         self.email = email
         self.password = password
         self.authService = authService
     }
     
     func login() {
-        email = email.trimmingCharacters(in: .whitespaces)
-        password = password.trimmingCharacters(in: .whitespaces)
+        email = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        password = password.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard validate() else { return }
+        guard validateInputs() else { return }
         
         authService.signIn(withEmail: email, password: password)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.error = self?.translateError(error) ?? "Невідома помилка"
+                switch completion {
+                case .failure(let error):
+                    self?.error = self?.authService.translateError(error) ?? "Невідома помилка"
+                case .finished:
+                    break
                 }
             }, receiveValue: { [weak self] result in
                 self?.userId = result.user.uid
@@ -44,14 +47,14 @@ class LoginViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func validate() -> Bool {
+    private func validateInputs() -> Bool {
         guard isValidEmail(email) else {
-            error = "Некоректний формат електронної пошти."
+            error = "Неправильний формат електронної пошти."
             return false
         }
         
         guard !password.isEmpty else {
-            error = "Пароль не може бути порожнім."
+            error = "Пароль не може бути пустим."
             return false
         }
         
@@ -62,25 +65,5 @@ class LoginViewModel: ObservableObject {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
-    }
-    
-    private func translateError(_ error: Error) -> String {
-        let nsError = error as NSError
-        switch nsError.code {
-        case AuthErrorCode.networkError.rawValue:
-            return "Проблеми з підключенням до мережі. Спробуйте ще раз."
-        case AuthErrorCode.userNotFound.rawValue:
-            return "Користувача не знайдено. Перевірте введені дані."
-        case AuthErrorCode.invalidEmail.rawValue:
-            return "Неправильний формат електронної пошти."
-        case AuthErrorCode.emailAlreadyInUse.rawValue:
-            return "Ця електронна пошта вже використовується."
-        case AuthErrorCode.weakPassword.rawValue:
-            return "Пароль занадто слабкий. Використовуйте щонайменше 8 символів, включаючи одну велику літеру, одну малу літеру та одну цифру."
-        case AuthErrorCode.wrongPassword.rawValue:
-            return "Неправильний пароль. Спробуйте ще раз."
-        default:
-            return "Невідома помилка: \(nsError.localizedDescription)"
-        }
     }
 }

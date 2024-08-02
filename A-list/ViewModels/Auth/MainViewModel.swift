@@ -5,31 +5,42 @@
 //  Created by Екатерина Токарева on 25.06.2024.
 //
 
-import Foundation
-import FirebaseAuth
 import Combine
+import FirebaseAuth
 
 class MainViewModel: ObservableObject {
     @Published var currentUserId = ""
-    private var handler: AuthStateDidChangeListenerHandle?
+    @Published var isAuthenticated: Bool = false
+    @Published var showingHomeSheet: Bool = false
+    
+    private var authService = FirebaseAuthService.shared
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        self.handler = Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            DispatchQueue.main.async {
-                self?.currentUserId = user?.uid ?? ""
+        setupAuthListener()
+    }
+    
+    private func setupAuthListener() {
+        let authStateChanges = NotificationCenter.default.publisher(for: Notification.Name.AuthStateDidChange, object: Auth.auth())
+            .map { notification -> FirebaseAuth.User? in
+                let auth = notification.object as? Auth
+                return auth?.currentUser
             }
-        }
-    }
-    
-    deinit {
-        if let handler = handler {
-            Auth.auth().removeStateDidChangeListener(handler)
-        }
-    }
-    
-    public var isSignedIn: Bool {
-        Auth.auth().currentUser != nil
+            .share()
+
+        authStateChanges
+            .map { $0?.uid ?? "" }
+            .receive(on: RunLoop.main)
+            .assign(to: \.currentUserId, on: self)
+            .store(in: &cancellables)
+
+        authStateChanges
+            .map { $0 != nil }
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isAuthenticated in
+                self?.isAuthenticated = isAuthenticated
+                self?.showingHomeSheet = isAuthenticated 
+            }
+            .store(in: &cancellables)
     }
 }
-

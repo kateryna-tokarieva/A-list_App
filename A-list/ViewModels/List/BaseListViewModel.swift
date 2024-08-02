@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
+import Combine
 
 class BaseListViewModel: ObservableObject {
     @Published var list: ShoppingList?
@@ -23,7 +24,8 @@ class BaseListViewModel: ObservableObject {
     var listId: String
     let userId = Auth.auth().currentUser?.uid
     let dataBase = Firestore.firestore()
-    private var service = BarcodeDataService()
+    private var service = BarcodeDataService.shared
+    private var cancellables = Set<AnyCancellable>()
     private var doneItemsCount = 0
     
     init(listId: String) {
@@ -92,12 +94,20 @@ class BaseListViewModel: ObservableObject {
     
     func fetchCodeData(ownerId: String) {
         guard let code = scannedCode, !code.isEmpty else { return }
-        service.fetchData(search: code) { [weak self] item in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.addItem(item.asShoppingItem(), ownerId: ownerId)
-            }
-        }
+        
+        service.fetchProduct(by: code)
+            .sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    print("Error fetching product: \(error)")
+                }
+            }, receiveValue: { [weak self] barcodeData in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    let shoppingItem = barcodeData.asShoppingItem()
+                    self.addItem(shoppingItem, ownerId: ownerId)
+                }
+            })
+            .store(in: &cancellables)
     }
     
     func editItem(withIndex index: Int) {
